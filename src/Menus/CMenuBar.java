@@ -5,7 +5,9 @@ import java.util.Map;
 
 import javax.swing.JMenuBar;
 
+import Settings.Menus;
 import Settings.Menus.EMENU;
+import adapter.MenuAdapter;
 
 public class CMenuBar extends JMenuBar {
 
@@ -13,10 +15,15 @@ public class CMenuBar extends JMenuBar {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	MenuAdapter mAdapter = new MenuAdapter();
 	public CMenuBar() {
-		EnumMap<EMENU,Enum<?>[]> menuItems = putitem();
-		for(Map.Entry<EMENU,Enum<?>[]> items : menuItems.entrySet()){
-			CMenu menu = new CMenu(items.getKey().getName(), items.getValue());
+		EnumMap<EMENU,Object> menuItems = putitem();
+		for(Map.Entry<EMENU,Object> items : menuItems.entrySet()){
+			String className = trim(items.getValue().getClass().getName());
+			System.out.println(items.getValue());
+			CMenu menu = new CMenu(className.substring(0, className.length()-4), items.getValue());
+			//System.out.println(className.substring(0, className.indexOf(";")));
 			this.add(menu);
 		}
 //		for(Enum menuItem : EMENU.values()){
@@ -25,12 +32,21 @@ public class CMenuBar extends JMenuBar {
 //			this.add(menu);
 //		}
 	}
-	private EnumMap<EMENU,Enum<?>[]> putitem(){
-		EnumMap<EMENU,Enum<?>[]> menuItems = new EnumMap<>(EMENU.class);
+	private EnumMap<EMENU,Object> putitem() throws InstantiationException, IllegalAccessException{
+		EnumMap<EMENU,Object> menuItems = new EnumMap<>(EMENU.class);
 		for(EMENU eMenu : EMENU.values()){
-			menuItems.put(eMenu, eMenu.getmenuItems());
+			Class classObject = eMenu.getClassObject();
+			Object menuItem = classObject.newInstance();
+			menuItem = classObject.cast(eMenu.getmenuItems());
+			menuItems.put(eMenu, menuItem);
 		}		
 		return menuItems;
+	}
+	private String trim(String str){
+		String result;
+		result = str.replace("[L"+Menus.class.getName()+"$", "");
+		result = result.replace(";", "");
+		return result;
 	}
 	
 }

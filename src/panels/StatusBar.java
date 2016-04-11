@@ -1,4 +1,4 @@
-package frames;
+package panels;
 /*
  * Copyright (C) 2001-2003 Colin Bell
  * colbell@users.sourceforge.net

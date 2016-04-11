@@ -3,19 +3,26 @@ package Menus;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import adapter.MenuAdapter;
 
-public class CMenu extends JMenu{
+
+public class CMenu extends JMenu {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public CMenu(String name, Enum<?>[] menuItemNames) {
-		//super(name);
-		this.setText(name);
+	
+	MenuAdapter mAdapter = new MenuAdapter();
+	public CMenu(String name, Object menuItemNames) throws ClassNotFoundException {
 		
-		for(Enum<?> menuItemName: menuItemNames){
-			System.out.println(menuItemName.getClass());
+		//Object item = theClass.cast(menuItemNames);
+		
+		
+		this.setText(name);
+		//menuItemNames = mAdapter.ConvertType(menuItemNames);
+		for(Object menuItemName: menuItemNames){
+			//menuItemName.valueOf(menuItemName.getClass(), menuItemName.);
 			JMenuItem menuItem = new JMenuItem(menuItemName.name());
 			menuItem.setActionCommand(menuItemName.name());
 			this.add(menuItem);

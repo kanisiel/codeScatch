@@ -1,11 +1,14 @@
 package frames;
 
 import java.awt.BorderLayout;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 
 import Menus.CMenuBar;
 import Settings.Constants;
+import panels.StatusBar;
 
 public class CFrame extends JFrame {
 	
@@ -17,6 +20,7 @@ public class CFrame extends JFrame {
 	private CMenuBar menuBar;
 	private CToolbar toolbar;
 	private StatusBar statusBar;
+	private HashMap<String, JInternalFrame> windowMap;
 	
 	
 	public CFrame(){
@@ -28,6 +32,7 @@ public class CFrame extends JFrame {
 		this.setResizable(true);
 		
 		//components initialization
+		this.windowMap = new HashMap<String, JInternalFrame>();
 		this.menuBar = new CMenuBar(); 
 		this.setJMenuBar(menuBar);
 		
