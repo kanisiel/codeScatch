@@ -1,9 +1,11 @@
 package Menus;
 
+import java.util.Vector;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import adapter.MenuAdapter;
+import models.MenuItem;
 
 
 public class CMenu extends JMenu {
@@ -11,21 +13,21 @@ public class CMenu extends JMenu {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 	
-	MenuAdapter mAdapter = new MenuAdapter();
-	public CMenu(String name, Enum[] menuItemNames) {
-		
-		//Object item = theClass.cast(menuItemNames);
-		
-		
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	 * Constructor													 *
+	 *  - Parameter : Menu Name (String), Item List (Vector)		 *
+	 *  															 *
+	 *  Author : Lee JunSoo											 *
+	 *  Last Modify : 2016/04/12									 *
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public CMenu(String name, Vector<MenuItem> items){
 		this.setText(name);
-		//menuItemNames = mAdapter.ConvertType(menuItemNames);
-		for(Enum menuItemName: menuItemNames){
-			//menuItemName.valueOf(menuItemName.getClass(), menuItemName.);
-			JMenuItem menuItem = new JMenuItem(menuItemName.name());
-			menuItem.setActionCommand(menuItemName.name());
+		for(MenuItem item : items){
+			JMenuItem menuItem = new JMenuItem(item.getName());
+			menuItem.setActionCommand(item.getName());
 			this.add(menuItem);
-		}	
+			if(item.getSeparate()){	this.addSeparator();	}
+		}
 	}
 }

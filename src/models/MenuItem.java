@@ -1,10 +1,9 @@
 /*
  * 
- * Model Class Menu
+ * Model Class MenuItem
  * 
  * Class Variable :
- * 	- Name(String) : Menu name for display
- * 	- Item list (Vector) : List about including items for each Menu
+ * 	- Name(String) : Item name for display
  * 
  * Method :
  * 	- Getter and Setter : For Class Variable
@@ -15,29 +14,30 @@
  */
 package models;
 
-import java.util.Vector;
-
-public class Menu {
+public class MenuItem {
 	private String name;
-	private Vector<MenuItem> items;
-	
+	private Boolean separate;
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Vector<MenuItem> getItems() {
-		return this.items;
+
+	public Boolean getSeparate() {
+		return separate;
 	}
-	public void setItems(Vector<MenuItem> items) {
-		this.items = items;
+
+	public void setSeparate(Boolean separate) {
+		this.separate = separate;
 	}
-	
-	public Menu(String name) {
+
+	public MenuItem(String name, Boolean separate) {
 		super();
 		this.name = name;
-		this.items = new Vector<>();
+		this.separate = separate;
 	}
 	
 }

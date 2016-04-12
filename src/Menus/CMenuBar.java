@@ -1,13 +1,15 @@
 package Menus;
 
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.JMenuBar;
 
-import Settings.Menus;
 import Settings.Menus.EMENU;
-import adapter.MenuAdapter;
+import Settings.Menus.MenuItems;
+import models.Menu;
+import models.MenuItem;
 
 public class CMenuBar extends JMenuBar {
 
@@ -16,31 +18,52 @@ public class CMenuBar extends JMenuBar {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	MenuAdapter mAdapter = new MenuAdapter();
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	 * Constructor													 *
+	 *  - Parameter : None											 *
+	 *  															 *
+	 *  Author : Lee JunSoo											 *
+	 *  Last Modify : 2016/04/12									 *
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public CMenuBar() {
-		EnumMap<EMENU,Enum[]> menuItems = putitem();
-		for(Map.Entry<EMENU,Enum[]> items : menuItems.entrySet()){
-			CMenu menu = new CMenu(items.getKey().getName(), items.getValue());
+		setMenu();
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	 * Set Menu														 *
+	 *  - Parameter : None											 *
+	 *  - Feature : Create Hash Map about Menus and MenuItems		 *
+	 *              and call Iterative Constructor call Method		 *
+	 *  															 *
+	 *  Author : Lee JunSoo											 *
+	 *  Last Modify : 2016/04/12									 *
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	private void setMenu(){
+		Map<String, Menu> menus = new LinkedHashMap<>();
+		for(EMENU name : EMENU.values()){
+			Menu menu = new Menu(name.getName());
+			menus.put(name.getName(), menu);
+		}
+		for(MenuItems item : MenuItems.values()){
+			MenuItem menuItem = new MenuItem(item.getName(), item.getSeparate());
+			menus.get(item.getMenuName()).getItems().add(menuItem);
+		}
+		addMenus(menus);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	 * Add Menu														 *
+	 *  - Parameter : None											 *
+	 *  - Feature : Iterative Constructor call and add to Menubar	 *
+	 *  															 *
+	 *  Author : Lee JunSoo											 *
+	 *  Last Modify : 2016/04/12									 *
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	private void addMenus(Map<String, Menu> menus){
+		for(Entry<String, Menu> entry : menus.entrySet()){
+			CMenu menu = new CMenu(entry.getKey(), entry.getValue().getItems());
 			this.add(menu);
 		}
-//		for(Enum menuItem : EMENU.values()){
-//			System.out.println(menuItem.name());
-//			JMenu menu = new JMenu(menuItem.name());
-//			this.add(menu);
-//		}
-	}
-	private EnumMap<EMENU,Enum[]> putitem() {
-		EnumMap<EMENU,Enum[]> menuItems = new EnumMap<>(EMENU.class);
-		for(EMENU eMenu : EMENU.values()){
-			menuItems.put(eMenu, eMenu.getmenuItems());//menuItem);
-		}		
-		return menuItems;
-	}
-	private String trim(String str){
-		String result;
-		result = str.replace("[L"+Menus.class.getName()+"$", "");
-		result = result.replace(";", "");
-		return result;
 	}
 	
 }
