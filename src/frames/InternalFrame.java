@@ -1,6 +1,8 @@
 package frames;
 
 
+import java.awt.BorderLayout;
+
 /*
  * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
  *
@@ -44,6 +46,7 @@ public class InternalFrame extends JInternalFrame {
 	static int openFrameCount = 0;
     static final int xOffset = 30, yOffset = 30;
  
+    //Constructor by Official Oracle Sample
     public InternalFrame() {
         super("Document #" + (++openFrameCount), 
               true, //resizable
@@ -58,7 +61,10 @@ public class InternalFrame extends JInternalFrame {
  
         //Set the window's location.
         setLocation(xOffset*openFrameCount, yOffset*openFrameCount);
+
+		this.getContentPane().setLayout(new BorderLayout());
     }
+    
     public InternalFrame(String title) {
         super(title, 
               true, //resizable
@@ -73,5 +79,7 @@ public class InternalFrame extends JInternalFrame {
  
         //Set the window's location.
         setLocation(xOffset*openFrameCount, yOffset*openFrameCount);
+
+		this.getContentPane().setLayout(new BorderLayout());
     }
 }
