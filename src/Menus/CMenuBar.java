@@ -18,12 +18,9 @@ public class CMenuBar extends JMenuBar {
 	
 	MenuAdapter mAdapter = new MenuAdapter();
 	public CMenuBar() {
-		EnumMap<EMENU,Object> menuItems = putitem();
-		for(Map.Entry<EMENU,Object> items : menuItems.entrySet()){
-			String className = trim(items.getValue().getClass().getName());
-			System.out.println(items.getValue());
-			CMenu menu = new CMenu(className.substring(0, className.length()-4), items.getValue());
-			//System.out.println(className.substring(0, className.indexOf(";")));
+		EnumMap<EMENU,Enum[]> menuItems = putitem();
+		for(Map.Entry<EMENU,Enum[]> items : menuItems.entrySet()){
+			CMenu menu = new CMenu(items.getKey().getName(), items.getValue());
 			this.add(menu);
 		}
 //		for(Enum menuItem : EMENU.values()){
@@ -32,13 +29,10 @@ public class CMenuBar extends JMenuBar {
 //			this.add(menu);
 //		}
 	}
-	private EnumMap<EMENU,Object> putitem() throws InstantiationException, IllegalAccessException{
-		EnumMap<EMENU,Object> menuItems = new EnumMap<>(EMENU.class);
+	private EnumMap<EMENU,Enum[]> putitem() {
+		EnumMap<EMENU,Enum[]> menuItems = new EnumMap<>(EMENU.class);
 		for(EMENU eMenu : EMENU.values()){
-			Class classObject = eMenu.getClassObject();
-			Object menuItem = classObject.newInstance();
-			menuItem = classObject.cast(eMenu.getmenuItems());
-			menuItems.put(eMenu, menuItem);
+			menuItems.put(eMenu, eMenu.getmenuItems());//menuItem);
 		}		
 		return menuItems;
 	}

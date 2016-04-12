@@ -8,6 +8,7 @@ import javax.swing.JInternalFrame;
 
 import Menus.CMenuBar;
 import Settings.Constants;
+import panels.DesktopPane;
 import panels.StatusBar;
 
 public class CFrame extends JFrame {
@@ -20,6 +21,7 @@ public class CFrame extends JFrame {
 	private CMenuBar menuBar;
 	private CToolbar toolbar;
 	private StatusBar statusBar;
+	private DesktopPane desktopPane;
 	private HashMap<String, JInternalFrame> windowMap;
 	
 	
@@ -41,8 +43,8 @@ public class CFrame extends JFrame {
 		this.getContentPane().add(statusBar, BorderLayout.SOUTH);
 		this.toolbar = new CToolbar();
 		this.add(this.toolbar, BorderLayout.WEST);
-//		this.drawingPanel = new CDrawingPanel();
-//		this.add(drawingPanel, BorderLayout.CENTER);	
+		this.desktopPane = new DesktopPane();
+		this.add(desktopPane, BorderLayout.CENTER);
 
 		
 	}

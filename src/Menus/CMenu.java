@@ -14,14 +14,14 @@ public class CMenu extends JMenu {
 
 	
 	MenuAdapter mAdapter = new MenuAdapter();
-	public CMenu(String name, Object menuItemNames) throws ClassNotFoundException {
+	public CMenu(String name, Enum[] menuItemNames) {
 		
 		//Object item = theClass.cast(menuItemNames);
 		
 		
 		this.setText(name);
 		//menuItemNames = mAdapter.ConvertType(menuItemNames);
-		for(Object menuItemName: menuItemNames){
+		for(Enum menuItemName: menuItemNames){
 			//menuItemName.valueOf(menuItemName.getClass(), menuItemName.);
 			JMenuItem menuItem = new JMenuItem(menuItemName.name());
 			menuItem.setActionCommand(menuItemName.name());
