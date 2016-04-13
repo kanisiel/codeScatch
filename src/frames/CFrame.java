@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import Menus.CMenuBar;
 import Settings.Constants;
+import listner.CComponentListener;
 import panels.DesktopPane;
 import panels.StatusBar;
 
@@ -32,7 +33,8 @@ public class CFrame extends JFrame {
 		this.setResizable(true);
 		
 		//components initialization
-		this.menuBar = new CMenuBar(); 
+		this.menuBar = new CMenuBar();
+		this.menuBar.init(this);
 		this.setJMenuBar(menuBar);
 		this.getContentPane().setLayout(new BorderLayout());
 		this.statusBar = new StatusBar();

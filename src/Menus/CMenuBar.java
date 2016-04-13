@@ -8,6 +8,7 @@ import javax.swing.JMenuBar;
 
 import Settings.Menus.EMENU;
 import Settings.Menus.MenuItems;
+import frames.CFrame;
 import models.Menu;
 import models.MenuItem;
 
@@ -17,6 +18,8 @@ public class CMenuBar extends JMenuBar {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	//Components
+	private CFrame parents;
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 	 * Constructor													 *
@@ -62,8 +65,14 @@ public class CMenuBar extends JMenuBar {
 	private void addMenus(Map<String, Menu> menus){
 		for(Entry<String, Menu> entry : menus.entrySet()){
 			CMenu menu = new CMenu(entry.getKey(), entry.getValue().getItems());
+			menu.init(parents);
 			this.add(menu);
 		}
+	}
+	
+	//initializing method
+	public void init(CFrame parents){
+		this.parents = parents;
 	}
 	
 }

@@ -31,10 +31,12 @@ import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
 import Settings.Windows;
+import Settings.Windows.words;
 import panels.LinePainter;
 import panels.TextLineNumber;
 
@@ -48,7 +50,6 @@ public class CodeViewer extends JInternalFrame {
     private JScrollPane scrollPane;
     private TextLineNumber textLineNumber;
     private LinePainter linePainter;
-    private String option = "(\\W)*(";
     
 	public CodeViewer(String title) {
         super(title, 
@@ -67,19 +68,13 @@ public class CodeViewer extends JInternalFrame {
         
         //set Styled text Attribute
         StyleContext cont = StyleContext.getDefaultStyleContext();
-	    AttributeSet attr = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, hex2Rgb(Windows.reservedWordColor)); //for Reserved word
+        SimpleAttributeSet attrVariable = new SimpleAttributeSet();
+        attrVariable.addAttribute(StyleConstants.Foreground, hex2Rgb(Windows.variableColor)); //for about Variable word
+        attrVariable.addAttribute(StyleConstants.Italic, Boolean.TRUE); //for about Variable word
+	    AttributeSet attrReserve = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, hex2Rgb(Windows.reservedWordColor)); //for Reserved word
 	    AttributeSet attrInclude = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, hex2Rgb(Windows.includeColor)); //for Reserved word
 	    AttributeSet attrBlack = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLACK);
 	    
-	    //concatenate reserved word to regular expression
-        for(String word : Windows.reservedWord){
-        	if(option.equals("(\\W)*(")){
-        		option = option.concat(word);
-        	} else{
-        		option = option.concat("|"+word);
-        	}
-        }
-        option = option.concat(")");
 	    //set DefaultStyledDocument
 	    DefaultStyledDocument doc = new DefaultStyledDocument() {
 	        /**
@@ -100,13 +95,13 @@ public class CodeViewer extends JInternalFrame {
 	     
 	            while (wordR <= after) {
 	                if (wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")) {
-	                    if (text.substring(wordL, wordR).matches(option)) {
-	                        setCharacterAttributes(wordL, wordR - wordL, attr, false);
-	                    }
-	                    else if (text.substring(wordL, wordR).matches(Windows.include)){
+	                    if (text.substring(wordL, wordR).matches("(\\W)*("+words.Reserved.getWordList()+")")) {
+	                        setCharacterAttributes(wordL, wordR - wordL, attrReserve, false);
+	                    } else if (text.substring(wordL, wordR).matches("(\\W)*("+words.Variable.getWordList()+")")){
+	                    	setCharacterAttributes(wordL, wordR - wordL, attrVariable, false);
+	                    } else if (text.substring(wordL, wordR).matches("(\\W)*("+Windows.include+")")){
 	                    	setCharacterAttributes(wordL, wordR - wordL, attrInclude, false);
-	                    }
-	                    else
+	                    } else
 	                        setCharacterAttributes(wordL, wordR - wordL, attrBlack, false);
 	                    wordL = wordR;
 	                }
@@ -122,8 +117,12 @@ public class CodeViewer extends JInternalFrame {
 	            if (before < 0) before = 0;
 	            int after = findFirstNonWordChar(text, offs);
 
-	            if (text.substring(before, after).matches(option)) {
-	                setCharacterAttributes(before, after - before, attr, false);
+	            if (text.substring(before, after).matches("(\\W)*("+words.Reserved.getWordList()+")")) {
+	                setCharacterAttributes(before, after - before, attrReserve, false);
+	            } else if (text.substring(before, after).matches("(\\W)*("+words.Variable.getWordList()+")")) {
+	                setCharacterAttributes(before, after - before, attrReserve, false);
+	            } else if (text.substring(before, after).matches("(\\W)*("+Windows.include+")")) {
+	                setCharacterAttributes(before, after - before, attrInclude, false);
 	            } else {
 	                setCharacterAttributes(before, after - before, attrBlack, false);
 	            }
@@ -142,6 +141,8 @@ public class CodeViewer extends JInternalFrame {
 		this.add(scrollPane);
 		this.setLinePainter(new LinePainter(textPane, hex2Rgb(Windows.highLightColor)));
     }
+	
+	//Hex Color code to RGB java Color Object
 	public static Color hex2Rgb(String colorStr) {
 	    return new Color(
 	            Integer.valueOf( colorStr.substring( 1, 3 ), 16 ),
