@@ -25,6 +25,9 @@ public class PreferenceFrame extends JFrame {
 		this.setResizable(true);
 	}
 	
+	public void applyChanges(){
+		parents.repaint();
+	}
 	//2nd phase initialization
 	public void init(CFrame parents, String title){
 		this.parents = parents;
