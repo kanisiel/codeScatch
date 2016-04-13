@@ -51,12 +51,7 @@ public class CFrame extends JFrame {
 	}
 	//2nd phase initialization
 	public void init(){
-		//components association initialization
-//		this.menuBar = (CMenuBar) this.getJMenuBar();
-//		this.menuBar.init(drawingPanel, this); //this.menuBar.init(drawingPanel);
-//		this.toolbar.init(drawingPanel);
-//		this.drawingPanel.init();
-				
+		
 		//associated attributes initialization
 		this.setVisible(true);
 		this.statusBar.setText("Welcome!");

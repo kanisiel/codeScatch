@@ -35,6 +35,8 @@ public class Windows {
 	public static final String variableColor = "#004C99";
 	public static final String stringColor = "#0000CC";
 	public static final String includeColor = "#CC0000";
+	public static final String includeAttrColor = "#FFFF00";
+	public static final String functionColor = "#80FF00";
 	
 	public static enum words {
 		Reserved("while|for|if|do|static"),
