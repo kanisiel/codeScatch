@@ -1,5 +1,6 @@
 package frames;
 
+import java.awt.BorderLayout;
 import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
@@ -23,6 +24,9 @@ public class PreferenceFrame extends JFrame {
 		this.setSize(Constants.PFRAME_W,Constants.PFRAME_H);
 		this.setLocation(Constants.PFRAME_X, Constants.PFRAME_Y);
 		this.setResizable(true);
+		
+
+		this.getContentPane().setLayout(new BorderLayout());
 	}
 	
 	public void applyChanges(){
