@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 
 import Menus.CMenuBar;
 import Settings.Constants;
-import listner.CComponentListener;
+import listener.CComponentListener;
 import panels.DesktopPane;
 import panels.StatusBar;
 
