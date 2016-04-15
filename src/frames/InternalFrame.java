@@ -35,36 +35,19 @@ import java.awt.BorderLayout;
  */
  
 import javax.swing.JInternalFrame;
+
+import panels.DesktopPane;
  
 /* Used by InternalFrameDemo.java. */
-public class InternalFrame extends JInternalFrame {
+public abstract class InternalFrame extends JInternalFrame {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	static int openFrameCount = 0;
-    static final int xOffset = 30, yOffset = 30;
+	protected DesktopPane parent;
+	protected CFrame ancestor;
  
     //Constructor by Official Oracle Sample
-    public InternalFrame() {
-        super("Document #" + (++openFrameCount), 
-              true, //resizable
-              true, //closable
-              true, //maximizable
-              true);//iconifiable
- 
-        //...Create the GUI and put it in the window...
- 
-        //...Then set the window size or call pack...
-        setSize(300,300);
- 
-        //Set the window's location.
-        setLocation(xOffset*openFrameCount, yOffset*openFrameCount);
-
-		this.getContentPane().setLayout(new BorderLayout());
-    }
-    
     public InternalFrame(String title) {
         super(title, 
               true, //resizable
@@ -73,13 +56,8 @@ public class InternalFrame extends JInternalFrame {
               true);//iconifiable
  
         //...Create the GUI and put it in the window...
- 
-        //...Then set the window size or call pack...
-        setSize(300,300);
- 
-        //Set the window's location.
-        setLocation(xOffset*openFrameCount, yOffset*openFrameCount);
 
 		this.getContentPane().setLayout(new BorderLayout());
     }
+    
 }

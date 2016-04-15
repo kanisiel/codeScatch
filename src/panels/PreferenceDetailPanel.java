@@ -1,35 +1,35 @@
 package panels;
 
-import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import frames.CFrame;
 
-public class PreferenceDetailPanel extends JPanel {
+public abstract class PreferenceDetailPanel extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String title;
-	private CFrame parent;
-	private JLabel titleLabel; 
+	protected CFrame parent;
+	protected JLabel titleLabel; 
+	
 	public PreferenceDetailPanel(CFrame parent, int width, int height) {
 		super();
-		
-		this.parent = parent;
-		this.setSize(width, height);
-		this.titleLabel = new JLabel(title);
-		titleLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		this.setLayout(new BorderLayout());
-		this.add(titleLabel, BorderLayout.NORTH);
 	}
 	
-	public void init(String title){
-		this.title = title;
+	public PreferenceDetailPanel(int width, int height) {
+		super();
+		this.setSize(width, height);
+	}
+	
+	protected Font[] getFontList(){
+		GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    Font[] fonts = e.getAllFonts(); // Get the fonts
+	    return fonts;
 	}
 	
 }

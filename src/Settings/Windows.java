@@ -1,32 +1,20 @@
 package Settings;
 
-import javax.swing.JInternalFrame;
-
-import frames.CodeViewer;
-import frames.FlowChart;
-import frames.TaskList;
-
 public class Windows {
 	//Internal Frame Attributes
 	public static enum InternalWindows {
-		Flow("Flow Chart", new FlowChart("Flow Chart")),
-		Code("Code Viewer", new CodeViewer("Code Viewer")),
-		Task("Task List", new TaskList("Task List"));
+		Flow("Flow Chart"),
+		Code("Code Viewer"),
+		Task("Task List");
 		
 		String title;
-		JInternalFrame frame;
 		//Constructor
-		private InternalWindows(String title, JInternalFrame frame){
+		private InternalWindows(String title){
 			this.title = title;
-			this.frame = frame;
 		}
 		
 		public String getTitle(){
 			return this.title;
-		}
-		
-		public JInternalFrame getInternalFrame(){
-			return frame;
 		}
 	};
 	//Code Viewer Attributes

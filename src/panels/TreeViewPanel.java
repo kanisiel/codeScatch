@@ -1,16 +1,24 @@
 package panels;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+
+import Settings.Constants;
+import Settings.Preference;
+import listener.CTreeExpansionListener;
+import models.InNodeObject;
 
 public class TreeViewPanel extends JPanel implements TreeSelectionListener {
 
@@ -19,43 +27,68 @@ public class TreeViewPanel extends JPanel implements TreeSelectionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	JTree tree;
-	JFrame parentsFrame;
-	JInternalFrame parentsIFrame;
+	JFrame parents;
+	CTreeExpansionListener expantionListener;
 	
 
-	public TreeViewPanel(JTree tree) {
+	public TreeViewPanel() {
 		super();
-		this.tree = tree;
+		this.setLayout(new BorderLayout());
+		this.expantionListener = new CTreeExpansionListener();
+		this.expantionListener.init(this);
+		this.tree = initTree();
 		this.tree.expandRow(0);
 		this.tree.setRootVisible(false);
-		tree.addMouseListener(new MouseAdapter(){
-		    @Override
-		    public void mouseClicked(MouseEvent e){
-		        if(e.getClickCount()==2){
-		            
-		        }
-		    }
-		});
-		this.add(tree);
+		this.tree.addTreeSelectionListener(this);
+		this.tree.addTreeExpansionListener(this.expantionListener);
+		this.add(tree, BorderLayout.WEST);
+		this.setSize(Constants.PFRAME_W/2, Constants.PFRAME_H);
 	}
 	
 	public void init(JFrame parent, int width, int height){
-		this.parentsFrame = parent;
+		this.parents = parent;
 		this.setSize(width, height);
 		this.setBackground(Color.WHITE);
 	}
-	public void init(JInternalFrame parent, int width, int height){
-		this.parentsIFrame = parent;
-		this.setSize(width, height);
-		this.setBackground(Color.WHITE);
-	}
-	public JTree getTree() {
+	
+	private JTree initTree(){
+		Map<String, PreferenceDetailPanel> panelList = new LinkedHashMap<>();
+		JTree tree = new JTree();
+		//tree.setRootVisible( false );
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root node, should be invisible");
+		DefaultTreeModel defaultTreeModel = new DefaultTreeModel( rootNode );
+		
+		tree.setModel( defaultTreeModel );
+		DefaultMutableTreeNode root = (DefaultMutableTreeNode) defaultTreeModel.getRoot();
+		DefaultMutableTreeNode parentNode; 
+		DefaultMutableTreeNode node;
+		
+		
+		for(String parentItem : Preference.preferenceItems){
+			parentNode = (DefaultMutableTreeNode) defaultTreeModel.getRoot(); 
+			node = new DefaultMutableTreeNode(parentItem);
+			addNodeToDefaultTreeModel( defaultTreeModel, parentNode, node );
+		}
+		for(String[] parentIndex : Preference.preferenceItemsChild){
+			int index = Arrays.asList(Preference.preferenceItemsChild).indexOf(parentIndex);
+			parentNode = (DefaultMutableTreeNode) defaultTreeModel.getChild(root, index);
+			for(String items : parentIndex){
+				node = new DefaultMutableTreeNode(new InNodeObject(items, Preference.preferenceItems[index]));
+				addNodeToDefaultTreeModel( defaultTreeModel, parentNode, node );
+			}
+		}
+	
 		return tree;
 	}
-	public void setTree(JTree tree) {
-		this.tree = tree;
+	
+	private static void addNodeToDefaultTreeModel( DefaultTreeModel treeModel, DefaultMutableTreeNode parentNode, DefaultMutableTreeNode node ) {
+		
+		treeModel.insertNodeInto(  node, parentNode, parentNode.getChildCount()  );
+		
+		if (  parentNode == treeModel.getRoot()  ) {
+			treeModel.nodeStructureChanged(  (TreeNode) treeModel.getRoot()  );
+		}
 	}
-
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
@@ -64,12 +97,14 @@ public class TreeViewPanel extends JPanel implements TreeSelectionListener {
 		
 		Object nodeInfo = node.getUserObject();
 		if (node.isLeaf()) {
-		 String title = (String) nodeInfo;
-		 
-		} else {
-		 
+			InNodeObject nodeObject = (InNodeObject) nodeInfo;
+			System.out.println(nodeObject.getLocation());
 		}
 		
+	}
+	
+	public JTree getTree(){
+		return this.tree;
 	}
 	
 }

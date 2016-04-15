@@ -23,13 +23,20 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
 import Settings.Windows.InternalWindows;
+import frames.CFrame;
+import frames.CodeViewer;
+import frames.FlowChart;
+import frames.TaskList;
 
 public class DesktopPane extends JDesktopPane {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+	private CFrame parent;
+	private TaskList taskListFrame;
+	private FlowChart flowChartFrame;
+	private CodeViewer codeViewerFrame;
 	
 	private Map<String, JInternalFrame> frameList;
 	
@@ -43,27 +50,22 @@ public class DesktopPane extends JDesktopPane {
 		initIFrames();
 	}
 	
+	public void init(CFrame parent){
+		this.parent = parent;
+	}
+	
 	//2nd Initializing
 	private void initIFrames(){
-		for(InternalWindows window : InternalWindows.values()){
-			JInternalFrame frame =  window.getInternalFrame();
-			int order = window.ordinal() % 2;
-			if(order==0){
-				frame.setLocation(0,0);
-				frame.setSize(this.getWidth()/2, this.getHeight());
-			} else {
-				frame.setLocation(this.getWidth()/2, this.getHeight());
-				frame.setSize(this.getWidth()/2, this.getHeight());
-			}
-			frameList.put(window.getTitle(), frame);
-		}
-		for(JInternalFrame frame : frameList.values()){
-			//For only two frame to visible.
-			if(frame.getTitle().equals(InternalWindows.Task.getTitle()) == false){
-				frame.setVisible(true);
-			}
-			this.add(frame);
-		}
+		taskListFrame = new TaskList(InternalWindows.Task.getTitle());
+		flowChartFrame = new FlowChart(InternalWindows.Flow.getTitle());
+		codeViewerFrame = new CodeViewer(InternalWindows.Code.getTitle());
+		taskListFrame.init(this);
+		flowChartFrame.init(this);
+		codeViewerFrame.init(this);
+		this.add(taskListFrame);
+		this.add(flowChartFrame);
+		this.add(codeViewerFrame);
+		
 	}
 	
 	public void toggleFrame(String title, Boolean visible){

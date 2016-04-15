@@ -13,15 +13,17 @@
 package frames;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-public class CodeViewer extends JInternalFrame {
+import panels.DesktopPane;
+
+public class CodeViewer extends InternalFrame {
 	/**
 	 * 
 	 */
@@ -32,20 +34,34 @@ public class CodeViewer extends JInternalFrame {
     private RTextScrollPane sp;
     
 	public CodeViewer(String title) {
-        super(title, 
-              true, //resizable
-              true, //closable
-              true, //maximizable
-              true);//iconifiable
+        super(title); 
+              
         
         cp = new JPanel(new BorderLayout());
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
         textArea.setCodeFoldingEnabled(true);
+        textArea.setFont(new Font("NanumGothic", Font.PLAIN, 9));
         sp = new RTextScrollPane(textArea);
         cp.add(sp);
 
         setContentPane(cp);
         pack();
+	}
+	
+	public void init(DesktopPane parent){
+		this.parent = parent;
+		this.setLocation(parent.getWidth()/2,0);
+		this.setSize(parent.getWidth()/2, parent.getHeight());
+		this.setVisible(true);
+	}
+
+	public Boolean setFont(String name, int style, int size){
+		try{
+			textArea.setFont(new Font(name, style, size));
+		} catch (Exception e){
+			return false;
+		}
+		return true;
 	}
 }
