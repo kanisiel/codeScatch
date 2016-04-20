@@ -1,19 +1,19 @@
 package frames;
 
-import java.awt.BorderLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import Settings.Constants;
-import panels.PreferenceDetailPanel;
+import net.miginfocom.swing.MigLayout;
 import panels.PreferencePanel;
+import panels.TreeViewPanel;
 
 public class PreferenceFrame extends JFrame {
 
@@ -25,11 +25,12 @@ public class PreferenceFrame extends JFrame {
 	private CFrame mainFrame;
 	private String title;
 	private PreferencePanel preferencePanel;
-	private BorderLayout layout;
+	private JScrollPane scrollPane;
+	private MigLayout layout;
 	private JPanel buttonPanel;
 	private JFrame preferenceFrame;
 	private ActionHandler actionHandler;
-	private Map<String, PreferenceDetailPanel> panelList;
+	private TreeViewPanel treePanel;
 	
 	public PreferenceFrame() throws HeadlessException {
 		super();
@@ -44,9 +45,16 @@ public class PreferenceFrame extends JFrame {
 		this.setSize(Constants.PFRAME_W,Constants.PFRAME_H);
 		this.setLocation(Constants.PFRAME_X, Constants.PFRAME_Y);
 		this.setResizable(true);
-		this.layout = new BorderLayout();
+		this.layout = new MigLayout("","["+(Constants.PFRAME_W)/3+"]["+(Constants.PFRAME_W)/3+"]["+(Constants.PFRAME_W)/3+"]");
 		this.getContentPane().setLayout(this.layout);
-		this.add(this.preferencePanel, BorderLayout.CENTER);
+		this.treePanel = new TreeViewPanel();
+		this.scrollPane = new JScrollPane(treePanel);
+		this.scrollPane.setBounds( 0, 0, Constants.PFRAME_W/3, Constants.PFRAME_H-30);
+		this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		this.add(this.scrollPane);
+		this.add(this.preferencePanel);
+		this.add(new JPanel(), "span 2");
 		this.buttonPanel = new JPanel();
 		JButton okButton = new JButton("OK");
 		okButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -58,7 +66,7 @@ public class PreferenceFrame extends JFrame {
 		cancelButton.addActionListener(this.actionHandler);
 		buttonPanel.add(okButton);
 		buttonPanel.add(cancelButton);
-		this.add(buttonPanel, BorderLayout.SOUTH);
+		this.add(buttonPanel);
 		
 		
 	}
@@ -96,8 +104,5 @@ public class PreferenceFrame extends JFrame {
 //			mainFrame = parents;
 //		}
 
-	}
-	public void setPanelList(Map<String, PreferenceDetailPanel> panelList){
-		this.panelList = panelList;
 	}
 }
