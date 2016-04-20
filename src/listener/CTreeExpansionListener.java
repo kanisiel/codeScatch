@@ -1,9 +1,7 @@
 package listener;
 
-import javax.swing.JTree;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
-import javax.swing.tree.TreePath;
 
 import panels.TreeViewPanel;
 
@@ -11,18 +9,16 @@ public class CTreeExpansionListener implements TreeExpansionListener {
 	private TreeViewPanel parent;
 	
 	public void treeExpanded(TreeExpansionEvent evt) {
-		JTree tree = (JTree) evt.getSource();
-
-		TreePath path = evt.getPath();
-		System.out.println(tree.getWidth() + ", " + tree.getHeight());
+//		JTree tree = (JTree) evt.getSource();
+//
+//		TreePath path = evt.getPath();
 	}
 
 	public void treeCollapsed(TreeExpansionEvent evt) {
-		JTree tree = (JTree) evt.getSource();
-
-		TreePath path = evt.getPath();
-		parent.setSize(tree.getWidth(), tree.getHeight());
-		System.out.println(tree.getWidth() + ", " + tree.getHeight());
+//		JTree tree = (JTree) evt.getSource();
+//
+//		TreePath path = evt.getPath();
+//		parent.setSize(tree.getWidth(), tree.getHeight());
 	}
 	public void init(TreeViewPanel parent){
 		this.parent = parent;

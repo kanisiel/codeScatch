@@ -51,7 +51,7 @@ public class CMenu extends JMenu {
 	public void setMenuItem(String menuItem) {
 		this.menuItem = menuItem;
 	}
-
+	
 	public void invokedMethod(String name){
 		try {
 			this.getClass().getMethod(name).invoke(this);
@@ -59,6 +59,10 @@ public class CMenu extends JMenu {
 	}
 	
 	public void init(CFrame parents){
+		
 		this.parents = parents;
+		this.actionHandler.init(parents);
+//		this.actionHandler.setMenu(this);
 	}
+	
 }

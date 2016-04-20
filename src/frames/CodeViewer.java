@@ -39,23 +39,26 @@ public class CodeViewer extends InternalFrame {
         
         cp = new JPanel(new BorderLayout());
         textArea = new RSyntaxTextArea(20, 60);
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
         textArea.setCodeFoldingEnabled(true);
         textArea.setFont(new Font("NanumGothic", Font.PLAIN, 9));
         sp = new RTextScrollPane(textArea);
         cp.add(sp);
-
         setContentPane(cp);
         pack();
 	}
 	
+	@Override
 	public void init(DesktopPane parent){
 		this.parent = parent;
 		this.setLocation(parent.getWidth()/2,0);
 		this.setSize(parent.getWidth()/2, parent.getHeight());
 		this.setVisible(true);
 	}
-
+	public RSyntaxTextArea getTextArea(){
+		return this.textArea;
+	}
+	
 	public Boolean setFont(String name, int style, int size){
 		try{
 			textArea.setFont(new Font(name, style, size));
@@ -63,5 +66,9 @@ public class CodeViewer extends InternalFrame {
 			return false;
 		}
 		return true;
+	}
+	public void setFonts(Font font){
+		this.textArea.setFont(font);
+		
 	}
 }

@@ -1,20 +1,30 @@
 package Settings;
 
+import frames.CodeViewer;
+import frames.FlowChart;
+import frames.InternalFrame;
+import frames.TaskList;
+
 public class Windows {
 	//Internal Frame Attributes
 	public static enum InternalWindows {
-		Flow("Flow Chart"),
-		Code("Code Viewer"),
-		Task("Task List");
+		Flow("Flow Chart", new FlowChart("Flow Chart")),
+		Code("Code Viewer", new CodeViewer("Code Viewer")),
+		Task("Task List", new TaskList("Task List"));
 		
 		String title;
+		InternalFrame frame;
 		//Constructor
-		private InternalWindows(String title){
+		private InternalWindows(String title, InternalFrame frame){
 			this.title = title;
+			this.frame = frame;
 		}
 		
 		public String getTitle(){
 			return this.title;
+		}
+		public InternalFrame getInternalFrame(){
+			return frame;
 		}
 	};
 	//Code Viewer Attributes

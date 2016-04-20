@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
@@ -17,6 +16,8 @@ import javax.swing.tree.TreeNode;
 
 import Settings.Constants;
 import Settings.Preference;
+import Settings.Preference.preferenceItemsChilds;
+import frames.PreferenceFrame;
 import listener.CTreeExpansionListener;
 import models.InNodeObject;
 
@@ -27,7 +28,7 @@ public class TreeViewPanel extends JPanel implements TreeSelectionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	JTree tree;
-	JFrame parents;
+	PreferenceFrame parents;
 	CTreeExpansionListener expantionListener;
 	
 
@@ -41,11 +42,13 @@ public class TreeViewPanel extends JPanel implements TreeSelectionListener {
 		this.tree.setRootVisible(false);
 		this.tree.addTreeSelectionListener(this);
 		this.tree.addTreeExpansionListener(this.expantionListener);
-		this.add(tree, BorderLayout.WEST);
-		this.setSize(Constants.PFRAME_W/2, Constants.PFRAME_H);
+		this.add(tree, BorderLayout.CENTER);
+		this.setSize(0, 0);
+		this.tree.setSize(Constants.PFRAME_W/3, Constants.PFRAME_H-30);
+		
 	}
 	
-	public void init(JFrame parent, int width, int height){
+	public void init(PreferenceFrame parent, int width, int height){
 		this.parents = parent;
 		this.setSize(width, height);
 		this.setBackground(Color.WHITE);
@@ -63,21 +66,19 @@ public class TreeViewPanel extends JPanel implements TreeSelectionListener {
 		DefaultMutableTreeNode parentNode; 
 		DefaultMutableTreeNode node;
 		
-		
 		for(String parentItem : Preference.preferenceItems){
 			parentNode = (DefaultMutableTreeNode) defaultTreeModel.getRoot(); 
 			node = new DefaultMutableTreeNode(parentItem);
 			addNodeToDefaultTreeModel( defaultTreeModel, parentNode, node );
+			panelList.put(parentItem, PreferenceDetailPanel.getInstance());
 		}
-		for(String[] parentIndex : Preference.preferenceItemsChild){
-			int index = Arrays.asList(Preference.preferenceItemsChild).indexOf(parentIndex);
+		for(preferenceItemsChilds items : Preference.preferenceItemsChilds.values()){
+			int index = Arrays.asList(Preference.preferenceItems).indexOf(items.getParent());
 			parentNode = (DefaultMutableTreeNode) defaultTreeModel.getChild(root, index);
-			for(String items : parentIndex){
-				node = new DefaultMutableTreeNode(new InNodeObject(items, Preference.preferenceItems[index]));
-				addNodeToDefaultTreeModel( defaultTreeModel, parentNode, node );
-			}
+			node = new DefaultMutableTreeNode(new InNodeObject(items.getItemName(), items.getParent(), items.name()));
+			addNodeToDefaultTreeModel( defaultTreeModel, parentNode, node );
+			panelList.put(items.getParent()+">"+items.getItemName(), items.getPanel());
 		}
-	
 		return tree;
 	}
 	
@@ -98,7 +99,9 @@ public class TreeViewPanel extends JPanel implements TreeSelectionListener {
 		Object nodeInfo = node.getUserObject();
 		if (node.isLeaf()) {
 			InNodeObject nodeObject = (InNodeObject) nodeInfo;
-			System.out.println(nodeObject.getLocation());
+			
+			String key = nodeObject.getSuperMenu()+">"+nodeObject.getTitle();
+			parents.setDetailPane(key);
 		}
 		
 	}

@@ -59,5 +59,8 @@ public abstract class InternalFrame extends JInternalFrame {
 
 		this.getContentPane().setLayout(new BorderLayout());
     }
+    public void init(DesktopPane parent){
+		this.parent = parent;
+    }
     
 }

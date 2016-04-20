@@ -26,6 +26,7 @@ import Settings.Windows.InternalWindows;
 import frames.CFrame;
 import frames.CodeViewer;
 import frames.FlowChart;
+import frames.InternalFrame;
 import frames.TaskList;
 
 public class DesktopPane extends JDesktopPane {
@@ -47,24 +48,16 @@ public class DesktopPane extends JDesktopPane {
 		
 		//Initializing
 		this.setSize(width, height);
-		initIFrames();
+		for(InternalWindows item : InternalWindows.values()){
+			InternalFrame frame = item.getInternalFrame();
+			frame.init(this);
+			frameList.put(item.getTitle(), frame);
+			this.add(frame);
+		}
 	}
 	
 	public void init(CFrame parent){
 		this.parent = parent;
-	}
-	
-	//2nd Initializing
-	private void initIFrames(){
-		taskListFrame = new TaskList(InternalWindows.Task.getTitle());
-		flowChartFrame = new FlowChart(InternalWindows.Flow.getTitle());
-		codeViewerFrame = new CodeViewer(InternalWindows.Code.getTitle());
-		taskListFrame.init(this);
-		flowChartFrame.init(this);
-		codeViewerFrame.init(this);
-		this.add(taskListFrame);
-		this.add(flowChartFrame);
-		this.add(codeViewerFrame);
 		
 	}
 	
@@ -74,5 +67,9 @@ public class DesktopPane extends JDesktopPane {
 				frame.setVisible(visible);
 			}
 		}
+	}
+
+	public CodeViewer getCodeViewerFrame() {
+		return codeViewerFrame;
 	}
 }

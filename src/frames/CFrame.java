@@ -16,6 +16,9 @@ public class CFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	//Association
+	private PreferenceFrame preferenceFrame;
+	
 	//components
 	private CMenuBar menuBar;
 	private CToolbar toolbar;
@@ -34,7 +37,6 @@ public class CFrame extends JFrame {
 		
 		//components initialization
 		this.menuBar = new CMenuBar();
-		this.menuBar.init(this);
 		this.setJMenuBar(menuBar);
 		this.getContentPane().setLayout(new BorderLayout());
 		this.statusBar = new StatusBar();
@@ -44,15 +46,42 @@ public class CFrame extends JFrame {
 		this.desktopPane = new DesktopPane(this.getWidth(), this.getHeight());
 		this.add(desktopPane, BorderLayout.CENTER);
 		this.componentListener = new CComponentListener();
-		this.componentListener.init(this.desktopPane);
 		this.addComponentListener(componentListener);
 
 		
 	}
+	public DesktopPane getDesktopPane(){
+		return this.desktopPane;
+	}
+	public PreferenceFrame getPreferenceFrame(){
+		return this.preferenceFrame;
+	}
 	//2nd phase initialization
 	public void init(){
+		//associated attributes initialization
+		this.componentListener.init(this.desktopPane);
+		this.menuBar.init(this);
+		this.desktopPane.init(this);
+		this.setVisible(true);
+		this.statusBar.setText("Welcome!");
+		try {
+			
+			//sleep 5 seconds
+			Thread.sleep(5000);
+			
+			this.statusBar.clearText();
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	public void init(PreferenceFrame preferenceFrame){
 		
 		//associated attributes initialization
+		this.preferenceFrame = preferenceFrame;
+		this.componentListener.init(this.desktopPane);
+		this.menuBar.init(this);
+		this.desktopPane.init(this);
 		this.setVisible(true);
 		this.statusBar.setText("Welcome!");
 		try {

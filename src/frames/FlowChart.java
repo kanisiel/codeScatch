@@ -19,7 +19,7 @@ public class FlowChart extends InternalFrame {
 		this.getContentPane().setLayout(new BorderLayout());
 	}
 
-	
+	@Override
 	public void init(DesktopPane parent){
 		this.parent = parent;
 		this.setLocation(0,0);

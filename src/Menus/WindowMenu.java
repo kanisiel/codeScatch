@@ -1,8 +1,6 @@
 package Menus;
 
-import Settings.Menus.MenuItems;
 import frames.CFrame;
-import frames.PreferenceFrame;
 
 public class WindowMenu extends CMenu{
 	/**
@@ -16,18 +14,19 @@ public class WindowMenu extends CMenu{
 	}
 
 	public void preference(){
-		createPreferenceWindow(MenuItems.Preference.getName());
+		parents.getPreferenceFrame().setVisible(true);
 	}
 	
-	public void createPreferenceWindow(String title){
-		PreferenceFrame preferenceFrame = new PreferenceFrame();
-		preferenceFrame.init(super.parents, title);
+	
+	@Override
+	public void invokedMethod(String name){
+		try {
+			this.getClass().getMethod(name).invoke(this);
+		} catch (Exception e) {e.printStackTrace();	}
 	}
-
 	
-	
-	
-	public void init(CFrame parents){
-		super.parents = parents;
+	@Override
+	public void init(CFrame parent){
+		this.parents = parent;
 	}
 }

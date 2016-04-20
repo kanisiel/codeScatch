@@ -20,6 +20,7 @@ public class CMenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	//Components
 	private CFrame parents;
+	private Map<String, CMenu> menus;
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 	 * Constructor													 *
@@ -29,6 +30,7 @@ public class CMenuBar extends JMenuBar {
 	 *  Last Modify : 2016/04/12									 *
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public CMenuBar() {
+		this.menus = new LinkedHashMap<>();
 		setMenu();
 	}
 	
@@ -65,7 +67,7 @@ public class CMenuBar extends JMenuBar {
 	private void addMenus(Map<String, Menu> menus){
 		for(Entry<String, Menu> entry : menus.entrySet()){
 			CMenu menu = new CMenu(entry.getKey(), entry.getValue().getItems());
-			menu.init(parents);
+			this.menus.put(entry.getKey(), menu);
 			this.add(menu);
 		}
 	}
@@ -73,6 +75,9 @@ public class CMenuBar extends JMenuBar {
 	//initializing method
 	public void init(CFrame parents){
 		this.parents = parents;
+		for(Entry<String, CMenu> entry : menus.entrySet()){
+			entry.getValue().init(parents);
+		}
 	}
 	
 }

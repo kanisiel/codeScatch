@@ -12,14 +12,19 @@ public class ActionHandler implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		CMenu target = MenuItems.valueOf(e.getActionCommand()).getInvoke();
 		target.init(parents);
 		target.invokedMethod(target.getMenuItem().toLowerCase());
-		//System.out.println(e.getActionCommand());
+		
 	}
 	public void init(CFrame parents){
 		this.parents = parents;
 	}
+//	public void setCaller(ColorFontPanel caller){
+//		this.caller = caller;
+//	}
+//	public void setMenu(CMenu menu){
+//		this.menu = menu;
+//	}
 
 }
