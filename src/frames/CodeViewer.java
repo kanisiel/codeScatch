@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import panels.DesktopPane;
@@ -59,16 +60,18 @@ public class CodeViewer extends InternalFrame {
 		return this.textArea;
 	}
 	
-	public Boolean setFont(String name, int style, int size){
-		try{
-			textArea.setFont(new Font(name, style, size));
-		} catch (Exception e){
-			return false;
-		}
-		return true;
-	}
-	public void setFonts(Font font){
-		this.textArea.setFont(font);
-		
-	}
+	public void setFont(RSyntaxTextArea textArea, Font font) {
+      if (font != null) {
+         SyntaxScheme ss = textArea.getSyntaxScheme();
+         ss = (SyntaxScheme) ss.clone();
+         for (int i = 0; i < ss.getStyleCount(); i++) {
+            if (ss.getStyle(i) != null) {
+               ss.getStyle(i).font = font;
+            }
+         }
+         textArea.setSyntaxScheme(ss);
+         textArea.setFont(font);
+         textArea.revalidate();
+      }
+   }
 }

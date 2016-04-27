@@ -25,7 +25,7 @@ public class FontPanel extends PreferenceDetailPanel {
 		
 		this.superMenu = superMenu;
 		this.title = title;
-		this.bActionHandler.init(target, this);
+		this.bActionHandler.init(this);
 		this.setSize(width, height);
 		this.titleLabel = new JLabel(this.superMenu + " > "+ this.title);
 		titleLabel.setHorizontalTextPosition(SwingConstants.LEFT);

@@ -53,6 +53,13 @@ public class DesktopPane extends JDesktopPane {
 			frame.init(this);
 			frameList.put(item.getTitle(), frame);
 			this.add(frame);
+			if(item.name().equals("Code")){
+				codeViewerFrame = (CodeViewer) frame;
+			} else if(item.name().equals("Flow")){
+				flowChartFrame = (FlowChart) frame;
+			} else if(item.name().equals("Task")){
+				taskListFrame = (TaskList) frame;
+			}
 		}
 	}
 	

@@ -45,7 +45,7 @@ public abstract class PreferenceDetailPanel extends JPanel {
 	
 	public void init(CFrame target){
 		this.target = target;
-		this.bActionHandler.init(target, this);
+		this.bActionHandler.init(this);
 	}
 	public static PreferenceDetailPanel getInstance() {
 		PreferenceDetailPanel pdPanel = new PreferenceDetailPanel(Preference.preferenceDetailPanel_W,Preference.preferenceDetailPanel_H-30) {
@@ -60,7 +60,6 @@ public abstract class PreferenceDetailPanel extends JPanel {
 	}
 	
 	public class BActionHandler implements ActionListener {
-		private CFrame parents;
 		private PreferenceDetailPanel caller;
 		
 		@Override
@@ -68,13 +67,12 @@ public abstract class PreferenceDetailPanel extends JPanel {
 			if(e.getActionCommand().equals("Apply")){
 				FontPanel cfp = (FontPanel) caller;
 				Font font = cfp.getFontSettingPanel().findFont();
-				parents.getDesktopPane().getCodeViewerFrame().setFont(font);
+				target.getDesktopPane().getCodeViewerFrame().setFont(target.getDesktopPane().getCodeViewerFrame().getTextArea(), font);
 			}
 			
 			
 		}
-		public void init(CFrame parents, PreferenceDetailPanel caller){
-			this.parents = parents;
+		public void init( PreferenceDetailPanel caller){
 			this.caller = caller;
 		}
 
