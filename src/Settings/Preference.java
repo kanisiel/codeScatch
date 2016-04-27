@@ -6,12 +6,13 @@ import panels.PreferenceDetailPanel;
 
 public class Preference {
 	
+	public static final String settingFile = "setting.ini";
 	public static final String fontSizes[] = { "8", "10", "11", "12", "14", "16", "18", "20", "24", "30", "36", "40", "48", "60", "72" };
 	
 	public static final int preferenceDetailPanel_W = (Constants.PFRAME_W/3)*2;
 	public static final int preferenceDetailPanel_H = Constants.PFRAME_H-30;
 	public static final String preferenceItems[] = {
-			"General", "Code Viewer", "Flow chart", "Task List"
+			"General", "Code Viewer", "Flow Chart", "Task List"
 	};
 	
 	public static final String preferenceItemsChild[] = {
@@ -22,10 +23,10 @@ public class Preference {
 //			{ new PreferenceDetailPanel((Constants.FRAME_W/3)*2, Constants.PFRAME_H)  }
 //	};
 	public static enum preferenceItemsChilds {
-		GL(preferenceItems[0], preferenceItemsChild[0], new Language(preferenceItems[0], preferenceItemsChild[0], preferenceDetailPanel_W, preferenceDetailPanel_H)),
-		CF(preferenceItems[1], preferenceItemsChild[1], new FontPanel(preferenceItems[1], preferenceItemsChild[1], preferenceDetailPanel_W, preferenceDetailPanel_H)),
-		FF(preferenceItems[2], preferenceItemsChild[1], new FontPanel(preferenceItems[2], preferenceItemsChild[1], preferenceDetailPanel_W, preferenceDetailPanel_H)),
-		TF(preferenceItems[3], preferenceItemsChild[1], new FontPanel(preferenceItems[3], preferenceItemsChild[1], preferenceDetailPanel_W, preferenceDetailPanel_H));
+		GL(preferenceItems[0], preferenceItemsChild[0], new Language(preferenceItems[0], preferenceItemsChild[0], preferenceDetailPanel_W, preferenceDetailPanel_H-30)),
+		CF(preferenceItems[1], preferenceItemsChild[1], new FontPanel(preferenceItems[1], preferenceItemsChild[1], preferenceDetailPanel_W, preferenceDetailPanel_H-30)),
+		FF(preferenceItems[2], preferenceItemsChild[1], new FontPanel(preferenceItems[2], preferenceItemsChild[1], preferenceDetailPanel_W, preferenceDetailPanel_H-30)),
+		TF(preferenceItems[3], preferenceItemsChild[1], new FontPanel(preferenceItems[3], preferenceItemsChild[1], preferenceDetailPanel_W, preferenceDetailPanel_H-30));
 		
 		String parent;
 		String itemName;

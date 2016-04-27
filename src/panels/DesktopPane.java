@@ -57,7 +57,7 @@ public class DesktopPane extends JDesktopPane {
 	}
 	
 	public void init(CFrame parent){
-		this.parent = parent;
+		this.setParent(parent);
 		
 	}
 	
@@ -72,4 +72,21 @@ public class DesktopPane extends JDesktopPane {
 	public CodeViewer getCodeViewerFrame() {
 		return codeViewerFrame;
 	}
+
+	public FlowChart getFlowChartFrame() {
+		return flowChartFrame;
+	}
+
+	public TaskList getTaskListFrame() {
+		return taskListFrame;
+	}
+
+	public CFrame getParent() {
+		return parent;
+	}
+
+	public void setParent(CFrame parent) {
+		this.parent = parent;
+	}
+
 }

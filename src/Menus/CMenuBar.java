@@ -19,7 +19,6 @@ public class CMenuBar extends JMenuBar {
 	 */
 	private static final long serialVersionUID = 1L;
 	//Components
-	private CFrame parents;
 	private Map<String, CMenu> menus;
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -74,7 +73,6 @@ public class CMenuBar extends JMenuBar {
 	
 	//initializing method
 	public void init(CFrame parents){
-		this.parents = parents;
 		for(Entry<String, CMenu> entry : menus.entrySet()){
 			entry.getValue().init(parents);
 		}

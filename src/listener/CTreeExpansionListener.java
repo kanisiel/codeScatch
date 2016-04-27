@@ -21,6 +21,14 @@ public class CTreeExpansionListener implements TreeExpansionListener {
 //		parent.setSize(tree.getWidth(), tree.getHeight());
 	}
 	public void init(TreeViewPanel parent){
+		this.setParent(parent);
+	}
+
+	public TreeViewPanel getParent() {
+		return parent;
+	}
+
+	public void setParent(TreeViewPanel parent) {
 		this.parent = parent;
 	}
 }

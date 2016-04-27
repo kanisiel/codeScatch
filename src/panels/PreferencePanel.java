@@ -1,12 +1,13 @@
 package panels;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import Settings.Constants;
 import Settings.Preference;
@@ -20,40 +21,52 @@ public class PreferencePanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private PreferenceFrame parent;
-	private TreeViewPanel treePanel;
-	private JScrollPane scrollPane;
-	private Map<String, PreferenceDetailPanel> panelList;
-	private BorderLayout layout;
+	private PreferenceFrame parents;
+	private Vector<PreferenceDetailPanel> panelVector;
+	private Map<String, Integer> panelList;
+	private CardLayout layout;
 	
 	public PreferencePanel(){
+		this.panelVector = new Vector<>();
 		this.panelList = new LinkedHashMap<>();
 		for(preferenceItemsChilds items : Preference.preferenceItemsChilds.values()){
 			PreferenceDetailPanel panel = items.getPanel();
-			panelList.put(items.getParent()+">"+items.getItemName(), panel);
+			panel.setVisible(true);
+			panelVector.add(panel);
+			panelList.put(items.getParent()+">"+items.getItemName(), panelVector.indexOf(panel));
 		}
-		panelList.get(Preference.preferenceItems[0]+">"+Preference.preferenceItemsChilds.GL.getItemName()).setVisible(true);
+		
+		this.add(panelVector.get(0), BorderLayout.CENTER);
+		
 		// set components
 		this.setSize(Constants.PFRAME_W,Constants.PFRAME_H-30);
 		this.setLocation(Constants.PFRAME_X, Constants.PFRAME_Y);
-		this.layout = new BorderLayout();
+		this.layout = new CardLayout();
 		this.setLayout(this.layout);
-		for(Entry<String, PreferenceDetailPanel> entry : panelList.entrySet()){
-			this.add(entry.getValue(), BorderLayout.CENTER);
+		for(Entry<String, Integer> entry : panelList.entrySet()){
+			this.add(panelVector.get(entry.getValue()), entry.getKey());
 		}
 		
 	}
+	
 	public void setDetailPanel(String key){
-		for(Entry<String, PreferenceDetailPanel> entry : panelList.entrySet()){
-			entry.getValue().setVisible(false);
-		}
-		panelList.get(key).setVisible(true);
+		CardLayout c1 = (CardLayout) this.getLayout();
+		c1.show(this, key);
+		this.repaint();
 	}
 	public void init(CFrame mainFrame, PreferenceFrame parent){
-		this.parent = parent;
-        for(Entry<String, PreferenceDetailPanel> entry : panelList.entrySet()){
-			entry.getValue().init(mainFrame);
-			entry.getValue().setParent(this);
+		this.setParents(parent);
+        for(PreferenceDetailPanel entry : panelVector){
+			entry.init(mainFrame);
+			entry.setParent(this);
 		}
+	}
+
+	public PreferenceFrame getParents() {
+		return parents;
+	}
+
+	public void setParents(PreferenceFrame parents) {
+		this.parents = parents;
 	}
 }

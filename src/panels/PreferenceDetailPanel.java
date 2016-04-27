@@ -11,11 +11,11 @@ import Settings.Preference;
 import frames.CFrame;
 
 public abstract class PreferenceDetailPanel extends JPanel {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 8205950031125250763L;
 	protected CFrame target;
 	protected PreferencePanel parent;
 	protected JLabel titleLabel;
@@ -39,6 +39,9 @@ public abstract class PreferenceDetailPanel extends JPanel {
 	public void setTarget(CFrame target){
 		this.target = target;
 	}
+	public JLabel getTitleLabel(){
+		return titleLabel;
+	}
 	
 	public void init(CFrame target){
 		this.target = target;
@@ -46,6 +49,11 @@ public abstract class PreferenceDetailPanel extends JPanel {
 	}
 	public static PreferenceDetailPanel getInstance() {
 		PreferenceDetailPanel pdPanel = new PreferenceDetailPanel(Preference.preferenceDetailPanel_W,Preference.preferenceDetailPanel_H-30) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 		};
 		pdPanel.setVisible(true);
 		return pdPanel;
@@ -60,9 +68,7 @@ public abstract class PreferenceDetailPanel extends JPanel {
 			if(e.getActionCommand().equals("Apply")){
 				FontPanel cfp = (FontPanel) caller;
 				Font font = cfp.getFontSettingPanel().findFont();
-				//parents.getDesktopPane().getCodeViewerFrame().setFonts(font);
-				//System.out.println(parents);
-				//System.out.println(cfp.getFontSettingPanel().findFont().toString());
+				parents.getDesktopPane().getCodeViewerFrame().setFont(font);
 			}
 			
 			

@@ -54,9 +54,14 @@ public class ButtonPanel extends JPanel {
 			if(e.getActionCommand().equals("cancel")){
 				parent.dispose();
 			}
-			//System.out.println(e.getActionCommand());
 		}
 		public void init(CFrame parents){
+			this.setParents(parents);
+		}
+		public CFrame getParents() {
+			return parents;
+		}
+		public void setParents(CFrame parents) {
 			this.parents = parents;
 		}
 
