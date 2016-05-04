@@ -22,7 +22,8 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import panels.DesktopPane;
+import Settings.Preference;
+import Settings.Windows;
 
 public class CodeViewer extends InternalFrame {
 	/**
@@ -34,28 +35,29 @@ public class CodeViewer extends InternalFrame {
     private RSyntaxTextArea textArea;
     private RTextScrollPane sp;
     
-	public CodeViewer(String title) {
-        super(title); 
+	public CodeViewer() {
+        super(Windows.InternalWindows.Code.getTitle()); 
               
         
         cp = new JPanel(new BorderLayout());
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
         textArea.setCodeFoldingEnabled(true);
-        textArea.setFont(new Font("NanumGothic", Font.PLAIN, 9));
+        textArea.setFont(Preference.defaultFont);
         sp = new RTextScrollPane(textArea);
         cp.add(sp);
         setContentPane(cp);
         pack();
+        this.setVisible(true);
 	}
 	
-	@Override
-	public void init(DesktopPane parent){
-		this.parent = parent;
-		this.setLocation(parent.getWidth()/2,0);
-		this.setSize(parent.getWidth()/2, parent.getHeight());
-		this.setVisible(true);
-	}
+//	@Override
+//	public void init(DesktopPane parent){
+//		this.parent = parent;
+//		this.setLocation(parent.getWidth()/2,0);
+//		this.setSize(parent.getWidth()/2, parent.getHeight());
+//		this.setVisible(true);
+//	}
 	public RSyntaxTextArea getTextArea(){
 		return this.textArea;
 	}

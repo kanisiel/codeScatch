@@ -22,11 +22,9 @@ import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
-import Settings.Windows.InternalWindows;
 import frames.CFrame;
 import frames.CodeViewer;
 import frames.FlowChart;
-import frames.InternalFrame;
 import frames.TaskList;
 
 public class DesktopPane extends JDesktopPane {
@@ -48,19 +46,19 @@ public class DesktopPane extends JDesktopPane {
 		
 		//Initializing
 		this.setSize(width, height);
-		for(InternalWindows item : InternalWindows.values()){
-			InternalFrame frame = item.getInternalFrame();
-			frame.init(this);
-			frameList.put(item.getTitle(), frame);
-			this.add(frame);
-			if(item.name().equals("Code")){
-				codeViewerFrame = (CodeViewer) frame;
-			} else if(item.name().equals("Flow")){
-				flowChartFrame = (FlowChart) frame;
-			} else if(item.name().equals("Task")){
-				taskListFrame = (TaskList) frame;
-			}
-		}
+//		for(InternalWindows item : InternalWindows.values()){
+//			InternalFrame frame = item.getInternalFrame();
+//			//frame.init(this);
+//			frameList.put(item.getTitle(), frame);
+//			this.add(frame);
+//			if(item.name().equals("Code")){
+//				codeViewerFrame = (CodeViewer) frame;
+//			} else if(item.name().equals("Flow")){
+//				flowChartFrame = (FlowChart) frame;
+//			} else if(item.name().equals("Task")){
+//				taskListFrame = (TaskList) frame;
+//			}
+//		}
 	}
 	
 	public void init(CFrame parent){

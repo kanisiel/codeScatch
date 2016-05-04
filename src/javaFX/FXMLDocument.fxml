@@ -5,10 +5,12 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import com.sibvisions.rad.ui.javafx.ext.mdi.*?>
+<?import com.sibvisions.rad.ui.javafx.ext.panes.*?>
+<?import jfxtras.scene.control.window.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFX.FXMLDocumentController">
+<FXDesktopPane id="DesktopPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFX.FXMLDocumentController">
     <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
-    </children>
-</AnchorPane>
+    	<FXInternalWindow  layoutX="122.0" layoutY="105.0" prefHeight="190.0" prefWidth="313.0" title="Window" />
+	</children>
+</FXDesktopPane>

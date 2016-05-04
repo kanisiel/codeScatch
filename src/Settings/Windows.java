@@ -1,31 +1,26 @@
 package Settings;
 
-import frames.CodeViewer;
-import frames.FlowChart;
-import frames.InternalFrame;
-import frames.TaskList;
-
 public class Windows {
 	//Internal Frame Attributes
 	public static enum InternalWindows {
-		Flow("Flow Chart", new FlowChart("Flow Chart")),
-		Code("Code Viewer", new CodeViewer("Code Viewer")),
-		Task("Task List", new TaskList("Task List"));
+		Flow("Flow Chart"),//, new FlowChart()),
+		Code("Code Viewer"),//, new CodeViewer()),
+		Task("Task List");//, new TaskList());
 		
 		String title;
-		InternalFrame frame;
+		//InternalFrame frame;
 		//Constructor
-		private InternalWindows(String title, InternalFrame frame){
+		private InternalWindows(String title){//, InternalFrame frame){
 			this.title = title;
-			this.frame = frame;
+			//this.frame = frame;
 		}
 		
 		public String getTitle(){
 			return this.title;
 		}
-		public InternalFrame getInternalFrame(){
-			return frame;
-		}
+//		public InternalFrame getInternalFrame(){
+//			return frame;
+//		}
 	};
 	//Code Viewer Attributes
 	public static final String highLightColor = "#CCE5FF"; 
