@@ -1,4 +1,4 @@
-package javaFX;
+package application;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -14,14 +14,13 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
+import Settings.Constants;
 import Settings.Preference;
 import Settings.Windows;
 import Settings.Windows.InternalWindows;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import jfxtras.scene.control.window.CloseIcon;
@@ -33,26 +32,40 @@ import jfxtras.scene.control.window.Window;
  * @author Lee Junsoo
  */
 public class CodeScatchFX extends Application {
-    
-    private static int counter = 1;
 
 	private void init(Stage primaryStage) throws Exception {
-		Parent main = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
-	    final Group root = new Group();  
-	
-	    root.getChildren().addAll(main);
-            primaryStage.setTitle("codeScatch v0.3");
+		MainUIController uiController = new MainUIController();
+	    //final Group root = new Group();  
+	    
+	    
+	    //root.getChildren().addAll(uiController);
+	    primaryStage.setTitle("codeScatch v0.3");
 	    primaryStage.setResizable(false);
-	    primaryStage.setScene(new Scene(root, 600, 500));
-	    for(InternalWindows item : InternalWindows.values()){
+	    primaryStage.setScene(new Scene(uiController));
+	    primaryStage.setWidth(Constants.FRAME_W);
+	    primaryStage.setHeight(Constants.FRAME_H);
+	    
+	    
+	}
+	
+	public double getSampleWidth() {return 600;}
+	public double getSampleHeight() {return 500;}
+	
+	private void addInternalFrames(Group root){
+		for(InternalWindows item : InternalWindows.values()){
 	    	
 			//InternalFrame frame = item.getInternalFrame();
 			Window w = new Window(item.getTitle());
 	        // set the window position to 10,10 (coordinates inside canvas)
-	        w.setLayoutX(10);
-	        w.setLayoutY(10);
+			if(item.getTitle().equals(Windows.InternalWindows.Code.getTitle())){
+		        w.setLayoutX(root.getLayoutX()+76+(Constants.FRAME_W-76)/2);
+		        w.setLayoutY(root.getLayoutY()+30);
+			} else {
+				w.setLayoutX(root.getLayoutX()+76);
+		        w.setLayoutY(root.getLayoutY()+30);
+			}
 	        // define the initial window size
-	        w.setPrefSize(300, 200);
+	        w.setPrefSize((Constants.FRAME_W-76)/2, Constants.FRAME_H-30);
 	        // either to the left
 	        w.getLeftIcons().add(new CloseIcon(w));
 	        // .. or to the right
@@ -66,12 +79,7 @@ public class CodeScatchFX extends Application {
 	        // add the window to the canvas
 	        root.getChildren().add(w);  
 		} 
-	    
 	}
-	
-	public double getSampleWidth() {return 600;}
-	public double getSampleHeight() {return 500;}
-	
 	private void createAndSetSwingContent(final SwingNode swingNode, String window) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -108,5 +116,6 @@ public class CodeScatchFX extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
     
 }

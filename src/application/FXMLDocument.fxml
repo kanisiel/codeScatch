@@ -8,9 +8,11 @@
 <?import com.sibvisions.rad.ui.javafx.ext.mdi.*?>
 <?import com.sibvisions.rad.ui.javafx.ext.panes.*?>
 <?import jfxtras.scene.control.window.*?>
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml"> 
+   <children>
 
-<FXDesktopPane id="DesktopPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFX.FXMLDocumentController">
-    <children>
-    	<FXInternalWindow  layoutX="122.0" layoutY="105.0" prefHeight="190.0" prefWidth="313.0" title="Window" />
-	</children>
-</FXDesktopPane>
+	<FXDesktopPane id="DesktopPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javaFX.FXMLDocumentController">
+	    
+	</FXDesktopPane>
+	   </children>
+</fx:root>
