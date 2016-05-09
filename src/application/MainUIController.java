@@ -6,32 +6,32 @@ package application;
  */
 
 
-import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
-
 /**
  *
  * @author newmacpro
  */
-public class MainUIController extends VBox {
+public class MainUIController implements Initializable {
     
-	@FXML private DesktopPaneController desktopPane;
-	//@FXML private DesktopPane desktopPane;
-    
+	
+//	@FXML 
+	public DesktopPaneController desktopPaneController;
+	
     public MainUIController(){
-    	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
-    	System.out.println(getClass().getResource("MainUI.fxml"));
-    	fxmlLoader.setRoot(this);
-    	fxmlLoader.setController(this);
-    	try{
-    		fxmlLoader.load();
-    	} catch(IOException e){
-    		e.getStackTrace();
-    		throw new RuntimeException(e);
-    	}
+
     }
+    public void init(VBox desktopPane){
+    	desktopPaneController = new DesktopPaneController(desktopPane);
+
+    }
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }
