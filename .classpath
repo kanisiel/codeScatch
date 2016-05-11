@@ -5,7 +5,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/jfxtras"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/rsyntaxtextarea-2.5.7"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/miglayout-5.1"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/miglayout-5.1"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jvxfx-1.0"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/antlr-4.5.3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
