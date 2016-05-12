@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import Menus.CMenuBar;
 import Settings.Constants;
+import Settings.Windows.InternalWindows;
 import listner.CComponentListener;
 import panels.DesktopPane;
 import panels.StatusBar;
@@ -51,7 +52,7 @@ public class CFrame extends JFrame {
 	}
 	//2nd phase initialization
 	public void init(){
-		
+		toolbar.init(((FlowChart)InternalWindows.Flow.getInternalFrame()).getFlowChartPane());
 		//associated attributes initialization
 		this.setVisible(true);
 		this.statusBar.setText("Welcome!");
