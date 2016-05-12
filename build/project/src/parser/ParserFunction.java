@@ -24,10 +24,4 @@ public class ParserFunction {
 	  }
 	public  void getStmt(ParseTree tree){
 	}
-	
-	public void printTokens(){
-		for(String s : tokenS){
-			System.out.println(s);
-		}
-	}
 }

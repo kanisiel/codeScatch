@@ -9,7 +9,6 @@ package application;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 /**
@@ -18,13 +17,17 @@ import javafx.scene.layout.VBox;
  */
 public class MainUIController implements Initializable {
     
-	@FXML private VBox desktopPane; 
-	@FXML private DesktopPaneController desktopPaneController;
+	
+//	@FXML 
+	public DesktopPaneController desktopPaneController;
 	
     public MainUIController(){
-    	
-    }
 
+    }
+    public void init(VBox desktopPane){
+    	desktopPaneController = new DesktopPaneController(desktopPane);
+
+    }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub

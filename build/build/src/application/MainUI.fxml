@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.sibvisions.rad.ui.javafx.ext.mdi.*?>
+
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import application.*?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainUIController">
+<VBox fx:id="content" prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1">
 	<children> 
 		<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 		    <top>
@@ -54,7 +54,11 @@
 		        </MenuBar>
 		    </top>
 			<center>
-				<fx:include fx:id="desktopPane" source="DesktopPane.fxml" />
+				<VBox fx:id="desktopPane" prefHeight="570.0" prefWidth="824.0" xmlns:fx="http://javafx.com/fxml/1">
+					<children>
+						
+					</children>
+				</VBox>
 		    </center>
 		    <left>
 		        <ToolBar prefHeight="376.0" prefWidth="76.0" BorderPane.alignment="CENTER">

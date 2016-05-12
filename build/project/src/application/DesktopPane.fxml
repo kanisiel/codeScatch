@@ -2,12 +2,16 @@
 
 <?import com.sibvisions.rad.ui.javafx.ext.mdi.*?>
 <?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.Control?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.VBox?>
+<?import application.*?>
+<?import jfxtras.scene.control.window.Window?>
 
 
-<VBox prefHeight="570.0" prefWidth="824.0" xmlns:fx="http://javafx.com/fxml" fx:controller="application.DesktopPaneController">
-   <children>
-     
-   </children>
+<VBox prefHeight="570.0" prefWidth="824.0" xmlns:fx="http://javafx.com/fxml">
+	<children>
+		<Window fx:id="flowChart" layoutX="0" prefWidth="412.0" prefHeight="570.0"></Window>
+		<Window fx:id="codeViewer" layoutX="412.0" prefWidth="412.0" prefHeight="570.0"></Window>
+	</children>
 </VBox>

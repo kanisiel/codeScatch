@@ -15,19 +15,11 @@ import javafx.stage.Stage;
  * @author Lee Junsoo
  */
 public class CodeScatchFX extends Application {
-
+	private MainUIView uiView;
 	private void init(Stage primaryStage) throws Exception {
-//		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainContainer.fxml"));
-//		fxmlLoader.setRoot(this);
-//		
-//		fxmlLoader.load();
-		MainUIView uiView = new MainUIView();
-	    //final Group root = new Group();
-	    //root.getChildren().addAll(uiController);
-		
-		//MainContaioner container = new MainContaioner();
+		uiView = new MainUIView();
 	    primaryStage.setTitle("codeScatch v0.3");
-	    primaryStage.setResizable(false);
+	    primaryStage.setResizable(true);
 	    primaryStage.setScene(new Scene(uiView.getContent()));
 	    primaryStage.setWidth(Constants.FRAME_W);
 	    primaryStage.setHeight(Constants.FRAME_H);
