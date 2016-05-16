@@ -15,9 +15,9 @@ import shapes.CShapeNode;
 
 public class CToolbar extends JToolBar{
 	private static final long serialVersionUID = 1L;
+	
 	private ActionHandler actionHandler;
 	private ButtonGroup buttonGroup;
-	
 	private FlowChartPane flowChartPane;
 	
 	public CToolbar(){
@@ -54,22 +54,18 @@ public class CToolbar extends JToolBar{
 			System.out.println(e.getActionCommand() + " Button pressed[" + EToolBarButton.valueOf(e.getActionCommand()).getShape() + "]");
 			
 			CShapeNode node;
-			boolean isDiamond = false;
 			String contents = (
 					EToolBarButton.valueOf(e.getActionCommand()).getShape().getShapeType() != EShapeType.STOP) ? 
 					JOptionPane.showInputDialog("Enter the content of Input/Ouput box: ") : "";
-			
-			//flowChartPane.setShapeManager(EToolBarButton.valueOf(e.getActionCommand()).getShape());
-			if (e.getActionCommand().equals(EShapeType.CONDITION.name()) ||
-					e.getActionCommand().equals(EShapeType.LOOP.name()))
-				isDiamond = true;
-			
+					
 			node = new CShapeNode(EToolBarButton.valueOf(
 					e.getActionCommand()).getShape().getShapeType(),
-					contents, 
-					isDiamond
+					contents
 					);
-			flowChartPane.getRootNode().insertNode(node);
+			
+			if (flowChartPane.getRootNode().insertNode(node))	// doens't operate
+				flowChartPane.getRootNode().printNode(flowChartPane.getRootNode());
+			
 			flowChartPane.drawNode(flowChartPane.getGraphics(), node);
 		}
 	}

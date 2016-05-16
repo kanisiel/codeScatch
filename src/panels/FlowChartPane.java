@@ -6,11 +6,9 @@ import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
+import Settings.Buttons.EToolBarButton;
 import Settings.Constants.EShapeType;
-import shapes.CDiamondManager;
 import shapes.COvalManager;
-import shapes.CParallelogramManager;
-import shapes.CRectangleManager;
 import shapes.CShapeManager;
 import shapes.CShapeNode;
 
@@ -20,7 +18,7 @@ public class FlowChartPane extends JPanel {
 	private CShapeManager shapeManager;
 	
 	public FlowChartPane() {
-		root = new CShapeNode(0, EShapeType.START, "START", false);
+		root = new CShapeNode(0, EShapeType.START, "START");
         this.setCoords(root, 55, 30);
         //shapeManager = new CShapeManager(EShapeType.START);
 	}
@@ -56,34 +54,13 @@ public class FlowChartPane extends JPanel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		if (node != null) {
-			if (node.getShapeType() == EShapeType.START)
+			// Refactoring these code is essential!!!!!!!!!!
+			if (node.getShapeType() == EShapeType.START || node.getShapeType() == EShapeType.STOP)
 				shapeManager = new COvalManager(node.getShapeType());
-			/*
+			
 			else 
 				shapeManager = EToolBarButton.valueOf(node.getShapeType().name()).getShape();
-			*/
-			else if (node.getShapeType() == EShapeType.PROCESS)
-				// draw rectangle
-				shapeManager = new CRectangleManager(node.getShapeType());
-			
-			else if (node.getShapeType() == EShapeType.IO)
-				// draw parallogram
-				shapeManager = new CParallelogramManager(node.getShapeType());
-			
-			else if (node.getShapeType() == EShapeType.CONDITION)
-				shapeManager = new CDiamondManager(node.getShapeType());
-			
-			else if (node.getShapeType() == EShapeType.LOOP)
-				// draw as CONDITION but one of the arrows is toward upward
-				shapeManager = new CDiamondManager(node.getShapeType());
-			
-			else if (node.getShapeType() == EShapeType.FUNCTION) {
-				// ... complex ... it may be an add on button...
-			}
-			
-			else if (node.getShapeType() == EShapeType.STOP)
-				shapeManager = new COvalManager(node.getShapeType());
-			
+		
 			shapeManager.draw(g2d, node);
 								
 			if (!node.getIsDiamond())

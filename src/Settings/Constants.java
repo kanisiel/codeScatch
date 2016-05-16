@@ -20,7 +20,13 @@ public class Constants {
 		LOOP,
 		FUNCTION,
 		STOP;
-	};	
+	};
+	
+	public static enum EArrowHeadDirection {
+		DOWN,
+		LEFT,
+		RIGHT;
+	};
 
 	//Preference frame attributes
 	public static final int PFRAME_X = 100;

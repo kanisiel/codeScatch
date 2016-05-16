@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.io.Serializable;
 
+import Settings.Constants.EArrowHeadDirection;
 import Settings.Constants.EShapeType;
 
 public abstract class CShapeManager implements Serializable {
@@ -13,26 +14,24 @@ public abstract class CShapeManager implements Serializable {
 	protected EShapeType shapeType;
 	protected Point sw, ne;
 	
-	public CShapeManager(EShapeType shapeType) {
-		this.shapeType = shapeType;
-	}
+	public CShapeManager(EShapeType shapeType) {	this.shapeType = shapeType;	}
 	
-	public void drawArrowHead(Graphics2D g, Point tip, Point tail, Color color) {
-		g.setPaint(color);
-        double dy = tip.y - tail.y;
-        double dx = tip.x - tail.x;
-        double theta = Math.atan2(dy, dx);
-        double x, y, rho = theta + Math.toRadians(30);
+	public void drawArrowHead(Graphics2D g, Point tip, Point tail, Color color, EArrowHeadDirection arrowHeadDirection) {
+		double dy 		= tip.y - tail.y;
+        double dx 		= tip.x - tail.x;
+        double theta	= Math.atan2(dy, dx);
+        double rad 		= (arrowHeadDirection != EArrowHeadDirection.LEFT) ? 30 : 120;	// 5*pi/6(rad) for upward-headed arrow
+        double rho 		= theta + Math.toRadians(rad);
         
+        g.setPaint(color);        
         for (int i = 0; i < 2; i++) {
-            x = tip.x - 10 * Math.cos(rho);
-            y = tip.y - 10 * Math.sin(rho);
+        	double x = tip.x - 10 * Math.cos(rho);
+        	double y = tip.y - 10 * Math.sin(rho);
             g.draw(new Line2D.Double(tip.x, tip.y, x, y));
-            rho = theta - Math.toRadians(30);
+            rho = theta - Math.toRadians(rad);
         }
 	}
 	
 	public EShapeType getShapeType() {	return shapeType;	}
-	
 	public void draw(Graphics2D g, CShapeNode node) {};
 }

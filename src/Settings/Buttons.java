@@ -33,12 +33,12 @@ public class Buttons {
 	 * Enumeration for Buttons on ToolBar
 	 */
 	public static enum EToolBarButton {
-		Process("Process", "img/process.png", "img/process_SLT.png", new CRectangleManager(EShapeType.PROCESS)),
+		PROCESS("Process", "img/process.png", "img/process_SLT.png", new CRectangleManager(EShapeType.PROCESS)),
 		IO("Input/Output", "img/io.png", "img/io_SLT.png", new CParallelogramManager(EShapeType.IO)),
-		Condition("Condition", "img/condition.png", "img/condition_SLT.png", new CDiamondManager(EShapeType.CONDITION)),
-		Loop("Loop", "img/loop.png", "img/loop_SLT.png", new CDiamondManager(EShapeType.LOOP)),
-		Function("Function", "img/fx.png", "img/fx_SLT.png", new COvalManager(EShapeType.FUNCTION)),
-		Stop("Stop", "img/stop.png", "img/stop_SLT.png", new COvalManager(EShapeType.STOP));
+		CONDITION("Condition", "img/condition.png", "img/condition_SLT.png", new CDiamondManager(EShapeType.CONDITION)),
+		LOOP("Loop", "img/loop.png", "img/loop_SLT.png", new CDiamondManager(EShapeType.LOOP)),
+		//FUNCTION("Function", "img/fx.png", "img/fx_SLT.png", new COvalManager(EShapeType.FUNCTION)),
+		STOP("Stop", "img/stop.png", "img/stop_SLT.png", new COvalManager(EShapeType.STOP));
 		
 		private String name;
 		private String iconDefName;		// Icon's image default path
