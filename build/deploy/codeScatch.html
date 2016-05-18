@@ -1,9 +1,10 @@
 <html><head>
-  <SCRIPT src="http://java.com/js/dtjava.js"></SCRIPT>
+  <SCRIPT src="./web-files/dtjava.js"></SCRIPT>
 <script>
     function launchApplication(jnlpfile) {
         dtjava.launch(            {
-                url : 'codeScatch.jnlp'
+                url : 'codeScatch.jnlp',
+                jnlp_content : 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPGpubHAgc3BlYz0iMS4wIiB4bWxuczpqZng9Imh0dHA6Ly9qYXZhZnguY29tIiBocmVmPSJjb2RlU2NhdGNoLmpubHAiPgogIDxpbmZvcm1hdGlvbj4KICAgIDx0aXRsZT5jb2RlU2NhdGNoPC90aXRsZT4KICAgIDx2ZW5kb3I+Y2Fwc3RvbmU8L3ZlbmRvcj4KICAgIDxkZXNjcmlwdGlvbj5TYW1wbGUgSmF2YUZYIDIuMCBhcHBsaWNhdGlvbi48L2Rlc2NyaXB0aW9uPgogICAgPG9mZmxpbmUtYWxsb3dlZC8+CiAgPC9pbmZvcm1hdGlvbj4KICA8cmVzb3VyY2VzPgogICAgPGoyc2UgdmVyc2lvbj0iMS42KyIgaHJlZj0iaHR0cDovL2phdmEuc3VuLmNvbS9wcm9kdWN0cy9hdXRvZGwvajJzZSIvPgogICAgPGphciBocmVmPSJjb2RlU2NhdGNoLmphciIgc2l6ZT0iMTc5MDM0IiBkb3dubG9hZD0iZWFnZXIiIC8+CiAgICA8amFyIGhyZWY9ImxpYnMvYW50bHItNC41LjMtY29tcGxldGUuamFyIiBzaXplPSIxNDg1MTIxIiBkb3dubG9hZD0iZWFnZXIiIC8+CiAgICA8amFyIGhyZWY9ImxpYnMvamZ4dHJhcy1jb21tb24tOC4wLXI1LVNOQVBTSE9ULmphciIgc2l6ZT0iNTM2ODUiIGRvd25sb2FkPSJlYWdlciIgLz4KICAgIDxqYXIgaHJlZj0ibGlicy9qZnh0cmFzLWZ4bWwtOC4wLXI1LVNOQVBTSE9ULmphciIgc2l6ZT0iMjA5MiIgZG93bmxvYWQ9ImVhZ2VyIiAvPgogICAgPGphciBocmVmPSJsaWJzL2pmeHRyYXMtbWVudS04LjAtcjUtU05BUFNIT1QuamFyIiBzaXplPSIyMDYxOCIgZG93bmxvYWQ9ImVhZ2VyIiAvPgogICAgPGphciBocmVmPSJsaWJzL2pmeHRyYXMtd2luZG93LTguMC1yNS1TTkFQU0hPVC5qYXIiIHNpemU9IjQwODU5IiBkb3dubG9hZD0iZWFnZXIiIC8+CiAgICA8amFyIGhyZWY9ImxpYnMvbWlnbGF5b3V0LWNvcmUtNS4xLTIwMTYwNDE2LjIyMDAyOS0zODcuamFyIiBzaXplPSI3NjU4OCIgZG93bmxvYWQ9ImVhZ2VyIiAvPgogICAgPGphciBocmVmPSJsaWJzL21pZ2xheW91dC1zd2luZy01LjEtMjAxNjA0MTkuMjIwMDIwLTM5MC5qYXIiIHNpemU9IjE3NDMyIiBkb3dubG9hZD0iZWFnZXIiIC8+CiAgICA8amFyIGhyZWY9ImxpYnMvcnN5bnRheHRleHRhcmVhLTIuNS43LmphciIgc2l6ZT0iMTA1MzUzNyIgZG93bmxvYWQ9ImVhZ2VyIiAvPgogIDwvcmVzb3VyY2VzPgogIDxqZng6amF2YWZ4LWRlc2MgIHdpZHRoPSI5MDAiIGhlaWdodD0iNjAwIiBtYWluLWNsYXNzPSJhcHBsaWNhdGlvbi5Db2RlU2NhdGNoRlgiICBuYW1lPSJjb2RlU2NyYXRjaCIgLz4KICA8dXBkYXRlIGNoZWNrPSJiYWNrZ3JvdW5kIi8+Cjwvam5scD4K'
             },
             {
                 javafx : '8.0+'
@@ -22,7 +23,8 @@
                 url : 'codeScatch.jnlp',
                 placeholder : 'javafx-app-placeholder',
                 width : 900,
-                height : 600
+                height : 600,
+                jnlp_content : 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPGpubHAgc3BlYz0iMS4wIiB4bWxuczpqZng9Imh0dHA6Ly9qYXZhZnguY29tIiBocmVmPSJjb2RlU2NhdGNoLmpubHAiPgogIDxpbmZvcm1hdGlvbj4KICAgIDx0aXRsZT5jb2RlU2NhdGNoPC90aXRsZT4KICAgIDx2ZW5kb3I+Y2Fwc3RvbmU8L3ZlbmRvcj4KICAgIDxkZXNjcmlwdGlvbj5TYW1wbGUgSmF2YUZYIDIuMCBhcHBsaWNhdGlvbi48L2Rlc2NyaXB0aW9uPgogICAgPG9mZmxpbmUtYWxsb3dlZC8+CiAgPC9pbmZvcm1hdGlvbj4KICA8cmVzb3VyY2VzPgogICAgPGoyc2UgdmVyc2lvbj0iMS42KyIgaHJlZj0iaHR0cDovL2phdmEuc3VuLmNvbS9wcm9kdWN0cy9hdXRvZGwvajJzZSIvPgogICAgPGphciBocmVmPSJjb2RlU2NhdGNoLmphciIgc2l6ZT0iMTc5MDM0IiBkb3dubG9hZD0iZWFnZXIiIC8+CiAgICA8amFyIGhyZWY9ImxpYnMvYW50bHItNC41LjMtY29tcGxldGUuamFyIiBzaXplPSIxNDg1MTIxIiBkb3dubG9hZD0iZWFnZXIiIC8+CiAgICA8amFyIGhyZWY9ImxpYnMvamZ4dHJhcy1jb21tb24tOC4wLXI1LVNOQVBTSE9ULmphciIgc2l6ZT0iNTM2ODUiIGRvd25sb2FkPSJlYWdlciIgLz4KICAgIDxqYXIgaHJlZj0ibGlicy9qZnh0cmFzLWZ4bWwtOC4wLXI1LVNOQVBTSE9ULmphciIgc2l6ZT0iMjA5MiIgZG93bmxvYWQ9ImVhZ2VyIiAvPgogICAgPGphciBocmVmPSJsaWJzL2pmeHRyYXMtbWVudS04LjAtcjUtU05BUFNIT1QuamFyIiBzaXplPSIyMDYxOCIgZG93bmxvYWQ9ImVhZ2VyIiAvPgogICAgPGphciBocmVmPSJsaWJzL2pmeHRyYXMtd2luZG93LTguMC1yNS1TTkFQU0hPVC5qYXIiIHNpemU9IjQwODU5IiBkb3dubG9hZD0iZWFnZXIiIC8+CiAgICA8amFyIGhyZWY9ImxpYnMvbWlnbGF5b3V0LWNvcmUtNS4xLTIwMTYwNDE2LjIyMDAyOS0zODcuamFyIiBzaXplPSI3NjU4OCIgZG93bmxvYWQ9ImVhZ2VyIiAvPgogICAgPGphciBocmVmPSJsaWJzL21pZ2xheW91dC1zd2luZy01LjEtMjAxNjA0MTkuMjIwMDIwLTM5MC5qYXIiIHNpemU9IjE3NDMyIiBkb3dubG9hZD0iZWFnZXIiIC8+CiAgICA8amFyIGhyZWY9ImxpYnMvcnN5bnRheHRleHRhcmVhLTIuNS43LmphciIgc2l6ZT0iMTA1MzUzNyIgZG93bmxvYWQ9ImVhZ2VyIiAvPgogIDwvcmVzb3VyY2VzPgogIDxqZng6amF2YWZ4LWRlc2MgIHdpZHRoPSI5MDAiIGhlaWdodD0iNjAwIiBtYWluLWNsYXNzPSJhcHBsaWNhdGlvbi5Db2RlU2NhdGNoRlgiICBuYW1lPSJjb2RlU2NyYXRjaCIgLz4KICA8dXBkYXRlIGNoZWNrPSJiYWNrZ3JvdW5kIi8+Cjwvam5scD4K'
             },
             {
                 javafx : '8.0+'

@@ -16,9 +16,6 @@
  */
 package panels;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
@@ -37,12 +34,10 @@ public class DesktopPane extends JDesktopPane {
 	private FlowChart flowChartFrame;
 	private CodeViewer codeViewerFrame;
 	
-	private Map<String, JInternalFrame> frameList;
 	
 	public DesktopPane(int width, int height) {
 		super();
 		//Components
-		frameList = new LinkedHashMap<>();
 		
 		//Initializing
 		this.setSize(width, height);

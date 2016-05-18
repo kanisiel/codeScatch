@@ -28,10 +28,8 @@ public class DesktopPaneController extends VBox {
 //    private FXDesktopWindowManager manager;
 	final int windowWidth = (Constants.FRAME_W-76)/2;
 	final int windowHeight = Constants.FRAME_H-30;
-	private String buffer;
     
     public DesktopPaneController(VBox desktopPane){
-    	buffer = "";
     	Pane canvas = new Pane();
     	desktopPane.getChildren().add(canvas);
 //    	Window w = new Window("test");
@@ -86,11 +84,12 @@ public class DesktopPaneController extends VBox {
 	
     }
     private void createAndSetSwingContent(final SwingNode swingNode, String window) {
+    	JPanel cp;
+		cp = new JPanel(new BorderLayout());
 //        SwingUtilities.invokeLater(new Runnable() {
 //            @Override
 //            public void run() {
             	if(window.equals(Windows.InternalWindows.Code.getTitle())){
-            		JPanel cp;
         	        RSyntaxTextArea textArea;
         	        RTextScrollPane sp;
             		cp = new JPanel(new BorderLayout());
@@ -103,8 +102,15 @@ public class DesktopPaneController extends VBox {
         	        textArea.addCaretListener(new CodeViewerListener());
         	        sp = new RTextScrollPane(textArea);
         	        cp.add(sp);
-        	        swingNode.setContent(cp);
-            	}
+            	} //else if(window.equals(Windows.InternalWindows.Flow.getTitle())){
+//        	        FlowChartPane fp;
+//            		cp = new JPanel(new BorderLayout());
+//        	        fp = new FlowChartPane();
+//            		fp.setVisible(true);
+//            		fp.setSize(windowWidth, windowHeight);
+//        	        cp.add(fp);
+//            	}
+    	        swingNode.setContent(cp);
 //            }
 //        });
     }

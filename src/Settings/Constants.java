@@ -9,9 +9,18 @@ public class Constants {
 	
 	public static enum EJFrame{
 		Toolbar,
-		DrawingPanel;
+		FlowChart;
 	};
 	
+	public static enum EShapeType {
+		START,
+		PROCESS,
+		IO,
+		CONDITION,
+		LOOP,
+		FUNCTION,
+		STOP;
+	};	
 
 	//Preference frame attributes
 	public static final int PFRAME_X = 100;

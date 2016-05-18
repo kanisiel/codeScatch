@@ -58,27 +58,9 @@ public class CFrame extends JFrame {
 	}
 	//2nd phase initialization
 	public void init(){
+		//toolbar.init(((FlowChart)InternalWindows.Flow.getInternalFrame()).getFlowChartPane());
 		//associated attributes initialization
-		this.componentListener.init(this.desktopPane);
-		this.menuBar.init(this);
-		this.desktopPane.init(this);
-		this.setVisible(true);
-		this.statusBar.setText("Welcome!");
-		try {
-			
-			//sleep 5 seconds
-			Thread.sleep(5000);
-			
-			this.statusBar.clearText();
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	public void init(PreferenceFrame preferenceFrame){
 		
-		//associated attributes initialization
-		this.preferenceFrame = preferenceFrame;
 		this.componentListener.init(this.desktopPane);
 		this.menuBar.init(this);
 		this.desktopPane.init(this);

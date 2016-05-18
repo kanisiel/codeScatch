@@ -35,6 +35,7 @@ public class CodeViewerListener implements CaretListener {
 				tree = parser.translationUnit();
 				functions = new ParserFunction();
 				functions.toTokenString(tree);
+				functions.printTokens();
 				//System.out.println(source.getText());
 			}
 		} else {

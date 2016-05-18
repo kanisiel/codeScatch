@@ -16,7 +16,7 @@ public class MainUIView extends VBox{
 
 	    	 controller = new MainUIController();
 	    	 URL url = MainUIView.class.getResource("MainUI.fxml");
-	    	 System.out.println(url);
+	    	 
 	    	 FXMLLoader loader = new FXMLLoader(url);
 	    	 loader.setController(controller);
 	    	 loader.load();
