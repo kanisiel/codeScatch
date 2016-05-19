@@ -18,7 +18,7 @@ public class CRectangleManager extends CShapeManager {
 	@Override
 	public void draw(Graphics2D g, CShapeNode node) {
 		g.drawRect(node.getX() - 25, node.getY(), 50, 50);
-		g.drawString(node.getShapeContent(), node.getX() - 24, node.getY() - 24);
+		g.drawString(node.getShapeContent(), node.getX() - 24, node.getY() + 25);
 		sw = new Point(node.getX(), node.getY() + 50);
         ne = new Point(node.getX(), node.getY() + 80);
 		g.draw(new Line2D.Double(sw, ne));

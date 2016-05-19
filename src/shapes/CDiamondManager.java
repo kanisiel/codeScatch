@@ -29,7 +29,7 @@ public class CDiamondManager extends CShapeManager {
         g.drawLine(node.getX() - 40, node.getY() + 40, node.getX(), node.getY() + 80);
         g.drawLine(node.getX(), node.getY(), node.getX() + 40, node.getY() + 40);
         g.drawLine(node.getX() + 40, node.getY() + 40, node.getX(), node.getY() + 80);
-        g.drawString(node.getShapeContent(), node.getX() - 30, node.getY() + 40);
+        g.drawString(node.getShapeContent() + "?", node.getX() - 30, node.getY() + 43);
         
         //Draw No line
         sw = new Point(node.getX(), node.getY() + 80);
@@ -40,8 +40,8 @@ public class CDiamondManager extends CShapeManager {
         g.setColor(Color.black);
                         
         //Draw yes line
-        g.drawLine(node.getX()+40, node.getY()+40, node.getX() +200, node.getY() + 40);
-        g.drawLine(node.getX()+200, node.getY()+40, node.getX() + 200, node.getY() + 110);
+        g.drawLine(node.getX() + 40, node.getY() + 40, node.getX() + 200, node.getY() + 40);
+        g.drawLine(node.getX() + 200, node.getY() + 40, node.getX() + 200, node.getY() + 110);
         sw = new Point(node.getX() + 200, node.getY() + 70);
         ne = new Point(node.getX() + 200, node.getY() + 110);
         super.drawArrowHead(g, ne, sw, Color.blue, EArrowHeadDirection.DOWN);

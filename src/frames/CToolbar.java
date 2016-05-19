@@ -42,30 +42,37 @@ public class CToolbar extends JToolBar{
 		this.setFocusable(true);
 	}
 	
-	public void init(FlowChartPane flowChartPane) {
-		this.flowChartPane = flowChartPane;
-	}
+	public void init(FlowChartPane flowChartPane) {	this.flowChartPane = flowChartPane;	}
 	
 	public class ActionHandler implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// message to confirm
-			System.out.println(e.getActionCommand() + " Button pressed[" + EToolBarButton.valueOf(e.getActionCommand()).getShape() + "]");
-			
 			CShapeNode node;
-			String contents = (
-					EToolBarButton.valueOf(e.getActionCommand()).getShape().getShapeType() != EShapeType.STOP) ? 
-					JOptionPane.showInputDialog("Enter the content of Input/Ouput box: ") : "";
-					
+			int attachTo = 1;
+			
+			String contents = (EToolBarButton.valueOf(e.getActionCommand()).getShape().getShapeType() != EShapeType.STOP) ? 
+					JOptionPane.showInputDialog("Enter the content of " + EToolBarButton.valueOf(e.getActionCommand()) + " box: ") : EShapeType.STOP.name();
+			
+			if (contents == null) return;
+			
 			node = new CShapeNode(EToolBarButton.valueOf(
 					e.getActionCommand()).getShape().getShapeType(),
 					contents
 					);
 			
-			if (flowChartPane.getRootNode().insertNode(node))	// doens't operate
-				flowChartPane.getRootNode().printNode(flowChartPane.getRootNode());
+			/*
+			if (EToolBarButton.valueOf(e.getActionCommand()).getShape().getShapeType() == EShapeType.CONDITION)
+				attachTo = (int) JOptionPane.showInputDialog(null, "0:NO 1:YES ",
+	                    "Link to shape no: ", JOptionPane.QUESTION_MESSAGE, null,
+	                    Constants.DECISION,
+	                    Constants.DECISION[0]);
+			*/
+			if (flowChartPane.getRootNode().insertNode(attachTo, node))
+				flowChartPane.setCoords(flowChartPane.getRootNode(), 55, 30);
 			
+			flowChartPane.getRootNode().printNode(flowChartPane.getRootNode());
+			System.out.println("\n");
 			flowChartPane.drawNode(flowChartPane.getGraphics(), node);
 		}
 	}

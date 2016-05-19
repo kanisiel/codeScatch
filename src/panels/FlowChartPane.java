@@ -20,18 +20,14 @@ public class FlowChartPane extends JPanel {
 	public FlowChartPane() {
 		root = new CShapeNode(0, EShapeType.START, "START");
         this.setCoords(root, 55, 30);
-        //shapeManager = new CShapeManager(EShapeType.START);
 	}
 	
-	public void setShapeManager(CShapeManager shapeManager) {	
-		this.shapeManager = shapeManager;
-	}
+	public void setShapeManager(CShapeManager shapeManager) {	this.shapeManager = shapeManager;	}
 
 	public void setCoords(CShapeNode node, int x, int y){
         if (node != null){
             node.setX(x);
             node.setY(y);
-               
 	        if (!node.getIsDiamond())
 	        	this.setCoords(node.getRight(), x, y + 80);
 	            
@@ -54,7 +50,6 @@ public class FlowChartPane extends JPanel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		if (node != null) {
-			// Refactoring these code is essential!!!!!!!!!!
 			if (node.getShapeType() == EShapeType.START || node.getShapeType() == EShapeType.STOP)
 				shapeManager = new COvalManager(node.getShapeType());
 			
@@ -63,13 +58,10 @@ public class FlowChartPane extends JPanel {
 		
 			shapeManager.draw(g2d, node);
 								
-			if (!node.getIsDiamond())
+			if (node.getIsDiamond())
 				this.drawNode(g, node.getLeft());
 			
-			else {
-				this.drawNode(g, node.getLeft());
-				this.drawNode(g, node.getRight());
-			}
+			this.drawNode(g, node.getRight());
 		}
 	}
 }

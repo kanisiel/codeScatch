@@ -1,6 +1,7 @@
 package shapes;
 
 import java.io.Serializable;
+
 import Settings.Constants.EShapeType;
 
 public class CShapeNode implements Serializable {
@@ -14,65 +15,74 @@ public class CShapeNode implements Serializable {
 	private boolean isDiamond;
 	private int x;
 	private int y;
-	private int numberOfShape;
+	private CShapeNode previousNode;
+	private static int incShapeNo = 0;
     
 	public CShapeNode(int shapeNo, EShapeType shapeType, String shapeContent){
-        left = null;
-        right = null;
         this.shapeNo = shapeNo;
         this.shapeType = shapeType;
         this.shapeContent = shapeContent;
         this.setIsDiamond();
-        this.numberOfShape = 0;
+        previousNode = null;
     }
     
     public CShapeNode(EShapeType shapeType, String shapeContent){
         left = null;
         right = null;
-        this.shapeNo++;
+        this.shapeNo = ++incShapeNo;
         this.shapeType = shapeType;
         this.shapeContent = shapeContent;
         this.setIsDiamond();
-        this.numberOfShape = 0;
+        previousNode = null;
+    }
+        
+    private void setIsDiamond() {
+    	isDiamond = (this.shapeType.equals(EShapeType.CONDITION) || this.shapeType.equals(EShapeType.LOOP)) ? true : false;    	
     }
     
-    public void setCoords(CShapeNode node, int x, int y){
-        if (node != null){
-            node.x = x;
-            node.y = y;
-               
-	        if (node.isDiamond == false)
-	        	this.setCoords(node.left,x,y+80);
-	            
-	        else {
-	        	this.setCoords(node.left,x,y+110);
-	        	this.setCoords(node.right,x+200,y+110);
-	        }
-        }
-    }
-    
-    private void setIsDiamond() {	
-    	if (this.shapeType == EShapeType.CONDITION || this.shapeType == EShapeType.LOOP)
-			isDiamond = true;	
-    	isDiamond = false;
+    public boolean insertNode(int attachTo, CShapeNode node) {
+    	if (attachTo == 0 && this.left == null) { 
+    		previousNode = this;
+    		this.left = node;
+    	}
+    	
+    	else if (attachTo == 1) 
+    		this.insertNode(node);    	
+
+    	return true;
     }
     
     public boolean insertNode(CShapeNode node) {
-    	if (this.right != null) {
+    	if (this.right == null) {
+    		previousNode = this;
     		this.right = node;
-    		numberOfShape++;
     		return true;
     	}
     	
-    	return false;
+    	return this.right.insertNode(node);
     }
     
-    // Correct this
-    public void printNode(CShapeNode node) {
-    	System.out.println(node);
+    public CShapeNode findNode(CShapeNode node, int shapeNo){ 
+        if (node != null){ 
+            if(node.shapeNo == shapeNo) return node; 
+             
+            else { 
+            	CShapeNode temp = null;
+            	
+                if (node.left != null)	temp = findNode(node.left, shapeNo);
+                
+                if (temp == null && node.right != null)	temp = findNode(node.right, shapeNo);
+                
+                return temp; 
+            } 
+        }
+        
+        return null; 
+    }
+    
+   public void printNode(CShapeNode node) {
     	if (node != null) {
-    		System.out.println(node.getShapeType() + " ");
-    		
+    		System.out.print(node.getShapeType().name() + "[" + node.shapeNo + "] -> ");
     		printNode(node.left);
     		printNode(node.right);
     	}
@@ -83,11 +93,11 @@ public class CShapeNode implements Serializable {
     
 	public CShapeNode getLeft() {	return left;	}
 	public CShapeNode getRight() {	return right;	}
+	public CShapeNode getPreviousNode() {	return previousNode;	}
 	public int getShapeNo() {	return shapeNo;	}
 	public String getShapeContent() {	return shapeContent;	}
 	public EShapeType getShapeType() {	return shapeType;	}
 	public boolean getIsDiamond() {	return isDiamond;	}
 	public int getX() {	return x;	}
 	public int getY() {	return y;	}
-	public int getNumberOfShape() {	return numberOfShape;	}
 }

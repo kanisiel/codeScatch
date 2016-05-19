@@ -27,6 +27,8 @@ public class Constants {
 		LEFT,
 		RIGHT;
 	};
+	
+	public static final String[] DECISION = {"NO", "YES"};
 
 	//Preference frame attributes
 	public static final int PFRAME_X = 100;

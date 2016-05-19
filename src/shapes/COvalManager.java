@@ -27,7 +27,7 @@ public class COvalManager extends CShapeManager {
 	}
 	
 	public void drawStartOval(Graphics2D g, CShapeNode node) {
-		g.drawOval(node.getX() - 25, node.getY(), 50, 50);
+		g.drawOval(node.getX() - 25, node.getY(), radius, radius);
         //g.drawString("Fig: " + node.getShapeNo(), node.getX() - 100, node.getY() + 20);
         g.drawString(node.getShapeContent(), node.getX() - 18, node.getY() + 30);
         sw = new Point(node.getX(), node.getY() + 50);
