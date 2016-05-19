@@ -10,8 +10,41 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/rsyntaxtextarea-2.5.7"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/miglayout-5.1"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/antlr-4.5.3"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/jfxtras"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/jvxfx-1.0"/>
+	<classpathentry kind="lib" path="libs/antlr-4.5.3/antlr-4.5.3-complete.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/antlr-4.5.3/antlr4-4.5.3-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jfxtras/jfxtras-common-8.0-r5-SNAPSHOT.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/jfxtras/jfxtras-common-8.0-r5-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jfxtras/jfxtras-controls-8.0-r5-SNAPSHOT.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/jfxtras/jfxtras-controls-8.0-r5-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jfxtras/jfxtras-fxml-8.0-r5-SNAPSHOT.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/jfxtras/jfxtras-fxml-8.0-r5-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jfxtras/jfxtras-labs-8.0-r5-20160515.080214-228.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/jfxtras/jfxtras-labs-8.0-r4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jfxtras/jfxtras-menu-8.0-r5-SNAPSHOT.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/jfxtras/jfxtras-menu-8.0-r5-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jfxtras/jfxtras-window-8.0-r5-SNAPSHOT.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/jfxtras/jfxtras-window-8.0-r5-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

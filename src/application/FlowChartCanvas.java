@@ -47,8 +47,8 @@ public class FlowChartCanvas extends BorderPane {
 		GraphicsContext gc = layer.getGraphicsContext2D();
 //		System.out.println(gc);
 		gc.setStroke(Color.BLACK);
-		gc.strokeOval(100, 100, 50, 50);
-		gc.strokeText("Start", 100, 100);
+		gc.strokeOval(windowWidth/2-25, 30, 50, 50);
+		gc.strokeText("Start", windowWidth/2-15, 0);
 		this.getChildren().add(layer);
 //		gc.clearRect(0, 0, width, height);
 //		gc.setStroke(Color.BLACK);
