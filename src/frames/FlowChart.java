@@ -15,7 +15,6 @@ public class FlowChart extends InternalFrame {
 	public FlowChart(String title) {
         super(title);//iconifiable
         this.getContentPane().setLayout(new BorderLayout());
-        
         flowChartPane = new FlowChartPane();
 		this.add(flowChartPane, BorderLayout.CENTER);
 

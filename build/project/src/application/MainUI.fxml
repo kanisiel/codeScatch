@@ -61,11 +61,11 @@
 				</VBox>
 		    </center>
 		    <left>
-		        <ToolBar prefHeight="376.0" prefWidth="76.0" BorderPane.alignment="CENTER">
-		            <items>
-		                <Button mnemonicParsing="false" text="Button" />
-		            </items>
-		        </ToolBar>
+		        <VBox fx:id="toolBar" xmlns:fx="http://javafx.com/fxml/1">
+		        	<children>
+		        	
+		        	</children>
+		        </VBox>
 		    </left>
 		        
 		</BorderPane>

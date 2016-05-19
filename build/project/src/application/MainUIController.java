@@ -20,12 +20,14 @@ public class MainUIController implements Initializable {
 	
 //	@FXML 
 	public DesktopPaneController desktopPaneController;
+	public ToolBarController toolBarController;
 	
     public MainUIController(){
 
     }
-    public void init(VBox desktopPane){
+    public void init(VBox desktopPane, VBox toolBar){
     	desktopPaneController = new DesktopPaneController(desktopPane);
+    	toolBarController = new ToolBarController(toolBar);
 
     }
 	@Override

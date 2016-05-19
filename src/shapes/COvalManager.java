@@ -21,10 +21,10 @@ public class COvalManager extends CShapeManager {
 	@Override
 	public void draw(Graphics2D g, CShapeNode node) {
 		if (shapeType == EShapeType.START)
-			this.drawStartOval(g, node);
+			drawStartOval(g, node);
 		
 		else
-			this.drawStopOval(g, node);
+			drawStopOval(g, node);
 	}
 	
 	public void drawStartOval(Graphics2D g, CShapeNode node) {

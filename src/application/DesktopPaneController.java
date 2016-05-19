@@ -17,13 +17,15 @@ import javafx.embed.swing.SwingNode;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import jfxtras.scene.control.window.CloseIcon;
 import jfxtras.scene.control.window.MinimizeIcon;
 import jfxtras.scene.control.window.Window;
 import listener.CodeViewerListener;
-import panels.FlowChartPane;
 
 public class DesktopPaneController extends VBox {
     
@@ -33,12 +35,14 @@ public class DesktopPaneController extends VBox {
 //    private FXDesktopWindowManager manager;
 	final int windowWidth = (Constants.FRAME_W-76)/2;
 	final int windowHeight = Constants.FRAME_H-30;
+	
     
     public DesktopPaneController(VBox desktopPane){
     	Pane canvas = new Pane();
     	desktopPane.getChildren().add(canvas);
 //    	Window w = new Window("test");
 //    	canvas.getChildren().add(w);
+    	
     	addInternalFrames(canvas);
 
     }
@@ -61,10 +65,10 @@ public class DesktopPaneController extends VBox {
 	        w.setLayoutX((Constants.FRAME_W-76)/2);
 	        w.setLayoutY(0);
 		} else {
-			Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
-			BackgroundImage bgImage = new BackgroundImage(img, null, null, null, null);
-			Background bg = new Background(bgImage);
-			w.setBackground(bg);
+//			Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
+//			BackgroundImage bgImage = new BackgroundImage(img, null, null, null, null);
+//			Background bg = new Background(bgImage);
+//			w.setBackground(bg);
 			w.setLayoutX(0);
 	        w.setLayoutY(0);
 		}
@@ -82,7 +86,16 @@ public class DesktopPaneController extends VBox {
         createAndSetSwingContent(swingNode, title);
         
         // add some content
-        setContent(w, swingNode);
+        if(w.getTitle().equals(Windows.InternalWindows.Code.getTitle())){
+        	setContent(w, swingNode);
+        } else {
+        	FlowChartCanvas canvas = new FlowChartCanvas();
+        	Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
+        	BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        	canvas.setBackground(new Background(bi));
+        	canvas.init();
+        	w.setContentPane(canvas);
+        }
         w.setVisible(true);
         
         return w;
@@ -92,7 +105,7 @@ public class DesktopPaneController extends VBox {
         w.setContentPane(p);
 	
     }
-    private void createAndSetSwingContent(final SwingNode swingNode, String window) {
+    private void createAndSetSwingContent(SwingNode swingNode, String window) {
     	
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -110,12 +123,34 @@ public class DesktopPaneController extends VBox {
         	        textArea.addCaretListener(new CodeViewerListener());
         	        sp = new RTextScrollPane(textArea);
         	        cp.add(sp);
-                        swingNode.setContent(cp);
+        	        swingNode.setContent(cp);
             	} 
                 if(window.equals(Windows.InternalWindows.Flow.getTitle())){
-        	        FlowChartPane fp;
-        	        fp = new FlowChartPane();
-        	        swingNode.setContent(fp);
+                	//JPanel cp = new JPanel();
+                	
+                	
+                	
+//                	
+//                	canvas.setImg(img);
+//                	canvas.paint(img.getGraphics());
+//        	        canvas.setVisible(true);
+//        	        canvas.setBackground(new Color(0, 0, 0));
+//        	        canvas.init();
+//        	        cp.add(canvas);
+//        	        swingNode.setContent(cp);
+                	//Graphics2D g2d = (Graphics2D) new BufferedImage(windowWidth, windowHeight, java.awt.Image.SCALE_DEFAULT).createGraphics();
+                    //System.out.println(g2d.);
+//                	JPanel cp = new JPanel(new BorderLayout());
+//                	BufferedImage bi = new BufferedImage(windowWidth, windowHeight, java.awt.Image.SCALE_DEFAULT);
+//                	FlowChartPane fcp = new FlowChartPane(bi);
+//                	System.out.println(fcp.getSize());
+//                	
+//                	fcp.setOpaque(false);
+//                	fcp.setVisible(true);
+//                	fcp.init();
+//                	cp.add(fcp, BorderLayout.CENTER);
+//                	swingNode.setContent(cp);
+                	
             	}
     	        
             }
