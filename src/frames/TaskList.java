@@ -2,8 +2,6 @@ package frames;
 
 import java.awt.BorderLayout;
 
-import Settings.Windows;
-
 public class TaskList extends InternalFrame {
 
 	/**
@@ -12,7 +10,7 @@ public class TaskList extends InternalFrame {
 	private static final long serialVersionUID = 1L;
 	
 	public TaskList() {
-        super(Windows.InternalWindows.Task.getTitle());//iconifiable
+        super("");//Windows.InternalWindows.Task.getTitle());//iconifiable
 
         
         //...Create the GUI and put it in the window...

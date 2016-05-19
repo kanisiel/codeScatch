@@ -4,8 +4,8 @@ public class Windows {
 	//Internal Frame Attributes
 	public static enum InternalWindows {
 		Flow("Flow Chart"),//, new FlowChart()),
-		Code("Code Viewer"),//, new CodeViewer()),
-		Task("Task List");//, new TaskList());
+		Code("Code Viewer");//,//, new CodeViewer()),
+		//Task("Task List");//, new TaskList());
 		
 		String title;
 		//InternalFrame frame;

@@ -2,6 +2,7 @@ package panels;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
@@ -18,6 +19,7 @@ public class FlowChartPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private CShapeNode root;
 	private CShapeManager shapeManager;
+	private Image img;
 	
 	public FlowChartPane() {
 		root = new CShapeNode(0, EShapeType.START, "START", false);
@@ -95,4 +97,9 @@ public class FlowChartPane extends JPanel {
 			}
 		}
 	}
+	
+
+	  public void paintComponent(Graphics g) {
+	    g.drawImage(img, 0, 0, null);
+	  }
 }
