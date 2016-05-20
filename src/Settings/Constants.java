@@ -6,6 +6,8 @@ public class Constants {
 	public static final int FRAME_Y = 100;
 	public static final int FRAME_W = 900;
 	public static final int FRAME_H = 600;
+	public static final int windowWidth = (FRAME_W-76)/2;
+	public static final int windowHeight = FRAME_H-30;
 	
 	public static enum EJFrame{
 		Toolbar,

@@ -8,9 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/rsyntaxtextarea-2.5.7"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/miglayout-5.1"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/jvxfx-1.0"/>
 	<classpathentry kind="lib" path="libs/antlr-4.5.3/antlr-4.5.3-complete.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/antlr-4.5.3/antlr4-4.5.3-javadoc.jar!/"/>
@@ -44,6 +41,26 @@
 	<classpathentry kind="lib" path="libs/jfxtras/jfxtras-window-8.0-r5-SNAPSHOT.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/jfxtras/jfxtras-window-8.0-r5-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/jvxfx-1.0/jvxfx-1.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/jvxfx-1.0/jvxfx-1.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/miglayout-5.1/miglayout-core-5.1-20160416.220029-387.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/miglayout-5.1/miglayout-core-5.1-20160416.220029-387-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/miglayout-5.1/miglayout-swing-5.1-20160419.220020-390.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/miglayout-5.1/miglayout-swing-5.1-20160419.220020-390-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/rsyntaxtextarea-2.5.7/rsyntaxtextarea-2.5.7.jar" sourcepath="libs/rsyntaxtextarea-2.5.7/rsyntaxtextarea-2.5.7-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/codeScatch/libs/rsyntaxtextarea-2.5.7/rsyntaxtextarea-2.5.7-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
