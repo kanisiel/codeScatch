@@ -84,7 +84,7 @@ public class CDiamondManager extends CShapeManager {
 	}
 	@Override
 	public Text getText() {
-		Text text = new Text(body);
+		text = new Text(body);
 		text.setX(tp.getX());
 		text.setY(tp.getY());
 		return text;
@@ -94,17 +94,19 @@ public class CDiamondManager extends CShapeManager {
 	@Override
 	public void setCoords(Point2D p, Dimension2D d, Dimension2D w) {
 		// TODO Auto-generated method stub
-		Text t = new Text(body);
-		this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
-		this.setP(new Point2D((w.getWidth()/2)-(td.getWidth()/2+20), p.getY()+d.getHeight()+40));
-		
-		this.setD(new Dimension2D(td.getWidth()+60, td.getHeight()+50));
-		this.setTp(new Point2D(this.getP().getX()+20, this.getP().getY()+38));
+		text = new Text(body);
+		text.setWrappingWidth(Math.ceil(text.getLayoutBounds().getWidth()));
+		this.setTd(new Dimension2D(text.getLayoutBounds().getWidth(), text.getLayoutBounds().getHeight()));
+		this.setD(new Dimension2D((Math.floor(text.getWrappingWidth())*1.4)+60, td.getHeight()+30));
+		this.setP(new Point2D((w.getWidth()/2)-(this.d.getWidth()/2+20), p.getY()+d.getHeight()+40));
+		this.setTp(new Point2D(this.getP().getX()+(25*1.4), this.getP().getY()+(20*1.4)));
 		
 		this.e = new Point2D(this.getP().getX(),this.getP().getY()+(this.getD().getHeight()/2));
 		this.w = new Point2D(this.getP().getX()+this.getD().getWidth(), this.getP().getY()+(this.getD().getHeight()/2));
 		this.n = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY());
 		this.s = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY()+this.getD().getHeight());
-		
+
+		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
+		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
 	}
 }

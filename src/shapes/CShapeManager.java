@@ -14,10 +14,8 @@ import javafx.scene.text.Text;
 public abstract class CShapeManager extends Canvas implements Serializable {
 	private static final long serialVersionUID = 1L;
 	protected String body;
-	protected Point2D p;
-	protected Dimension2D d;
-	protected Point2D tp;
-	protected Dimension2D td;
+	protected Point2D p, tp, upperAnchor, lowerAnchor;
+	protected Dimension2D d, td;
 	protected Color fill;
 	protected Color stroke;
 	protected Text text;
@@ -95,5 +93,17 @@ public abstract class CShapeManager extends Canvas implements Serializable {
 //	
 //	public EShapeType getShapeType() {	return shapeType;	}
 //	
+	public Point2D getUpperAnchor() {
+		return upperAnchor;
+	}
+	public Point2D getLowerAnchor() {
+		return lowerAnchor;
+	}
+	public void setUpperAnchor(Point2D upperAnchor) {
+		this.upperAnchor = upperAnchor;
+	}
+	public void setLowerAnchor(Point2D lowerAnchor) {
+		this.lowerAnchor = lowerAnchor;
+	}
 	
 }

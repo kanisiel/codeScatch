@@ -9,10 +9,16 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import shapes.CArrowHead;
 import shapes.CShapeManager;
 import shapes.CShapeNode;
+import shapes.CStartEndManager;
 
 public class FlowChartCanvas extends BorderPane {
 	private static final long serialVersionUID = 1L;
@@ -43,7 +49,9 @@ public class FlowChartCanvas extends BorderPane {
 	}
 	public void addShape(CShapeManager csm){
 		//init();
+		
 		this.manager.addNode(csm);
+		//Line l = new Line(this.getWidth()/2, startY, endX, endY) 
 		setCoord(csm);
 		reDraw();
 		
@@ -71,7 +79,27 @@ public class FlowChartCanvas extends BorderPane {
 			Shape shape = s.getShape();
 			Text text = s.getText();
 			Group g = new Group();
-			g.getChildren().addAll(shape, text);
+			if(!s.getClass().equals(CStartEndManager.class)){
+				CShapeManager prev = this.manager.findPrev(s);
+				CShapeManager next = this.manager.findNext(s);
+				MoveTo mtu = new MoveTo(prev.getLowerAnchor().getX(), prev.getLowerAnchor().getY());
+				LineTo ltu = new LineTo(s.getUpperAnchor().getX(), s.getUpperAnchor().getY());
+				Path upper = new Path(mtu, ltu);
+				upper.setStroke(Color.BLACK);
+				upper.setStrokeWidth(2);
+				CArrowHead uh = new CArrowHead(Constants.SOUTH, s.getUpperAnchor());
+				Shape upperHead = uh.getShape();
+				MoveTo mtl = new MoveTo(s.getLowerAnchor().getX(), s.getLowerAnchor().getY());
+				LineTo ltl = new LineTo(next.getUpperAnchor().getX(), next.getUpperAnchor().getY());
+				Path lower = new Path(mtl, ltl);
+				lower.setStroke(Color.BLACK);
+				lower.setStrokeWidth(2);
+				CArrowHead lh = new CArrowHead(Constants.SOUTH, next.getUpperAnchor());
+				Shape lowerHead = lh.getShape();
+				g.getChildren().addAll(upper, upperHead, shape, text, lower, lowerHead);
+			}else {
+				g.getChildren().addAll(shape, text);
+			}
 			g.setId(String.valueOf(this.manager.findNode(s)));
 			this.getChildren().add(g);
 			//c.getChildren().add();

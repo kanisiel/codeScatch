@@ -53,16 +53,16 @@ public class CParallelogramManager extends CShapeManager {
 		text.setWrappingWidth(Math.ceil(text.getLayoutBounds().getWidth()));
 		this.setTd(new Dimension2D(text.getLayoutBounds().getWidth(), text.getLayoutBounds().getHeight()));
 		this.setD(new Dimension2D((Math.floor(text.getWrappingWidth())*1.4)+60, td.getHeight()+30));
-		this.setP(new Point2D((w.getWidth()/2)-(this.getD().getWidth()/2), p.getY()+d.getHeight()+40));
-		
-		
+		this.setP(new Point2D((w.getWidth()/2)-(this.d.getWidth()/2), p.getY()+d.getHeight()+40));
 		this.setTp(new Point2D(this.getP().getX()+30, this.getP().getY()+27));
 		
 		this.ul = new Point2D(this.getP().getX()+30,this.getP().getY());
 		this.ur = new Point2D(this.getP().getX()+this.getD().getWidth(), this.getP().getY());
 		this.dl = new Point2D(this.getP().getX(), this.getP().getY()+this.getD().getHeight());
 		this.dr = new Point2D(this.getP().getX()+(this.getD().getWidth()-30), this.getP().getY()+this.getD().getHeight());
-		
+
+		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
+		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
 	}
 	
 //	public CParallelogramManager(EShapeType shapeType) {

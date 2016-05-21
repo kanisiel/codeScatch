@@ -46,7 +46,6 @@ public class TreeToShape {
 						list.add(declare);
 					}
 				}
-				System.out.println(list);
 				for(CShapeManager e : list){
 					canvas.addShape(e);
 				}

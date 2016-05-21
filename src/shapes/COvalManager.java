@@ -80,10 +80,13 @@ public class COvalManager extends CShapeManager {
 	public void setCoords(Point2D p, Dimension2D d, Dimension2D w) {
 		// TODO Auto-generated method stub
 		Text t = new Text(body);
-		this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
-		this.setP(new Point2D((w.getWidth()/2)-(td.getWidth()/2+20), p.getY()+d.getHeight()+40));
-		
-		this.setD(new Dimension2D(td.getWidth()+40, td.getHeight()+30));
+		text.setWrappingWidth(Math.ceil(text.getLayoutBounds().getWidth()));
+		this.setTd(new Dimension2D(text.getLayoutBounds().getWidth(), text.getLayoutBounds().getHeight()));
+		this.setD(new Dimension2D((Math.floor(text.getWrappingWidth())*1.4)+20, td.getHeight()+30));
+		this.setP(new Point2D((w.getWidth()/2)-(this.d.getWidth()/2+20), p.getY()+d.getHeight()+40));
 		this.setTp(new Point2D(this.getP().getX()+20, this.getP().getY()+27));
+		
+		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
+		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
 	}
 }
