@@ -12,8 +12,9 @@ public class CParallelogramManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
 	private Point2D ul, ur, dl, dr;
 	
-	public CParallelogramManager(){
+	public CParallelogramManager(String body){
 		super();
+		this.body = body;
 	}
 
 	@Override

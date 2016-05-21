@@ -12,8 +12,9 @@ public class COvalManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
 
 	
-	public COvalManager(){
+	public COvalManager(String body){
 		super();
+		this.body = body;
 	}
 
 	

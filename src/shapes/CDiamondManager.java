@@ -12,8 +12,9 @@ public class CDiamondManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
 	private Point2D e, w, s, n;
 	
-	public CDiamondManager(){
+	public CDiamondManager(String body){
 		super();
+		this.body = body;
 	}
 
 

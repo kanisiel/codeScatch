@@ -3,7 +3,6 @@ package frames;
 import javax.swing.ButtonGroup;
 import javax.swing.JToolBar;
 
-import Settings.Buttons.EToolBarButton;
 import Settings.Constants;
 import application.FlowChartCanvas;
 
@@ -21,16 +20,16 @@ public class CToolbar extends JToolBar{
 //		actionHandler = new ActionHandler();
 		buttonGroup = new ButtonGroup();
 		
-		for (EToolBarButton eButton : EToolBarButton.values()) {
-			CRadioButton button = new CRadioButton(eButton.getIconDefName(), eButton.getIconSLTName());
-			this.add(button);
-			
-//			button.addActionListener(actionHandler);
-			button.setActionCommand(eButton.name());
-			button.setToolTipText(eButton.getName());
-			
-			buttonGroup.add(button);
-		}
+//		for (EToolBarButton eButton : EToolBarButton.values()) {
+//			CRadioButton button = new CRadioButton(eButton.getIconDefName(), eButton.getIconSLTName());
+//			this.add(button);
+//			
+////			button.addActionListener(actionHandler);
+//			button.setActionCommand(eButton.name());
+//			button.setToolTipText(eButton.getName());
+//			
+//			buttonGroup.add(button);
+//		}
 		
 		this.setFloatable(true);
 		this.setFocusable(true);

@@ -11,8 +11,9 @@ import javafx.scene.text.Text;
 public class CRectangleManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
 	
-	public CRectangleManager(){
+	public CRectangleManager(String body){
 		super();
+		this.body = body;
 	}
 	
 	@Override

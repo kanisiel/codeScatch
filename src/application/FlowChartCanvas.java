@@ -1,6 +1,5 @@
 package application;
 
-import java.awt.Graphics;
 import java.awt.Image;
 
 import Settings.Constants;
@@ -46,10 +45,7 @@ public class FlowChartCanvas extends BorderPane {
 		this.getChildren().clear();
 	}
 	public void addShape(CShapeManager csm){
-		//init();
-		
 		this.manager.addNode(csm);
-		//Line l = new Line(this.getWidth()/2, startY, endX, endY) 
 		setCoord(csm);
 		reDraw();
 		
@@ -67,13 +63,6 @@ public class FlowChartCanvas extends BorderPane {
 	}
 	public void drawAll(){
 		for(CShapeManager s : this.manager.getNodes()){
-			//int index = this.manager.findNode(s);
-//			Canvas c = new Canvas(Constants.windowWidth, Constants.windowHeight);
-//			this.getChildren().add(c);
-//			GraphicsContext gc = c.getGraphicsContext2D();
-//			if(!s.getClass().equals(CStartEndManager.class)){
-//				setCoord(s);
-//			}
 			Shape shape = s.getShape();
 			Text text = s.getText();
 			Group g = new Group();
@@ -104,98 +93,6 @@ public class FlowChartCanvas extends BorderPane {
 			//s.draw(gc);
 		}
 	}
-//	public void draw(GraphicsContext gc, CShapeManager csm){
-//		int index = this.getChildren().indexOf(gc.getCanvas());
-//		gc.setStroke(Color.BLACK);
-//		gc.strokeRect((this.getWidth()/2)-50, 80*(index+1), 100, 60);
-//		if(csm.getBody()!=null){
-//			Text text = new Text(csm.getBody());
-//			Bounds b = text.getLayoutBounds();
-//			double tw = b.getWidth();
-//			double th = b.getHeight();
-//			gc.strokeText(csm.getBody(), (this.getWidth()/2)-40, 100*(index+1));
-//		}
-//	}
-	public void setShapeManager(CShapeManager shapeManager) {
-	}
 
-	public void setCoords(CShapeNode node, int x, int y){
-        if (node != null){
-            node.setX(x);
-            node.setY(y);
-               
-	        if (!node.getIsDiamond())
-	        	this.setCoords(node.getRight(), x, y + 80);
-	            
-	        else {
-	        	this.setCoords(node.getLeft(), x , y + 110);
-	        	this.setCoords(node.getRight(), x + 200 , y + 110);
-	        }
-        }
-    }
-	
-	public CShapeNode getRootNode() {	return root;	}
-	
-//	public void paint(Graphics g) {
-//		
-//		//super.paint(g);
-//		this.drawNode(g, root);
-//	}
-	
-//	public void drawNode(Graphics g, CShapeNode node) {
-//		Graphics2D g2d = (Graphics2D) g;
-//		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//		
-//		if (node != null) {
-//			if (node.getShapeType() == EShapeType.START)
-//				shapeManager = new COvalManager(node.getShapeType());
-//			/*
-//			else 
-//				shapeManager = EToolBarButton.valueOf(node.getShapeType().name()).getShape();
-//			*/
-//			else if (node.getShapeType() == EShapeType.PROCESS)
-//				// draw rectangle
-//				shapeManager = new CRectangleManager(node.getShapeType());
-//			
-//			else if (node.getShapeType() == EShapeType.IO)
-//				// draw parallogram
-//				shapeManager = new CParallelogramManager(node.getShapeType());
-//			
-//			else if (node.getShapeType() == EShapeType.CONDITION)
-//				shapeManager = new CDiamondManager(node.getShapeType());
-//			
-//			else if (node.getShapeType() == EShapeType.LOOP)
-//				// draw as CONDITION but one of the arrows is toward upward
-//				shapeManager = new CDiamondManager(node.getShapeType());
-//			
-//			else if (node.getShapeType() == EShapeType.FUNCTION) {
-//				// ... complex ... it may be an add on button...
-//			}
-//			
-//			else if (node.getShapeType() == EShapeType.STOP)
-//				shapeManager = new COvalManager(node.getShapeType());
-//			
-//			shapeManager.draw(g2d, node);
-//								
-//			if (!node.getIsDiamond())
-//				this.drawNode(g, node.getLeft());
-//			
-//			else {
-//				this.drawNode(g, node.getLeft());
-//				this.drawNode(g, node.getRight());
-//			}
-//		}
-//	}
-	
-
-	  public void paintComponent(Graphics g) {
-	    g.drawImage(img, 0, 0, null);
-	  }
-	public Image getImg() {
-		return img;
-	}
-	public void setImg(Image img) {
-		this.img = img;
-	}
 }
 

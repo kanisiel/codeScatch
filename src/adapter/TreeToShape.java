@@ -33,15 +33,14 @@ public class TreeToShape {
 				//String[] stmts = body.split("\n");
 				for(String stmt : body.split("\n")){
 					if(stmt.contains("=")){
-						CRectangleManager declare = new CRectangleManager();
-						declare.setBody(stmt);
+						CRectangleManager declare = new CRectangleManager(stmt);
 						list.add(declare);
 					} else if(stmt.contains("if(")){
-						CDiamondManager declare = new CDiamondManager();
+						CDiamondManager declare = new CDiamondManager(stmt);
 						declare.setBody(stmt);
 						list.add(declare);
 					} else {
-						CParallelogramManager declare = new CParallelogramManager();
+						CParallelogramManager declare = new CParallelogramManager(stmt);
 						declare.setBody(stmt);
 						list.add(declare);
 					}
