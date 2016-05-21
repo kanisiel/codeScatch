@@ -7,33 +7,25 @@ import Settings.Buttons.EToolBarButton;
 import Settings.Constants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Orientation;
+import javafx.scene.Group;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
-public class ToolBarController extends VBox {
-	private FlowChartCanvas fcc;
-	private ToolBar toolbar;
+public class FxToolBar1 extends ToolBar {
 	private ToggleGroup buttonGroup;
+	private Group g;
 	
-	public ToolBarController(VBox toolBar, FlowChartCanvas fcc){
-		this.fcc = fcc;
-		setToolBarNode();
-    	Pane canvas = new Pane();
-    	toolBar.getChildren().add(canvas);
-    	canvas.getChildren().add(toolbar);
-	}
-	public void setToolBarNode(){
+	private FlowChartCanvas flowChartCanvas;
+	
+	public void FxToolbar(){
 		// attributes initialization
-		toolbar = new ToolBar();
-		toolbar.setOrientation(Orientation.VERTICAL);
+		//super();
+		g = new Group();
 		this.setPrefSize(Constants.TOOLBAR_W, Constants.TOOLBAR_H);
 		buttonGroup = new ToggleGroup();
 		buttonGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -43,9 +35,11 @@ public class ToolBarController extends VBox {
 		    	  }
 		      }
 		});
+		System.out.println(1);
 		for (EToolBarButton eButton : EToolBarButton.values()) {
-			ToggleButton button = new ToggleButton();
-			button.setGraphic(new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(eButton.getIconDefName()))));
+			
+			RadioButton button = new RadioButton();
+			button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(eButton.getIconDefName()))));
 			Map<String, String> userData = new HashMap<>();
 			userData.put("Name", eButton.name());
 			userData.put("Icon", eButton.getIconDefName());
@@ -53,9 +47,15 @@ public class ToolBarController extends VBox {
 			button.setUserData(userData);
 			button.setTooltip(new Tooltip(eButton.getName()));
 			button.setToggleGroup(buttonGroup);
-			toolbar.getItems().add(button);
-			//toolbar.getItems().add(new Separator());
+			g.getChildren().add(button);
 		}
+		this.getChildren().add(g);
 	}
-
+	
+	public void init(FlowChartCanvas flowChartCanvas) {
+		this.flowChartCanvas = flowChartCanvas;
+	}
+	
+	
 }
+

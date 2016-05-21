@@ -3,19 +3,19 @@ package frames;
 import java.awt.BorderLayout;
 
 import panels.DesktopPane;
-import panels.FlowChartPane;
+import panels.FlowChartCanvas;
 
 
 public class FlowChart extends InternalFrame {
 
 	private static final long serialVersionUID = 1L;
-	private FlowChartPane flowChartPane;
+	private FlowChartCanvas flowChartPane;
 	
 
 	public FlowChart(String title) {
         super(title);//iconifiable
         this.getContentPane().setLayout(new BorderLayout());
-        flowChartPane = new FlowChartPane();
+        flowChartPane = new FlowChartCanvas();
 		this.add(flowChartPane, BorderLayout.CENTER);
 
 	}
@@ -34,5 +34,5 @@ public class FlowChart extends InternalFrame {
 		this.setVisible(true);
 	}
 	
-	public FlowChartPane getFlowChartPane() {	return flowChartPane;	}
+	public FlowChartCanvas getFlowChartPane() {	return flowChartPane;	}
 }

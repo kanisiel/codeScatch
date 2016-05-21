@@ -13,6 +13,7 @@ import Settings.Constants;
 import Settings.Preference;
 import Settings.Windows;
 import Settings.Windows.InternalWindows;
+import adapter.TreeToShape;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -34,7 +35,10 @@ public class DesktopPaneController extends VBox {
 //   
 //    private FXDesktopWindowManager manager;
 	final int windowWidth = (Constants.FRAME_W-76)/2;
-	final int windowHeight = Constants.FRAME_H-30;
+	final int windowHeight = Constants.FRAME_H-50;
+	public FlowChartCanvas fcc;
+	public RSyntaxTextArea textArea;
+	public TreeToShape tts;
 	
     
     public DesktopPaneController(VBox desktopPane){
@@ -44,7 +48,7 @@ public class DesktopPaneController extends VBox {
 //    	canvas.getChildren().add(w);
     	
     	addInternalFrames(canvas);
-
+    	this.tts = new TreeToShape(fcc);
     }
 
     private void addInternalFrames(Pane canvas){
@@ -89,12 +93,12 @@ public class DesktopPaneController extends VBox {
         if(w.getTitle().equals(Windows.InternalWindows.Code.getTitle())){
         	setContent(w, swingNode);
         } else {
-        	FlowChartCanvas canvas = new FlowChartCanvas();
+        	fcc = new FlowChartCanvas();
         	Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
         	BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-        	canvas.setBackground(new Background(bi));
-        	canvas.init();
-        	w.setContentPane(canvas);
+        	fcc.setBackground(new Background(bi));
+        	//canvas.init();
+        	w.setContentPane(fcc);
         }
         w.setVisible(true);
         
@@ -112,7 +116,6 @@ public class DesktopPaneController extends VBox {
             public void run() {
             	if(window.equals(Windows.InternalWindows.Code.getTitle())){
                     JPanel cp = new JPanel(new BorderLayout());
-        	        RSyntaxTextArea textArea;
         	        RTextScrollPane sp;
         	        textArea = new RSyntaxTextArea();
         	        textArea.setColumns(windowWidth/9);
@@ -120,41 +123,16 @@ public class DesktopPaneController extends VBox {
         	        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
         	        textArea.setCodeFoldingEnabled(true);
         	        textArea.setFont(Preference.defaultFont);
-        	        textArea.addCaretListener(new CodeViewerListener());
+        	        textArea.addCaretListener(new CodeViewerListener(tts));
         	        sp = new RTextScrollPane(textArea);
         	        cp.add(sp);
         	        swingNode.setContent(cp);
-            	} 
-                if(window.equals(Windows.InternalWindows.Flow.getTitle())){
-                	//JPanel cp = new JPanel();
-                	
-                	
-                	
-//                	
-//                	canvas.setImg(img);
-//                	canvas.paint(img.getGraphics());
-//        	        canvas.setVisible(true);
-//        	        canvas.setBackground(new Color(0, 0, 0));
-//        	        canvas.init();
-//        	        cp.add(canvas);
-//        	        swingNode.setContent(cp);
-                	//Graphics2D g2d = (Graphics2D) new BufferedImage(windowWidth, windowHeight, java.awt.Image.SCALE_DEFAULT).createGraphics();
-                    //System.out.println(g2d.);
-//                	JPanel cp = new JPanel(new BorderLayout());
-//                	BufferedImage bi = new BufferedImage(windowWidth, windowHeight, java.awt.Image.SCALE_DEFAULT);
-//                	FlowChartPane fcp = new FlowChartPane(bi);
-//                	System.out.println(fcp.getSize());
-//                	
-//                	fcp.setOpaque(false);
-//                	fcp.setVisible(true);
-//                	fcp.init();
-//                	cp.add(fcp, BorderLayout.CENTER);
-//                	swingNode.setContent(cp);
-                	
             	}
     	        
             }
         });
     }
-    
+    public FlowChartCanvas getFlowChartCanvas(){
+    	return fcc;
+    }
 }

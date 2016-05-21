@@ -1,6 +1,5 @@
 package Settings;
 
-import Settings.Constants.EShapeType;
 import shapes.CDiamondManager;
 import shapes.COvalManager;
 import shapes.CParallelogramManager;
@@ -33,12 +32,12 @@ public class Buttons {
 	 * Enumeration for Buttons on ToolBar
 	 */
 	public static enum EToolBarButton {
-		Process("Process", "img/process.png", "img/process_SLT.png", new CRectangleManager(EShapeType.PROCESS)),
-		IO("Input/Output", "img/io.png", "img/io_SLT.png", new CParallelogramManager(EShapeType.IO)),
-		Condition("Condition", "img/condition.png", "img/condition_SLT.png", new CDiamondManager(EShapeType.CONDITION)),
-		Loop("Loop", "img/loop.png", "img/loop_SLT.png", new CDiamondManager(EShapeType.LOOP)),
-		Function("Function", "img/fx.png", "img/fx_SLT.png", new COvalManager(EShapeType.FUNCTION)),
-		Stop("Stop", "img/stop.png", "img/stop_SLT.png", new COvalManager(EShapeType.STOP));
+		Process("Process", "img/process.png", "img/process_SLT.png", new CRectangleManager("")),
+		IO("Input/Output", "img/io.png", "img/io_SLT.png", new CParallelogramManager("")),
+		Condition("Condition", "img/condition.png", "img/condition_SLT.png", new CDiamondManager("")),
+		Loop("Loop", "img/loop.png", "img/loop_SLT.png", new CDiamondManager("")),
+		Function("Function", "img/fx.png", "img/fx_SLT.png", new COvalManager("")),
+		Stop("Stop", "img/stop.png", "img/stop_SLT.png", new COvalManager(""));
 		
 		private String name;
 		private String iconDefName;		// Icon's image default path

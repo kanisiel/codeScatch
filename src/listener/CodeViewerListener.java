@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
+import adapter.TreeToShape;
 import parser.CLexer;
 import parser.CParser;
 import parser.ParserFunction;
@@ -20,7 +21,11 @@ public class CodeViewerListener implements CaretListener {
 	private CParser parser;
 	private ParseTree tree;
 	private ParserFunction functions;
-
+	private TreeToShape tts;
+	
+	public CodeViewerListener(TreeToShape tts) {
+		this.tts = tts;
+	}
 	@Override
 	public void caretUpdate(CaretEvent e) {
 		// TODO Auto-generated method stub
@@ -28,15 +33,16 @@ public class CodeViewerListener implements CaretListener {
 		if(source.getText().length()>1){
 			if(!buffer.equals(source.getText())){
 				buffer = source.getText();
-				in = new ANTLRInputStream(buffer);
-				lexer = new CLexer(in);
-				token = new CommonTokenStream(lexer);
-				parser = new CParser(token);
-				tree = parser.translationUnit();
-				functions = new ParserFunction();
-				functions.toTokenString(tree);
-				functions.printTokens();
-				//System.out.println(source.getText());
+//				in = new ANTLRInputStream(buffer);
+//				lexer = new CLexer(in);
+//				token = new CommonTokenStream(lexer);
+//				parser = new CParser(token);
+//				tree = parser.translationUnit();
+//				functions = new ParserFunction();
+//				functions.toTokenString(tree);
+//				functions.printTokens();
+//				System.out.println(source.getText());
+				tts.declareToShape(buffer);
 			}
 		} else {
 			buffer = source.getText();
