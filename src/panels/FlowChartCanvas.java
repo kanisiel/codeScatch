@@ -2,7 +2,7 @@ package panels;
 
 import javax.swing.JPanel;
 
-public class FlowChartPane extends JPanel {
+public class FlowChartCanvas extends JPanel {
 //	private static final long serialVersionUID = 1L;
 //	private CShapeNode root;
 //	private CShapeManager shapeManager;

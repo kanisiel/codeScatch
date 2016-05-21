@@ -15,47 +15,7 @@ public class CDiamondManager extends CShapeManager {
 	public CDiamondManager(){
 		super();
 	}
-//	public CDiamondManager(EShapeType shapeType) {
-//		super(shapeType);
-//	}
-//	
-//	@Override
-//	public void draw(Graphics2D g, CShapeNode node) {
-//		if (shapeType == EShapeType.CONDITION)
-//			this.drawCondition(g, node);
-//		
-//		else
-//			this.drawLoop(g, node);
-//	}
-//	
-//	private void drawCondition(Graphics2D g, CShapeNode node) {
-//		g.drawLine(node.getX() - 40, node.getY() + 40, node.getX(), node.getY());
-//        g.drawLine(node.getX() - 40, node.getY() + 40, node.getX(), node.getY() + 80);
-//        g.drawLine(node.getX(), node.getY(), node.getX() + 40, node.getY() + 40);
-//        g.drawLine(node.getX() + 40, node.getY() + 40, node.getX(), node.getY() + 80);
-//        g.drawString(node.getShapeContent(), node.getX() - 30, node.getY() + 40);
-//        
-//        //Draw No line
-//        sw = new Point(node.getX(), node.getY() + 80);
-//        ne = new Point(node.getX(), node.getY() + 110);
-//        g.draw(new Line2D.Double(sw, ne));
-//        super.drawArrowHead(g, ne, sw, Color.blue);
-//        g.drawString("NO", node.getX() + 10, node.getY() + 95);
-//        g.setColor(Color.black);
-//                        
-//        //Draw yes line
-//        g.drawLine(node.getX()+40, node.getY()+40, node.getX() +200, node.getY() + 40);
-//        g.drawLine(node.getX()+200, node.getY()+40, node.getX() + 200, node.getY() + 110);
-//        sw = new Point(node.getX() + 200, node.getY() + 70);
-//        ne = new Point(node.getX() + 200, node.getY() + 110);
-//        super.drawArrowHead(g, ne, sw, Color.blue);
-//        g.drawString("YES", node.getX() + 170, node.getY() + 95);
-//        g.setColor(Color.black);
-//	}
-//	
-//	private void drawLoop(Graphics2D g, CShapeNode node) {
-//		this.drawCondition(g, node);
-//	}
+
 
 
 	@Override
@@ -97,9 +57,9 @@ public class CDiamondManager extends CShapeManager {
 		text = new Text(body);
 		text.setWrappingWidth(Math.ceil(text.getLayoutBounds().getWidth()));
 		this.setTd(new Dimension2D(text.getLayoutBounds().getWidth(), text.getLayoutBounds().getHeight()));
-		this.setD(new Dimension2D((Math.floor(text.getWrappingWidth())*1.4)+60, td.getHeight()+30));
-		this.setP(new Point2D((w.getWidth()/2)-(this.d.getWidth()/2+20), p.getY()+d.getHeight()+40));
-		this.setTp(new Point2D(this.getP().getX()+(25*1.4), this.getP().getY()+(20*1.4)));
+		this.setD(new Dimension2D((Math.floor(text.getWrappingWidth())*1.4)+40, td.getHeight()+40));
+		this.setP(new Point2D((w.getWidth()/2)-(this.d.getWidth()/2), p.getY()+d.getHeight()+40));
+		this.setTp(new Point2D(this.getP().getX()+(14*1.4), this.getP().getY()+(24*1.4)));
 		
 		this.e = new Point2D(this.getP().getX(),this.getP().getY()+(this.getD().getHeight()/2));
 		this.w = new Point2D(this.getP().getX()+this.getD().getWidth(), this.getP().getY()+(this.getD().getHeight()/2));

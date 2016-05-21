@@ -21,9 +21,7 @@ import shapes.CShapeNode;
 import shapes.CStartEndManager;
 
 public class FlowChartCanvas extends BorderPane {
-	private static final long serialVersionUID = 1L;
 	private CShapeNode root;
-	private CShapeManager shapeManager;
 	private Image img;
 	private Canvas canvas;
 	private FlowChartManager manager;
@@ -87,14 +85,14 @@ public class FlowChartCanvas extends BorderPane {
 				Path upper = new Path(mtu, ltu);
 				upper.setStroke(Color.BLACK);
 				upper.setStrokeWidth(2);
-				CArrowHead uh = new CArrowHead(Constants.SOUTH, s.getUpperAnchor());
+				CArrowHead uh = new CArrowHead(Constants.SOUTH, s.getUpperAnchor(), prev.getLowerAnchor());
 				Shape upperHead = uh.getShape();
 				MoveTo mtl = new MoveTo(s.getLowerAnchor().getX(), s.getLowerAnchor().getY());
 				LineTo ltl = new LineTo(next.getUpperAnchor().getX(), next.getUpperAnchor().getY());
 				Path lower = new Path(mtl, ltl);
 				lower.setStroke(Color.BLACK);
 				lower.setStrokeWidth(2);
-				CArrowHead lh = new CArrowHead(Constants.SOUTH, next.getUpperAnchor());
+				CArrowHead lh = new CArrowHead(Constants.SOUTH, next.getUpperAnchor(), s.getLowerAnchor());
 				Shape lowerHead = lh.getShape();
 				g.getChildren().addAll(upper, upperHead, shape, text, lower, lowerHead);
 			}else {
@@ -118,8 +116,7 @@ public class FlowChartCanvas extends BorderPane {
 //			gc.strokeText(csm.getBody(), (this.getWidth()/2)-40, 100*(index+1));
 //		}
 //	}
-	public void setShapeManager(CShapeManager shapeManager) {	
-		this.shapeManager = shapeManager;
+	public void setShapeManager(CShapeManager shapeManager) {
 	}
 
 	public void setCoords(CShapeNode node, int x, int y){

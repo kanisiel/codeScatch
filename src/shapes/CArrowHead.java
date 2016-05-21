@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 
 public class CArrowHead extends CShapeManager {
 
@@ -15,9 +16,9 @@ public class CArrowHead extends CShapeManager {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Point2D lp, rp, cp;
+	private Point2D lp, rp, cp, sp;
 	
-	public CArrowHead(String arrowTo, Point2D endP, double scale) {
+	public CArrowHead(String arrowTo, Point2D endP, Point2D staP, double scale) {
 		super();
 		double d = 10 * scale;
 		cp = endP;
@@ -36,9 +37,10 @@ public class CArrowHead extends CShapeManager {
 		}
 		
 	}
-	public CArrowHead(String arrowTo, Point2D endP) {
+	public CArrowHead(String arrowTo, Point2D endP, Point2D staP) {
 		super();
 		cp = endP;
+		sp = staP;
 		if(arrowTo.equals(Constants.EAST)){
 			lp = new Point2D(endP.getX()-10, endP.getY()-10);
 			rp = new Point2D(endP.getX()-10, endP.getY()+10);
@@ -73,6 +75,9 @@ public class CArrowHead extends CShapeManager {
 		Polygon p = new Polygon(cp.getX(), cp.getY(), lp.getX(), lp.getY(), rp.getX(), rp.getY());
 		p.setFill(Color.BLACK);
 		p.setStrokeWidth(2);
+		
+		System.out.println(GetAngle(cp, sp));
+		p.getTransforms().add(new Rotate(GetAngle(cp,sp),cp.getX(),cp.getY()));
 		return p;
 	}
 
@@ -87,5 +92,16 @@ public class CArrowHead extends CShapeManager {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
+	public double GetAngle(Point2D p1, Point2D p2) {
+	    double xdf = p2.getX() - p1.getX();
+	    double ydf = p2.getY() - p1.getY();
+	
+	    double ang = RadianToDegree(Math.atan2(ydf, xdf));
+	    return ang + 90;
+	}
+	public double RadianToDegree(double rad) {
+	    return rad * (180 / Math.PI);
+	}
 }

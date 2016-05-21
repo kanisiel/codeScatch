@@ -132,5 +132,7 @@ public class DesktopPaneController extends VBox {
             }
         });
     }
-    
+    public FlowChartCanvas getFlowChartCanvas(){
+    	return fcc;
+    }
 }
