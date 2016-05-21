@@ -4,10 +4,13 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import Settings.Constants;
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import shapes.CShapeManager;
 import shapes.CShapeNode;
 
@@ -17,56 +20,76 @@ public class FlowChartCanvas extends BorderPane {
 	private CShapeManager shapeManager;
 	private Image img;
 	private Canvas canvas;
+	private FlowChartManager manager;
 	
 	public FlowChartCanvas() {
+		this.manager = new FlowChartManager();
 		canvas = new Canvas();
 		canvas.widthProperty().bind(this.widthProperty());
 		canvas.heightProperty().bind(this.heightProperty());
 		this.setCenter(canvas);
 		this.setPrefSize(Constants.windowWidth, Constants.windowHeight);
 		
+		//Initialize canvas component;
+		this.manager.initManager();
+		
+		drawAll();		
 	}
 	public void init(){
-//		Circle circle = new Circle(50);
-//		circle.setFill(Color.BLACK);
-//        circle.setStroke(Color.BLACK);
-//        circle.setStrokeWidth(2.0);
-//        this.getChildren().add(circle);
-//		double width = getWidth();
-//		double height = getHeight();
-//		Canvas layer = new Canvas(this.windowWidth, this.windowHeight);
-//		GraphicsContext gc = layer.getGraphicsContext2D();
-//		gc.setStroke(Color.BLACK);
-//		gc.strokeOval(windowWidth/2-25, 30, 50, 50);
-//		gc.strokeText("Start", windowWidth/2-15, 0);
-//		this.getChildren().add(layer);
-//		gc.clearRect(0, 0, width, height);
-//		gc.setStroke(Color.BLACK);
-		//gc.strokeOval((this.windowWidth/2-25), 30, 50, 50);
-		//this.requestLayout();
-//		root = new CShapeNode(0, EShapeType.START, "START", false);
-//		this.setCoords(root, 55, 40);
-//		shapeManager = new COvalManager(EShapeType.START);
-//		g2d.drawOval(windowWidth/2 - 25, 30, 50, 50);
-//		shapeManager.draw(g2d, root);
-//		this.paint(g2d);
-//      this.getGraphics().drawOval(windowWidth/2 -25, 30, 50, 50);
+		this.manager.initManager();
+	}
+	public void clearCanvas(){
+		this.getChildren().clear();
 	}
 	public void addShape(CShapeManager csm){
-    	this.getChildren().clear();//remove(0, this.getChildren().size());
-		Canvas layer = new Canvas(Constants.windowWidth, Constants.windowHeight);
-		GraphicsContext gc = layer.getGraphicsContext2D();
-		draw(gc, csm);
-    	this.getChildren().add(layer);
+		//init();
+		this.manager.addNode(csm);
+		setCoord(csm);
+		reDraw();
 		
 	}
-	public void draw(GraphicsContext gc, CShapeManager csm){
-		gc.setStroke(Color.BLACK);
-		gc.strokeRect(50, 50, 100, 100);
-		if(csm.getBody()!=null){
-			gc.strokeText(csm.getBody(), 100, 100);
+	public void setCoord(CShapeManager csm){
+		Point2D p = this.manager.findPrev(csm).getP();
+		Dimension2D d = this.manager.findPrev(csm).getD();
+		Dimension2D w = new Dimension2D(this.getWidth(), this.getHeight());
+		
+		csm.setCoords(p, d, w);
+	}
+	public void reDraw(){
+		clearCanvas();
+		drawAll();
+	}
+	public void drawAll(){
+		for(CShapeManager s : this.manager.getNodes()){
+			//int index = this.manager.findNode(s);
+//			Canvas c = new Canvas(Constants.windowWidth, Constants.windowHeight);
+//			this.getChildren().add(c);
+//			GraphicsContext gc = c.getGraphicsContext2D();
+//			if(!s.getClass().equals(CStartEndManager.class)){
+//				setCoord(s);
+//			}
+			Shape shape = s.getShape();
+			Text text = s.getText();
+			Group g = new Group();
+			g.getChildren().addAll(shape, text);
+			g.setId(String.valueOf(this.manager.findNode(s)));
+			this.getChildren().add(g);
+			//c.getChildren().add();
+			//s.draw(gc);
 		}
 	}
+//	public void draw(GraphicsContext gc, CShapeManager csm){
+//		int index = this.getChildren().indexOf(gc.getCanvas());
+//		gc.setStroke(Color.BLACK);
+//		gc.strokeRect((this.getWidth()/2)-50, 80*(index+1), 100, 60);
+//		if(csm.getBody()!=null){
+//			Text text = new Text(csm.getBody());
+//			Bounds b = text.getLayoutBounds();
+//			double tw = b.getWidth();
+//			double th = b.getHeight();
+//			gc.strokeText(csm.getBody(), (this.getWidth()/2)-40, 100*(index+1));
+//		}
+//	}
 	public void setShapeManager(CShapeManager shapeManager) {	
 		this.shapeManager = shapeManager;
 	}

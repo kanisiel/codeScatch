@@ -35,7 +35,7 @@ public class DesktopPaneController extends VBox {
 //   
 //    private FXDesktopWindowManager manager;
 	final int windowWidth = (Constants.FRAME_W-76)/2;
-	final int windowHeight = Constants.FRAME_H-30;
+	final int windowHeight = Constants.FRAME_H-50;
 	public FlowChartCanvas fcc;
 	public RSyntaxTextArea textArea;
 	public TreeToShape tts;

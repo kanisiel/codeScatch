@@ -7,13 +7,14 @@ public class Constants {
 	public static final int FRAME_W = 900;
 	public static final int FRAME_H = 600;
 	public static final int windowWidth = (FRAME_W-76)/2;
-	public static final int windowHeight = FRAME_H-30;
+	public static final int windowHeight = FRAME_H-80;
+	public static final double centerAxisX = (Constants.windowWidth/2);
 	
 	public static enum EJFrame{
 		Toolbar,
 		FlowChart;
 	};
-	
+
 	public static enum EShapeType {
 		START,
 		PROCESS,

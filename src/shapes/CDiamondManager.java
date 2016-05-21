@@ -1,10 +1,16 @@
 package shapes;
 
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 
 public class CDiamondManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
-
+	private Point2D e, w, s, n;
 	
 	public CDiamondManager(){
 		super();
@@ -55,5 +61,50 @@ public class CDiamondManager extends CShapeManager {
 	@Override
 	public void drawText(GraphicsContext gc) {
 		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void draw(GraphicsContext gc){
+		gc.setFill(fill);
+		gc.setStroke(stroke);
+		gc.fillOval(p.getX(), p.getY(), d.getWidth(), d.getHeight());
+		gc.strokeText(body, tp.getX(), tp.getY());
+	}
+
+
+	@Override
+	public Shape getShape() {
+		// TODO Auto-generated method stub
+		Polygon p = new Polygon();
+		p.setFill(Color.TRANSPARENT);
+		p.setStroke(stroke);
+		p.setStrokeWidth(2);
+		p.getPoints().addAll(e.getX(),e.getY(),n.getX(),n.getY(), w.getX(), w.getY(), s.getX(), s.getY());
+		return p;
+	}
+	@Override
+	public Text getText() {
+		Text text = new Text(body);
+		text.setX(tp.getX());
+		text.setY(tp.getY());
+		return text;
+	}
+
+
+	@Override
+	public void setCoords(Point2D p, Dimension2D d, Dimension2D w) {
+		// TODO Auto-generated method stub
+		Text t = new Text(body);
+		this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
+		this.setP(new Point2D((w.getWidth()/2)-(td.getWidth()/2+20), p.getY()+d.getHeight()+40));
+		
+		this.setD(new Dimension2D(td.getWidth()+60, td.getHeight()+50));
+		this.setTp(new Point2D(this.getP().getX()+20, this.getP().getY()+38));
+		
+		this.e = new Point2D(this.getP().getX(),this.getP().getY()+(this.getD().getHeight()/2));
+		this.w = new Point2D(this.getP().getX()+this.getD().getWidth(), this.getP().getY()+(this.getD().getHeight()/2));
+		this.n = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY());
+		this.s = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY()+this.getD().getHeight());
+		
 	}
 }

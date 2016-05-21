@@ -1,7 +1,12 @@
 package shapes;
 
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 
 public class CRectangleManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
@@ -15,11 +20,38 @@ public class CRectangleManager extends CShapeManager {
 		gc.setStroke(Color.BLACK);
 		gc.strokeText(body, 30, 30);
 	}
-	
+	@Override
+	public void setBody(String body){
+		this.body = body;
+//		Text t = new Text(body);
+//		
+//		this.setD(new Dimension2D(20, 20));
+//		this.setP(new Point2D((Constants.windowWidth/2)-10, Constants.windowHeight-40));
+//		this.setBody("End");
+//		this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
+//		this.setTp(new Point2D((this.getP().getX()+(this.getD().getWidth()+10)), (this.getP().getY()+(this.getD().getHeight()/2))+(t.getLayoutBounds().getHeight()/3)));
+	}
 	@Override
 	public void draw(GraphicsContext gc){
-		gc.setStroke(Color.BLACK);
-		gc.strokeRect(30, 30, 100, 100);
+		gc.setFill(fill);
+		gc.setStroke(stroke);
+		//gc.strokeRect(p.getX(), p.getY(), d.getWidth(), d.getHeight());
+		gc.strokeText(body, tp.getX(), tp.getY());
+	}
+	@Override
+	public Shape getShape(){
+		Rectangle r = new Rectangle(p.getX(), p.getY(), d.getWidth(), d.getHeight());
+		r.setStroke(stroke);
+		r.setStrokeWidth(2);
+		r.setFill(Color.TRANSPARENT);
+		return r;
+	}
+	@Override
+	public Text getText() {
+		Text text = new Text(body);
+		text.setX(tp.getX());
+		text.setY(tp.getY());
+		return text;
 	}
 //	public CRectangleManager(EShapeType shapeType) {
 //		super(shapeType);
@@ -35,5 +67,16 @@ public class CRectangleManager extends CShapeManager {
 //        super.drawArrowHead(g, ne, sw, Color.blue);
 //        g.setColor(Color.black);
 //	}
+
+	@Override
+	public void setCoords(Point2D p, Dimension2D d, Dimension2D w) {
+		// TODO Auto-generated method stub
+		text = new Text(body);
+		this.setTd(new Dimension2D(text.getLayoutBounds().getWidth(), text.getLayoutBounds().getHeight()));
+		this.setP(new Point2D((w.getWidth()/2)-(td.getWidth()/2+20), p.getY()+d.getHeight()+40));
+		
+		this.setD(new Dimension2D(td.getWidth()+40, td.getHeight()+30));
+		this.setTp(new Point2D(this.getP().getX()+10, this.getP().getY()+27));
+	}
 
 }
