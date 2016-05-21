@@ -6,20 +6,15 @@ import javax.swing.JFrame;
 
 import Menus.CMenuBar;
 import Settings.Constants;
-import Settings.Windows.InternalWindows;
 import listner.CComponentListener;
 import panels.DesktopPane;
 import panels.StatusBar;
 
 public class CFrame extends JFrame {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	//components
 	private CMenuBar menuBar;
-	private CToolbar toolbar;
 	private StatusBar statusBar;
 	private DesktopPane desktopPane;
 	private CComponentListener componentListener;
@@ -40,8 +35,6 @@ public class CFrame extends JFrame {
 		this.getContentPane().setLayout(new BorderLayout());
 		this.statusBar = new StatusBar();
 		this.getContentPane().add(statusBar, BorderLayout.SOUTH);
-		this.toolbar = new CToolbar();
-		this.add(this.toolbar, BorderLayout.WEST);
 		this.desktopPane = new DesktopPane(this.getWidth(), this.getHeight());
 		this.add(desktopPane, BorderLayout.CENTER);
 		this.componentListener = new CComponentListener();
@@ -52,7 +45,6 @@ public class CFrame extends JFrame {
 	}
 	//2nd phase initialization
 	public void init(){
-		toolbar.init(((FlowChart)InternalWindows.Flow.getInternalFrame()).getFlowChartPane());
 		//associated attributes initialization
 		this.setVisible(true);
 		this.statusBar.setText("Welcome!");

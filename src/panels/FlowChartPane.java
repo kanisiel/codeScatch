@@ -6,7 +6,6 @@ import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
-import Settings.Buttons.EToolBarButton;
 import Settings.Constants.EShapeType;
 import shapes.COvalManager;
 import shapes.CShapeManager;
@@ -54,7 +53,7 @@ public class FlowChartPane extends JPanel {
 				shapeManager = new COvalManager(node.getShapeType());
 			
 			else 
-				shapeManager = EToolBarButton.valueOf(node.getShapeType().name()).getShape();
+//				shapeManager = EToolBarButton.valueOf(node.getShapeType().name()).getShape();
 		
 			shapeManager.draw(g2d, node);
 								

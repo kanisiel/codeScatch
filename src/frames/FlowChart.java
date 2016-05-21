@@ -1,10 +1,10 @@
 package frames;
 
 import java.awt.BorderLayout;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
+import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import panels.DesktopPane;
 import panels.FlowChartPane;
@@ -19,13 +19,11 @@ public class FlowChart extends InternalFrame {
         this.getContentPane().setLayout(new BorderLayout());
         
         flowChartPane = new FlowChartPane();
-        scrollPane = new JScrollPane(flowChartPane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane = new JScrollPane(flowChartPane, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(flowChartPane.getWidth(), flowChartPane.getHeight()));
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         this.add(scrollPane, BorderLayout.CENTER);
-        scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {  
-            public void adjustmentValueChanged(AdjustmentEvent e) {  
-                e.getAdjustable().setValue(e.getAdjustable().getMaximum());  
-            }
-        });
+        
 	}
 	
 	public void init(DesktopPane parent){

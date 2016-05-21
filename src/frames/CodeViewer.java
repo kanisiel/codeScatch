@@ -48,4 +48,6 @@ public class CodeViewer extends JInternalFrame {
         setContentPane(cp);
         pack();
 	}
+	
+	public RSyntaxTextArea getTextArea() {	return this.textArea;	}
 }

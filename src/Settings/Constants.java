@@ -28,6 +28,19 @@ public class Constants {
 		RIGHT;
 	};
 	
+	public static enum EIOType {
+		Input,
+		Print;
+	}
+	
+	public static enum EVarType {
+		Int,
+		Short,
+		Float,
+		Double,
+		Char;
+	};
+	
 	public static final String[] DECISION = {"NO", "YES"};
 
 	//Preference frame attributes
