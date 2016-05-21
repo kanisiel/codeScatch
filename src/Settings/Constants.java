@@ -6,12 +6,28 @@ public class Constants {
 	public static final int FRAME_Y = 100;
 	public static final int FRAME_W = 900;
 	public static final int FRAME_H = 600;
+	public static final int windowWidth = (FRAME_W-76)/2;
+	public static final int windowHeight = FRAME_H-80;
+	public static final double centerAxisX = (Constants.windowWidth/2);
+	public static final String EAST = "EAST";
+	public static final String WEST = "WEST";
+	public static final String SOUTH = "SOUTH";
+	public static final String NORTH = "NORTH";
 	
 	public static enum EJFrame{
 		Toolbar,
-		DrawingPanel;
+		FlowChart;
 	};
-	
+
+	public static enum EShapeType {
+		START,
+		PROCESS,
+		IO,
+		CONDITION,
+		LOOP,
+		FUNCTION,
+		STOP;
+	};	
 
 	//Preference frame attributes
 	public static final int PFRAME_X = 100;
