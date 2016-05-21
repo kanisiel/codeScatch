@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.sibvisions.rad.ui.javafx.ext.mdi.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.Control?>
+<?import javafx.scene.layout.*?>
+<?import application.*?>
+<?import jfxtras.scene.control.window.Window?>
+
+
+<VBox prefHeight="570.0" prefWidth="824.0" xmlns:fx="http://javafx.com/fxml">
+	<children>
+		
+	</children>
+</VBox>
