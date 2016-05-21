@@ -10,7 +10,6 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 import parser.CLexer;
 import parser.CParser;
-import parser.ParserFunction;
 
 public class CodeViewerListener implements CaretListener {
 	public String buffer;
@@ -19,7 +18,6 @@ public class CodeViewerListener implements CaretListener {
 	private CommonTokenStream token;
 	private CParser parser;
 	private ParseTree tree;
-	private ParserFunction functions;
 
 	@Override
 	public void caretUpdate(CaretEvent e) {
@@ -33,9 +31,7 @@ public class CodeViewerListener implements CaretListener {
 				token = new CommonTokenStream(lexer);
 				parser = new CParser(token);
 				tree = parser.translationUnit();
-				functions = new ParserFunction();
-				functions.toTokenString(tree);
-				functions.printTokens();
+
 				//System.out.println(source.getText());
 			}
 		} else {
