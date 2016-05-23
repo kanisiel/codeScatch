@@ -1,16 +1,21 @@
 package listener;
 
+import java.util.Vector;
+
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.Trees;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 import adapter.TreeToShape;
 import parser.CLexer;
 import parser.CParser;
+import parser.CSemanticAnalysis;
+import parser.CVisitor;
 
 public class CodeViewerListener implements CaretListener {
 	public String buffer;
@@ -32,17 +37,33 @@ public class CodeViewerListener implements CaretListener {
 		if(source.getText().length()>1){
 			if(!buffer.equals(source.getText())){
 				buffer = source.getText();
-//				in = new ANTLRInputStream(buffer);
-//				lexer = new CLexer(in);
-//				tokens = new CommonTokenStream(lexer);
-//				parser = new CParser(tokens);
-//				tree = parser.translationUnit();
-//				CVisitor visitor = new CVisitor(tree, parser);
-//			    Vector<ParseTree> parseTrees = visitor.codeStructure(tree);
-//			    CSemanticAnalysis semanticAnalysis = new CSemanticAnalysis(parser);
-//				for(int i = 0; i < parseTrees.size(); ++i){
-//					semanticAnalysis.analyzeDCLR(parseTrees.get(i).getChild(0));
-//				}
+				
+				ANTLRInputStream in = new ANTLRInputStream(buffer);
+//				// input Stream into lexer
+			    CLexer lexer = new CLexer(in);
+			  
+			    // tokenStream into parser
+			    CommonTokenStream tokens = new CommonTokenStream(lexer);
+			    CParser parser = new CParser(tokens);
+			  
+			    // make parseTree
+			    ParseTree parseTree = parser.translationUnit();
+			                
+			    // get code structure  
+			    CVisitor visitor = new CVisitor(parseTree, parser);
+			    Vector<ParseTree> parseTrees = visitor.codeStructure(parseTree);
+			    parseTree = visitor.getFunDefinition(parseTrees);
+			    
+			    CSemanticAnalysis semanticAnalysis = new CSemanticAnalysis(parser);   
+			      
+			    for(int i = 0; i < parseTree.getChildCount(); ++i){
+			    	if(Trees.getNodeText(parseTree.getChild(i), parser).equals("compoundStatement")){
+			    		semanticAnalysis.setParseTree(parseTree.getChild(i));
+			    	    semanticAnalysis.analyzeCompoundStatement(parseTree.getChild(i));
+			    	}
+			    }
+			      
+			    semanticAnalysis.test();
 				tts.declareToShape(buffer);
 			}
 		} else {
