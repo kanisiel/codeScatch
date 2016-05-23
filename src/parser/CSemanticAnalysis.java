@@ -12,6 +12,8 @@ public class CSemanticAnalysis {
 	private ParseTree rootParseTree;
 	private Vector<ParseTree> parseTrees;
 	private TreeNode<TreeData> parent;
+	private String line;
+	public Vector<String> st;
 
 	
 	public void setParseTree(ParseTree parseTree) {this.rootParseTree = parseTree;}
@@ -21,6 +23,8 @@ public class CSemanticAnalysis {
 		this.parser = parser;
 		this.parseTrees = new Vector<ParseTree>();
 		this.parent = new TreeNode<TreeData>(null);
+		this.st = new Vector<>();
+		this.line = "";
 	}
 	
 
@@ -77,6 +81,31 @@ public class CSemanticAnalysis {
 			}
 		}
 	}
+	public Vector<String> getST(){
+		return st;
+	}
+	public String getLine(ParseTree parseTree){
+		line = "";
+		visitChild(parseTree);
+		return line;
+	}
+	
+	public void visitChild(ParseTree parseTree) {
+		if(parseTree.getChildCount() > 0){
+			for(int i = 0; i < parseTree.getChildCount(); ++i){
+				
+				visitChild(parseTree.getChild(i));
+
+			}
+		}
+		else{
+			if(Trees.getNodeText(parseTree.getParent(), parser).equals("typeSpecifier")){
+				line += parseTree.getText() + " ";
+			} else {
+				line += parseTree.getText();
+			}
+		}
+	}
 	
 	public void visitChildren(ParseTree parseTree) {
 		if(parseTree.getChildCount() > 0){
@@ -86,12 +115,12 @@ public class CSemanticAnalysis {
 		}
 		else{
 			if(Trees.getNodeText(parseTree.getParent(), parser).equals("typeSpecifier")){
-				System.out.printf(parseTree.getText() + " ");
+				parseTree.getText().replace("\"", "\\\"");
+				parseTree.getText().replace("%", "\\%");
+				System.out.print(parseTree.getText() + " ");
 			} else {
-				System.out.printf(parseTree.getText());
+				System.out.print(parseTree.getText()+ " ");
 			}
-			//System.out.println(Trees.getNodeText(parseTree.getParent(), parser));
-			//System.out.printf(parseTree.getText() + " ");
 		}
 	}
 	

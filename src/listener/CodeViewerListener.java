@@ -40,7 +40,7 @@ public class CodeViewerListener implements CaretListener {
 		if(source.getText().length()>1){
 			if(!buffer.equals(source.getText())){
 				buffer = source.getText();
-				
+				System.out.println(buffer);
 				ANTLRInputStream in = new ANTLRInputStream(buffer);
 //				// input Stream into lexer
 			    CLexer lexer = new CLexer(in);
@@ -70,11 +70,15 @@ public class CodeViewerListener implements CaretListener {
 //			    semanticAnalysis.makeTree(parseTrees);
 			    System.out.println(semanticAnalysis.getParent().getChildList());
 			    List<TreeNode<TreeData>> tnl = semanticAnalysis.getParent().getChildList();
+			    Vector<String> lines = new Vector<>();
 			    for(TreeNode<TreeData> tn : tnl){
-//			    	System.out.println();
-			    	
-			    	semanticAnalysis.visitChildren(tn.getData().getParseTree());
+			    		lines.add(semanticAnalysis.getLine(tn.getData().getParseTree()));
 			    }
+			    for(String s : lines){
+			    	System.out.println(s);
+			    	System.out.println(s.matches("^if[(]{1}"));
+			    }
+			    //java.util.MissingFormatArgumentException
 				tts.declareToShape(buffer);
 			}
 		} else {

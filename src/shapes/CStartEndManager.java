@@ -33,8 +33,7 @@ public class CStartEndManager extends CShapeManager {
 			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
 			this.setTp(new Point2D((this.getP().getX()+(this.getD().getWidth()+10)), (this.getP().getY()+(this.getD().getHeight()/2))+(t.getLayoutBounds().getHeight()/3)));
 		}
-		upperAnchor = new Point2D(p.getX(), p.getY()-15);
-		lowerAnchor = new Point2D(p.getX(), p.getY()+15);
+		setAnchor();
 	}
 
 	@Override
@@ -71,5 +70,8 @@ public class CStartEndManager extends CShapeManager {
 		upperAnchor = new Point2D(this.p.getX(), this.p.getY()-15);
 		lowerAnchor = new Point2D(this.p.getX(), this.p.getY()+15);
 	}
-
+	public void setAnchor(){
+		upperAnchor = new Point2D(p.getX(), p.getY()-15);
+		lowerAnchor = new Point2D(p.getX(), p.getY()+15);
+	}
 }

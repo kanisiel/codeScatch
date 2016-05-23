@@ -32,7 +32,9 @@ public class FlowChartManager {
 		this.nodes.add(sems);
 		this.nodes.add(seme);
 	}
-	
+	public CShapeManager getEndNode(){
+		return nodes.get(nodes.size()-1);
+	}
 	public void addNode(CShapeManager node){
 		this.nodes.add((this.nodes.size()-1), node);
 	}

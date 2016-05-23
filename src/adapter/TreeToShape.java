@@ -32,6 +32,7 @@ public class TreeToShape {
 				canvas.clearCanvas();
 				//String[] stmts = body.split("\n");
 				for(String stmt : body.split("\n")){
+					stmt.replace("\t", "");
 					if(stmt.contains("=")){
 						CRectangleManager declare = new CRectangleManager(stmt);
 						list.add(declare);

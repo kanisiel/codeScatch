@@ -14,19 +14,19 @@ import Settings.Preference;
 import Settings.Windows;
 import Settings.Windows.InternalWindows;
 import adapter.TreeToShape;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import jfxtras.scene.control.window.CloseIcon;
 import jfxtras.scene.control.window.MinimizeIcon;
 import jfxtras.scene.control.window.Window;
 import listener.CodeViewerListener;
+import shapes.CShapeManager;
 
 public class DesktopPaneController extends VBox {
     
@@ -93,12 +93,47 @@ public class DesktopPaneController extends VBox {
         if(w.getTitle().equals(Windows.InternalWindows.Code.getTitle())){
         	setContent(w, swingNode);
         } else {
+        	w.widthProperty().addListener(new ChangeListener<Number>() {
+
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					fcc.setPrefWidth(w.widthProperty().get()-5);					
+				}
+			});
+        	w.heightProperty().addListener(new ChangeListener<Number>() {
+
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					fcc.setPrefHeight(w.heightProperty().get()-30);					
+				}
+			});
+        	Pane p = new Pane();
         	fcc = new FlowChartCanvas();
-        	Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
-        	BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-        	fcc.setBackground(new Background(bi));
-        	//canvas.init();
-        	w.setContentPane(fcc);
+        	ScrollBar sc = new ScrollBar();
+        	 sc.setLayoutX(w.getPrefWidth()-sc.getWidth());
+             sc.setMin(0);
+             sc.setOrientation(Orientation.VERTICAL);
+             sc.setPrefHeight(w.getPrefHeight()-30);
+             sc.setMax(3000);
+             sc.valueProperty().addListener(new ChangeListener<Number>() {
+                 public void changed(ObservableValue<? extends Number> ov,
+                     Number old_val, Number new_val) {
+                	 FlowChartManager manager = fcc.getManager();
+                	 	for(CShapeManager csm : manager.getNodes()){//fcc.getChildren()){
+                	 		int index = manager.findNode(csm);
+                	 		Node n = fcc.getChildren().get(index);
+                	 		n.setLayoutY(-new_val.doubleValue());
+                	 		if(csm.getP().getY()- 25 + n.getLayoutY()<0){
+                	 			n.setVisible(false);
+                	 		} else {
+                	 			n.setVisible(true);
+                	 		}
+                	 	}
+                         //fcc.getChildren().//setLayoutY(-new_val.doubleValue());
+                 }
+             });
+        	p.getChildren().addAll(fcc, sc);
+        	w.setContentPane(p);
         }
         w.setVisible(true);
         
