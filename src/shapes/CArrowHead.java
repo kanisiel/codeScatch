@@ -17,6 +17,7 @@ public class CArrowHead extends CShapeManager {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Point2D lp, rp, cp, sp;
+	private Polygon poly;
 	
 	public CArrowHead(String arrowTo, Point2D endP, Point2D staP, double scale) {
 		super();
@@ -54,6 +55,7 @@ public class CArrowHead extends CShapeManager {
 			lp = new Point2D(endP.getX()-10, endP.getY()+10);
 			rp = new Point2D(endP.getX()+10, endP.getY()+10);
 		}
+		p = new Point2D(cp.getX(), cp.getY()-10);
 		
 	}
 
@@ -72,11 +74,11 @@ public class CArrowHead extends CShapeManager {
 	@Override
 	public Shape getShape() {
 		// TODO Auto-generated method stub
-		Polygon p = new Polygon(cp.getX(), cp.getY(), lp.getX(), lp.getY(), rp.getX(), rp.getY());
-		p.setFill(Color.BLACK);
-		p.setStrokeWidth(2);
-		p.getTransforms().add(new Rotate(GetAngle(cp,sp),cp.getX(),cp.getY()));
-		return p;
+		poly = new Polygon(cp.getX(), cp.getY(), lp.getX(), lp.getY(), rp.getX(), rp.getY());
+		poly.setFill(Color.BLACK);
+		poly.setStrokeWidth(2);
+		poly.getTransforms().add(new Rotate(GetAngle(cp,sp),cp.getX(),cp.getY()));
+		return poly;
 	}
 
 	@Override
@@ -101,5 +103,10 @@ public class CArrowHead extends CShapeManager {
 	}
 	public double RadianToDegree(double rad) {
 	    return rad * (180 / Math.PI);
+	}
+	@Override
+	public Shape Shape() {
+		// TODO Auto-generated method stub
+		return poly;
 	}
 }

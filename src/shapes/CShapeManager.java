@@ -78,5 +78,6 @@ public abstract class CShapeManager implements Serializable {
 	public void setLowerAnchor(Point2D lowerAnchor) {
 		this.lowerAnchor = lowerAnchor;
 	}
+	public abstract Shape Shape();
 	
 }

@@ -18,15 +18,15 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
+import javafx.scene.Group;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Shape;
 import jfxtras.scene.control.window.CloseIcon;
 import jfxtras.scene.control.window.MinimizeIcon;
 import jfxtras.scene.control.window.Window;
 import listener.CodeViewerListener;
-import shapes.CShapeManager;
 
 public class DesktopPaneController extends VBox {
     
@@ -118,18 +118,27 @@ public class DesktopPaneController extends VBox {
              sc.valueProperty().addListener(new ChangeListener<Number>() {
                  public void changed(ObservableValue<? extends Number> ov,
                      Number old_val, Number new_val) {
-                	 FlowChartManager manager = fcc.getManager();
-                	 	for(CShapeManager csm : manager.getNodes()){//fcc.getChildren()){
-                	 		int index = manager.findNode(csm);
-                	 		Node n = fcc.getChildren().get(index);
-                	 		n.setLayoutY(-new_val.doubleValue());
-                	 		if(csm.getP().getY()- 25 + n.getLayoutY()<0){
+                	 for(javafx.scene.Node n : fcc.getChildren()){
+        	 			int index = fcc.getChildren().indexOf(n);
+        	 			n.setLayoutY(-new_val.doubleValue());
+        	 			Group g = (Group) n;
+    	 				Shape s = (Shape) g.getChildren().get(0);
+    	 				System.out.println(s.getId());
+	 					if(index == 0 || index == fcc.getChildren().size()-1){
+        	 				if(Double.parseDouble(s.getId()) + n.getLayoutY()<0){
                 	 			n.setVisible(false);
                 	 		} else {
                 	 			n.setVisible(true);
                 	 		}
-                	 	}
-                         //fcc.getChildren().//setLayoutY(-new_val.doubleValue());
+    	 				}
+            	 		 else {
+            	 			if(Double.parseDouble(s.getId()) + n.getLayoutY()<=0){
+                	 			n.setVisible(false);
+                	 		} else {
+                	 			n.setVisible(true);
+                	 		}
+            	 		}	
+        	 		}
                  }
              });
         	p.getChildren().addAll(fcc, sc);

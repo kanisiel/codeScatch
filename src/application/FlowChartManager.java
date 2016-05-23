@@ -3,18 +3,18 @@ package application;
 import java.util.Vector;
 
 import Settings.Constants;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import shapes.CShapeManager;
 import shapes.CStartEndManager;
 
 public class FlowChartManager {
 	private Vector<CShapeManager> nodes;
-	private Vector<Canvas> canvases;
+	private Vector<Group> allnodes;
 	
 	public FlowChartManager(){
 		this.nodes = new Vector<>();
-		this.canvases = new Vector<>();
+		this.allnodes = new Vector<>();
 	}
 	public void initManager(CShapeManager start, CShapeManager end){
 		this.nodes.clear();
@@ -23,6 +23,7 @@ public class FlowChartManager {
 	}
 	public void initManager(){
 		this.nodes.clear();
+		this.allnodes.clear();
 		CStartEndManager sems = new CStartEndManager(Constants.EShapeType.START.ordinal());
 		sems.setFill(Color.BLACK);
 		sems.setStroke(Color.BLACK);
@@ -55,22 +56,19 @@ public class FlowChartManager {
 		}
 		return nodes.get(nodes.indexOf(node)+1);
 	}
-	public Canvas startCanvas(){
-		return this.canvases.get(0);
-	}
-	public Canvas endCanvas(){
-		return this.canvases.get(this.canvases.size());
+	public int findAllNode(CShapeManager node){
+		return allnodes.indexOf(node);
 	}
 	public Vector<CShapeManager> getNodes() {
 		return nodes;
 	}
-	public Vector<Canvas> getCanvases() {
-		return canvases;
+	public Vector<Group> getAllNodes() {
+		return allnodes;
 	}
 	public void setNodes(Vector<CShapeManager> nodes) {
 		this.nodes = nodes;
 	}
-	public void setCanvases(Vector<Canvas> canvases) {
-		this.canvases = canvases;
+	public void setCanvases(Vector<Group> allnodes) {
+		this.allnodes = allnodes;
 	}
 }

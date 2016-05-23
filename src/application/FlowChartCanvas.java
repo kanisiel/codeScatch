@@ -12,13 +12,10 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import shapes.CArrowHead;
+import shapes.CConnectManager;
 import shapes.CShapeManager;
 import shapes.CStartEndManager;
 
@@ -67,44 +64,36 @@ public class FlowChartCanvas extends BorderPane {
 		drawAll();
 	}
 	public void drawAll(){
+		this.manager.getAllNodes().clear();
 		for(CShapeManager s : this.manager.getNodes()){
+			endPoint = s.getLowerAnchor();
+			if(endPoint.getY() > (this.getPrefHeight())){
+				CStartEndManager end = (CStartEndManager)this.manager.getEndNode();
+				Point2D p = new Point2D(endPoint.getX(), endPoint.getY()+40);
+				end.setP(p);
+				end.setTp(new Point2D((end.getP().getX()+(end.getD().getWidth()+5)), (end.getP().getY())+(5.0)));
+				end.setAnchor();
+			}
 			Shape shape = s.getShape();
+			shape.setId(String.valueOf(s.getUpperAnchor().getY()));
 			Text text = s.getText();
 			Group g = new Group();
-			if(!s.getClass().equals(CStartEndManager.class)){
-				endPoint = s.getLowerAnchor();
-				if(endPoint.getY() > this.getPrefHeight()-30){
-					CStartEndManager end = (CStartEndManager)this.manager.getEndNode();
-					Point2D p = new Point2D(endPoint.getX(), endPoint.getY()+40);
-					end.setP(p);
-					end.setTp(new Point2D((end.getP().getX()+(end.getD().getWidth()+10)), (end.getP().getY()+(end.getD().getHeight()/2))+(end.getText().getLayoutBounds().getHeight()/3)));
-					end.setAnchor();
-				}
-				CShapeManager prev = this.manager.findPrev(s);
-				CShapeManager next = this.manager.findNext(s);
-				MoveTo mtu = new MoveTo(prev.getLowerAnchor().getX(), prev.getLowerAnchor().getY());
-				LineTo ltu = new LineTo(s.getUpperAnchor().getX(), s.getUpperAnchor().getY());
-				Path upper = new Path(mtu, ltu);
-				upper.setStroke(Color.BLACK);
-				upper.setStrokeWidth(2);
-				CArrowHead uh = new CArrowHead(Constants.SOUTH, s.getUpperAnchor(), prev.getLowerAnchor());
-				Shape upperHead = uh.getShape();
-				MoveTo mtl = new MoveTo(s.getLowerAnchor().getX(), s.getLowerAnchor().getY());
-				LineTo ltl = new LineTo(next.getUpperAnchor().getX(), next.getUpperAnchor().getY());
-				Path lower = new Path(mtl, ltl);
-				lower.setStroke(Color.BLACK);
-				lower.setStrokeWidth(2);
-				CArrowHead lh = new CArrowHead(Constants.SOUTH, next.getUpperAnchor(), s.getLowerAnchor());
-				Shape lowerHead = lh.getShape();
-				g.getChildren().addAll(upper, upperHead, shape, text, lower, lowerHead);
-				
-			}else {
-				g.getChildren().addAll(shape, text);
-			}
-			g.setId(String.valueOf(this.manager.findNode(s)));
+			g.getChildren().addAll(shape, text);
+			this.manager.getAllNodes().add(g);
 			this.getChildren().add(g);
-			//c.getChildren().add();
-			//s.draw(gc);
+			if(this.manager.findNode(s) != this.manager.getNodes().size()-1){
+				Group arrow = new Group();
+				CShapeManager next = this.manager.findNext(s);
+				CConnectManager cm = new CConnectManager();
+				cm.setCoord(s.getLowerAnchor(), next.getUpperAnchor());
+				CArrowHead lh = new CArrowHead(Constants.SOUTH, next.getUpperAnchor(), s.getLowerAnchor());
+				Shape line = cm.getShape();
+				line.setId(String.valueOf(cm.getUpperAnchor().getY()));
+				Shape head = lh.getShape();
+				arrow.getChildren().addAll(line, head);
+				this.manager.getAllNodes().add(arrow);
+				this.getChildren().add(arrow);
+			}
 		}
 	}
 	public FlowChartManager getManager(){

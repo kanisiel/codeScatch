@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 
 public class COvalManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
-
+	private Ellipse e;
 	
 	public COvalManager(String body){
 		super();
@@ -34,7 +34,7 @@ public class COvalManager extends CShapeManager {
 	@Override
 	public Shape getShape() {
 		// TODO Auto-generated method stub
-		Ellipse e = new Ellipse(p.getX(), p.getY(), d.getWidth()/2, d.getHeight()/2);
+		e = new Ellipse(p.getX(), p.getY(), d.getWidth()/2, d.getHeight()/2);
 		e.setStroke(stroke);
 		e.setStrokeWidth(2);
 		e.setFill(Color.TRANSPARENT);
@@ -60,5 +60,12 @@ public class COvalManager extends CShapeManager {
 		
 		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
 		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
+	}
+
+
+	@Override
+	public Shape Shape() {
+		// TODO Auto-generated method stub
+		return e;
 	}
 }

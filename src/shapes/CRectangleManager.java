@@ -11,6 +11,8 @@ import javafx.scene.text.Text;
 public class CRectangleManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
 	
+	Rectangle r;
+	
 	public CRectangleManager(String body){
 		super();
 		this.body = body;
@@ -41,7 +43,7 @@ public class CRectangleManager extends CShapeManager {
 	}
 	@Override
 	public Shape getShape(){
-		Rectangle r = new Rectangle(p.getX(), p.getY(), d.getWidth(), d.getHeight());
+		r = new Rectangle(p.getX(), p.getY(), d.getWidth(), d.getHeight());
 		r.setStroke(stroke);
 		r.setStrokeWidth(2);
 		r.setFill(Color.TRANSPARENT);
@@ -81,6 +83,12 @@ public class CRectangleManager extends CShapeManager {
 		
 		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
 		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
+	}
+
+	@Override
+	public Shape Shape() {
+		// TODO Auto-generated method stub
+		return r;
 	}
 
 }
