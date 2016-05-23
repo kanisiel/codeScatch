@@ -85,6 +85,12 @@ public class CSemanticAnalysis {
 			}
 		}
 		else{
+			if(Trees.getNodeText(parseTree.getParent(), parser).equals("typeSpecifier")){
+				System.out.printf(parseTree.getText() + " ");
+			} else {
+				System.out.printf(parseTree.getText());
+			}
+			//System.out.println(Trees.getNodeText(parseTree.getParent(), parser));
 			//System.out.printf(parseTree.getText() + " ");
 		}
 	}
@@ -174,6 +180,21 @@ public class CSemanticAnalysis {
 				;
 			}
 		}
+	}
+
+
+	public TreeNode<TreeData> getParent() {
+		// make tree
+		
+			makeTree(parseTrees);
+		// merge code
+//			mergeCode(this.parent);
+		return parent;
+	}
+
+
+	public void setParent(TreeNode<TreeData> parent) {
+		this.parent = parent;
 	}
 
 }

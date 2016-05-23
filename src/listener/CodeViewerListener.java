@@ -1,5 +1,6 @@
 package listener;
 
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.event.CaretEvent;
@@ -16,6 +17,8 @@ import parser.CLexer;
 import parser.CParser;
 import parser.CSemanticAnalysis;
 import parser.CVisitor;
+import parser.TreeData;
+import parser.TreeNode;
 
 public class CodeViewerListener implements CaretListener {
 	public String buffer;
@@ -63,7 +66,15 @@ public class CodeViewerListener implements CaretListener {
 			    	}
 			    }
 			      
-			    semanticAnalysis.test();
+			    //semanticAnalysis.test();
+//			    semanticAnalysis.makeTree(parseTrees);
+			    System.out.println(semanticAnalysis.getParent().getChildList());
+			    List<TreeNode<TreeData>> tnl = semanticAnalysis.getParent().getChildList();
+			    for(TreeNode<TreeData> tn : tnl){
+//			    	System.out.println();
+			    	
+			    	semanticAnalysis.visitChildren(tn.getData().getParseTree());
+			    }
 				tts.declareToShape(buffer);
 			}
 		} else {
