@@ -123,7 +123,6 @@ public class DesktopPaneController extends VBox {
         	 			n.setLayoutY(-new_val.doubleValue());
         	 			Group g = (Group) n;
     	 				Shape s = (Shape) g.getChildren().get(0);
-    	 				System.out.println(s.getId());
 	 					if(index == 0 || index == fcc.getChildren().size()-1){
         	 				if(Double.parseDouble(s.getId()) + n.getLayoutY()<0){
                 	 			n.setVisible(false);

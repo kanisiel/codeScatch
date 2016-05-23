@@ -40,6 +40,28 @@ public class CStartEndManager extends CShapeManager {
 		}
 		setAnchor();
 	}
+	public CStartEndManager(int flag, Point2D p){
+		super();
+		// TODO Auto-generated constructor stub
+		if(flag==Constants.EShapeType.START.ordinal()){
+			this.setD(new Dimension2D(20, 20));
+			this.setP(p);
+			this.setBody("Start");
+			Text t = new Text(this.getBody());
+			t.setFont(new Font("Arial", Double.parseDouble("10.0")));
+			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
+			this.setTp(new Point2D((this.getP().getX()+(this.getD().getWidth()+5)), (this.getP().getY()+5.0)));
+		} else if(flag == Constants.EShapeType.STOP.ordinal()){
+			this.setD(new Dimension2D(20, 20));
+			this.setP(p);
+			this.setBody("End");
+			Text t = new Text(this.getBody());
+			t.setFont(new Font("Arial", Double.parseDouble("10.0")));
+			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
+			this.setTp(new Point2D((this.getP().getX()+(this.getD().getWidth()+5)), (this.getP().getY())+(5.0)));
+		}
+		setAnchor();
+	}
 
 	@Override
 	public void drawText(GraphicsContext gc) {
@@ -83,5 +105,8 @@ public class CStartEndManager extends CShapeManager {
 	public void setAnchor(){
 		upperAnchor = new Point2D(p.getX(), p.getY()-15);
 		lowerAnchor = new Point2D(p.getX(), p.getY()+15);
+	}
+	public void setUpperAnchor(Point2D p){
+		upperAnchor = p;
 	}
 }

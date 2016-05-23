@@ -68,11 +68,12 @@ public class FlowChartCanvas extends BorderPane {
 		for(CShapeManager s : this.manager.getNodes()){
 			endPoint = s.getLowerAnchor();
 			if(endPoint.getY() > (this.getPrefHeight())){
-				CStartEndManager end = (CStartEndManager)this.manager.getEndNode();
-				Point2D p = new Point2D(endPoint.getX(), endPoint.getY()+40);
+				//CStartEndManager end = (CStartEndManager)this.manager.getEndNode();
+				Point2D p = new Point2D(endPoint.getX(), endPoint.getY()+55);
+				CStartEndManager end = (CStartEndManager) this.manager.getNodes().get((this.manager.getNodes().size()-1));
 				end.setP(p);
-				end.setTp(new Point2D((end.getP().getX()+(end.getD().getWidth()+5)), (end.getP().getY())+(5.0)));
-				end.setAnchor();
+				end.setTp(new Point2D(p.getX()+(end.getD().getWidth()+5), (p.getY())+(5.0)));
+				end.setUpperAnchor(new Point2D(p.getX(), p.getY()-15));
 			}
 			Shape shape = s.getShape();
 			shape.setId(String.valueOf(s.getUpperAnchor().getY()));
