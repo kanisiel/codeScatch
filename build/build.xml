@@ -20,57 +20,57 @@
 		<mkdir dir="externalLibs" />
 	
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/jvxfx-1.0">
+			<fileset dir="../libs/jvxfx-1.0">
 				<filename name="jvxfx.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-labs-8.0-r4.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-window-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/antlr-4.5.3">
+			<fileset dir="../libs/antlr-4.5.3">
 				<filename name="antlr-4.5.3-complete.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/rsyntaxtextarea-2.5.7">
+			<fileset dir="../libs/rsyntaxtextarea-2.5.7">
 				<filename name="rsyntaxtextarea-2.5.7.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-controls-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-menu-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-fxml-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/miglayout-5.1">
+			<fileset dir="../libs/miglayout-5.1">
 				<filename name="miglayout-core-5.1-20160416.220029-387.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/miglayout-5.1">
+			<fileset dir="../libs/miglayout-5.1">
 				<filename name="miglayout-swing-5.1-20160419.220020-390.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="/Users/newmacpro/Documents/workspace/codeScatch/libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-common-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
@@ -149,7 +149,7 @@
 	
 		<fx:resources id="appRes">
 			<fx:fileset dir="dist" includes="codeScatch.jar"/>
-			<fx:fileset dir="dist" includes="libs/*"/>
+			<fx:fileset dir="dist" includes="../libs/*"/>
 		</fx:resources>
 	
 		<fx:application id="fxApplication"

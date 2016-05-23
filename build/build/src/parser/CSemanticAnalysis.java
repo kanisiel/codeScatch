@@ -1,6 +1,4 @@
 package parser;
-import java.util.List;
-
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.Trees;
 
@@ -18,7 +16,7 @@ public class CSemanticAnalysis {
 
 	
 	
-	CSemanticAnalysis(CParser parser){
+	public CSemanticAnalysis(CParser parser){
 		this.parser = parser;
 	}	
 	

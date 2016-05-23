@@ -85,8 +85,8 @@ public class DesktopPaneController extends VBox {
  
         //Initialize components
         SwingNode swingNode = new SwingNode();
-        swingNode.prefWidth(w.getWidth());
-        swingNode.prefHeight(w.getHeight());
+        swingNode.prefWidth(w.getPrefWidth());
+        swingNode.prefHeight(w.getPrefHeight());
         createAndSetSwingContent(swingNode, title);
         
         // add some content

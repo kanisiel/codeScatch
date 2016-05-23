@@ -1,5 +1,7 @@
 package listener;
 
+import java.util.Vector;
+
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
@@ -11,12 +13,14 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import adapter.TreeToShape;
 import parser.CLexer;
 import parser.CParser;
+import parser.CSemanticAnalysis;
+import parser.CVisitor;
 
 public class CodeViewerListener implements CaretListener {
 	public String buffer;
 	private ANTLRInputStream in;
 	private CLexer lexer;
-	private CommonTokenStream token;
+	private CommonTokenStream tokens;
 	private CParser parser;
 	private ParseTree tree;
 	//private ParserFunction functions;
@@ -32,15 +36,17 @@ public class CodeViewerListener implements CaretListener {
 		if(source.getText().length()>1){
 			if(!buffer.equals(source.getText())){
 				buffer = source.getText();
-//				in = new ANTLRInputStream(buffer);
-//				lexer = new CLexer(in);
-//				token = new CommonTokenStream(lexer);
-//				parser = new CParser(token);
-//				tree = parser.translationUnit();
-//				functions = new ParserFunction();
-//				functions.toTokenString(tree);
-//				functions.printTokens();
-//				System.out.println(source.getText());
+				in = new ANTLRInputStream(buffer);
+				lexer = new CLexer(in);
+				tokens = new CommonTokenStream(lexer);
+				parser = new CParser(tokens);
+				tree = parser.translationUnit();
+				CVisitor visitor = new CVisitor(tree, parser);
+			    Vector<ParseTree> parseTrees = visitor.codeStructure(tree);
+			    CSemanticAnalysis semanticAnalysis = new CSemanticAnalysis(parser);
+				for(int i = 0; i < parseTrees.size(); ++i){
+					semanticAnalysis.analyzeDCLR(parseTrees.get(i).getChild(0));
+				}
 				tts.declareToShape(buffer);
 			}
 		} else {
