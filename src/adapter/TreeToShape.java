@@ -39,6 +39,12 @@ public class TreeToShape {
 						CDiamondManager declare = new CDiamondManager(stmt);
 						declare.setBody(stmt);
 						list.add(declare);
+					} else if(stmt.contains("for(")){
+						String[] token1D = stmt.split("for(");
+						System.out.println(token1D.length);
+//						String type = token1D[0];
+//						String[] token2D = token1D[1]
+						
 					} else {
 						CParallelogramManager declare = new CParallelogramManager(stmt);
 						declare.setBody(stmt);

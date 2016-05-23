@@ -75,8 +75,6 @@ public class CArrowHead extends CShapeManager {
 		Polygon p = new Polygon(cp.getX(), cp.getY(), lp.getX(), lp.getY(), rp.getX(), rp.getY());
 		p.setFill(Color.BLACK);
 		p.setStrokeWidth(2);
-		
-		System.out.println(GetAngle(cp, sp));
 		p.getTransforms().add(new Rotate(GetAngle(cp,sp),cp.getX(),cp.getY()));
 		return p;
 	}

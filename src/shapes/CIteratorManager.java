@@ -3,15 +3,24 @@ package shapes;
 import java.util.Vector;
 
 public class CIteratorManager extends CShapeNode {
-
+	private String type;
 	private String init;
 	private String condition;
 	private String amount;
 	private Vector<CShapeManager> body;
 
-	public CIteratorManager(String condition) {
+	public CIteratorManager(String type, String condition) {
 		super();
+		this.type = type;
 		this.condition = condition;
+		this.body = new Vector<>();
+	}
+	public CIteratorManager(String type, String init, String condition, String amount) {
+		super();
+		this.type = type;
+		this.init = init;
+		this.condition = condition;
+		this.amount = amount;
 		this.body = new Vector<>();
 	}
 	
@@ -52,5 +61,13 @@ public class CIteratorManager extends CShapeNode {
 		}
 		shapes.add(new CRectangleManager(amount));
 		return shapes;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

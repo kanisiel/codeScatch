@@ -1,7 +1,5 @@
 package application;
 
-import java.awt.Image;
-
 import Settings.Constants;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
@@ -16,12 +14,9 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import shapes.CArrowHead;
 import shapes.CShapeManager;
-import shapes.CShapeNode;
 import shapes.CStartEndManager;
 
 public class FlowChartCanvas extends BorderPane {
-	private CShapeNode root;
-	private Image img;
 	private Canvas canvas;
 	private FlowChartManager manager;
 	
