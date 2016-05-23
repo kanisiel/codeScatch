@@ -19,7 +19,7 @@ public class FlowChart extends InternalFrame {
         this.getContentPane().setLayout(new BorderLayout());
         
         flowChartPane = new FlowChartPane();
-        scrollPane = new JScrollPane(flowChartPane, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane = new JScrollPane(flowChartPane, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setPreferredSize(new Dimension(flowChartPane.getWidth(), flowChartPane.getHeight()));
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         this.add(scrollPane, BorderLayout.CENTER);

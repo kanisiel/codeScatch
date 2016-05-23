@@ -2,6 +2,7 @@ package shapes;
 
 import java.io.Serializable;
 
+import Settings.Constants.EControlStatementMode;
 import Settings.Constants.EShapeType;
 
 public class CShapeNode implements Serializable {
@@ -12,21 +13,14 @@ public class CShapeNode implements Serializable {
 	private int shapeNo;
 	private String shapeContent;
 	private EShapeType shapeType;
+	private EControlStatementMode mode;
 	private boolean isDiamond;
 	private int x;
 	private int y;
 	private CShapeNode previousNode;
 	private static int incShapeNo = 0;
     
-	public CShapeNode(int shapeNo, EShapeType shapeType, String shapeContent){
-        this.shapeNo = shapeNo;
-        this.shapeType = shapeType;
-        this.shapeContent = shapeContent;
-        this.setIsDiamond();
-        previousNode = null;
-    }
-    
-    public CShapeNode(EShapeType shapeType, String shapeContent){
+	public CShapeNode(EShapeType shapeType, String shapeContent){
         left = null;
         right = null;
         this.shapeNo = ++incShapeNo;
@@ -34,6 +28,16 @@ public class CShapeNode implements Serializable {
         this.shapeContent = shapeContent;
         this.setIsDiamond();
         previousNode = null;
+    }
+	
+	public CShapeNode(int shapeNo, EShapeType shapeType, String shapeContent){
+        this(shapeType, shapeContent);
+        this.shapeNo = shapeNo;
+    }
+	
+	public CShapeNode(EShapeType shapeType, EControlStatementMode mode){
+        this(shapeType, "");
+        this.mode = mode;
     }
         
     private void setIsDiamond() {
@@ -47,14 +51,19 @@ public class CShapeNode implements Serializable {
     	}
     	
     	else if (attachTo == 1) 
-    		this.insertNode(node);    	
-
+    		this.insertNode(node);
+    	
     	return true;
     }
     
     public boolean insertNode(CShapeNode node) {
+    	if (previousNode != null) {
+    		System.out.println("Number of node: " + shapeNo);
+    		System.out.println("PrevNode isDiamond: " + previousNode.isDiamond);
+    	}
     	if (this.right == null) {
     		previousNode = this;
+    		System.out.println(previousNode.getShapeType() + "(" + previousNode.getShapeNo() + ")");
     		this.right = node;
     		return true;
     	}
@@ -97,6 +106,7 @@ public class CShapeNode implements Serializable {
 	public int getShapeNo() {	return shapeNo;	}
 	public String getShapeContent() {	return shapeContent;	}
 	public EShapeType getShapeType() {	return shapeType;	}
+	public EControlStatementMode getMode() {	return mode;	}
 	public boolean getIsDiamond() {	return isDiamond;	}
 	public int getX() {	return x;	}
 	public int getY() {	return y;	}

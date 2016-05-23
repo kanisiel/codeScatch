@@ -19,7 +19,7 @@ public class Constants {
 		CONDITION,
 		LOOP,
 		FUNCTION,
-		STOP;
+		END;
 	};
 	
 	public static enum EArrowHeadDirection {
@@ -39,6 +39,33 @@ public class Constants {
 		Float,
 		Double,
 		Char;
+	};
+	
+	public static enum EControlStatementMode {
+		IF_ONLY,
+		IF_ELSE,
+		IF_ELSEIF_ELSE,
+		CASE,
+		WHILE,
+		DO_WHILE,
+		FOR;
+	};
+	
+	public static enum ERectDrawType {
+		CODE("Code"),
+		CONDITION("IF"),
+		DO_WHILE("DO-WHILE"),
+		WHIlE("WHILE"),
+		FOR("FOR"),
+		SWITCH("SWITCH"),
+		CONTINUE("Continue"),
+		BREAK("Break"),
+		RETURN("Return");
+		
+		private String name;
+		
+		private ERectDrawType(String name) {	this.name = name;	}
+		public String getName() {	return name;	}
 	};
 	
 	public static final String[] DECISION = {"NO", "YES"};

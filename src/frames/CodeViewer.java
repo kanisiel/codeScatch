@@ -13,6 +13,11 @@
 package frames;
 
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -20,6 +25,8 @@ import javax.swing.JPanel;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
+
+import converter.CConverter;
 
 public class CodeViewer extends JInternalFrame {
 	/**
@@ -30,6 +37,8 @@ public class CodeViewer extends JInternalFrame {
     private JPanel cp;
     private RSyntaxTextArea textArea;
     private RTextScrollPane sp;
+    private CConverter converter;
+    private KeyHandler keyHandler;
     
 	public CodeViewer(String title) {
         super(title, 
@@ -43,11 +52,42 @@ public class CodeViewer extends JInternalFrame {
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
         textArea.setCodeFoldingEnabled(true);
         sp = new RTextScrollPane(textArea);
+        converter = new CConverter(textArea);
+        
+        keyHandler = new KeyHandler();
+        this.textArea.addKeyListener(keyHandler);
         cp.add(sp);
 
         setContentPane(cp);
         pack();
 	}
 	
-	public RSyntaxTextArea getTextArea() {	return this.textArea;	}
+	public class KeyHandler implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if ((e.getKeyCode() == KeyEvent.VK_V && e.isControlDown())) {
+				Transferable contents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(Toolkit.getDefaultToolkit().getSystemClipboard());
+				if (contents != null) {
+					try {
+						String tmp = (String)contents.getTransferData(DataFlavor.stringFlavor);
+						converter.setContents(tmp);
+						converter.convert();
+					} catch (Exception ex) {}
+				}
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+		//	if (e.getKeyChar() == '\n') {
+		//		converter.setContents(((RSyntaxTextArea)e.getSource()).getText());
+		//		converter.convert();
+		//	}
+		}
+		
+	}
 }

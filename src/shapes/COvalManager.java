@@ -33,8 +33,6 @@ public class COvalManager extends CShapeManager {
         sw = new Point(node.getX(), node.getY() + 50);
         ne = new Point(node.getX(), node.getY() + 80);
         g.draw(new Line2D.Double(sw, ne));
-        super.drawArrowHead(g, ne, sw, Color.blue, EArrowHeadDirection.DOWN);
-        g.setColor(Color.black);
 	}
 	
 	public void drawStopOval(Graphics2D g, CShapeNode node) {
