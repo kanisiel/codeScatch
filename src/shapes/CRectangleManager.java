@@ -1,12 +1,8 @@
 package shapes;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Line2D;
 
-import Settings.Constants.EArrowHeadDirection;
 import Settings.Constants.EShapeType;
 
 public class CRectangleManager extends CShapeManager {

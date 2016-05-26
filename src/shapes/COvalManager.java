@@ -1,11 +1,9 @@
 package shapes;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Line2D;
 
-import Settings.Constants.EArrowHeadDirection;
 import Settings.Constants.EShapeType;
 
 public class COvalManager extends CShapeManager {
@@ -37,6 +35,6 @@ public class COvalManager extends CShapeManager {
 	
 	public void drawStopOval(Graphics2D g, CShapeNode node) {
 		g.drawOval(node.getX() - 25, node.getY(), radius, radius);
-		g.drawString(node.getShapeContent(), node.getX() - 15, node.getY() + 30);
+		g.drawString(node.getShapeContent(), node.getX() - 12, node.getY() + 30);
 	}
 }

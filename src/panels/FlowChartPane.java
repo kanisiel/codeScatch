@@ -104,6 +104,7 @@ public class FlowChartPane extends JPanel {
 				new CShapeNode(EShapeType.LOOP, EControlStatementMode.FOR),
 				new CShapeNode(EShapeType.CONDITION, EControlStatementMode.IF_ELSE),
 				new CShapeNode(EShapeType.CONDITION, EControlStatementMode.IF_ONLY),
+				new CShapeNode(EShapeType.END, "END")
 		};
 		
 		for (CShapeNode node : nodes) {
