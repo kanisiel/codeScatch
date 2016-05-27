@@ -8,6 +8,8 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.Trees;
 
+import Settings.CConstants;
+
 public class CVisitor implements ParseTreeVisitor<ParseTree>{
 	private Vector<ParseTree> parseTrees = new Vector<ParseTree>();
 	private ParseTree parseTree;
@@ -25,6 +27,14 @@ public class CVisitor implements ParseTreeVisitor<ParseTree>{
 		return parseTrees; 
 	}
 	
+	public ParseTree getFunDefinition(Vector<ParseTree> parseTrees){
+		for(int i = 0; i < parseTrees.size(); ++i){
+	    	  if(Trees.getNodeText(parseTrees.get(i).getChild(0), parser).equals(CConstants.FUNCTIONDEFINITION)){
+	    		  return parseTrees.get(i).getChild(0);
+	    	  }
+	    }
+		return null;
+	}
 	
 	public void TransUnitGoChildNode(ParseTree parseTree){
 		String externalDeclaration = "externalDeclaration";
@@ -53,7 +63,7 @@ public class CVisitor implements ParseTreeVisitor<ParseTree>{
 			}
 		}
 		else{
-			;
+			System.out.println(parseTree.getText());
 		}
 	}
 	

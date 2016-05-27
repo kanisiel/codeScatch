@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 
 public class CRectangleManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
@@ -54,6 +55,7 @@ public class CRectangleManager extends CShapeManager {
 		text = new Text(body);
 		text.setX(tp.getX());
 		text.setY(tp.getY());
+		text.setBoundsType(TextBoundsType.VISUAL); 
 		return text;
 	}
 //	public CRectangleManager(EShapeType shapeType) {
@@ -83,6 +85,8 @@ public class CRectangleManager extends CShapeManager {
 		
 		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
 		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
+		leftAnchor = new Point2D(this.p.getX(), this.p.getY()+this.d.getHeight()/2);
+		rightAnchor = new Point2D(this.leftAnchor.getX()+this.d.getWidth(), this.leftAnchor.getY());
 	}
 
 	@Override

@@ -2,55 +2,62 @@ package shapes;
 
 import java.util.Vector;
 
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Point2D;
+
 public class CIteratorManager extends CShapeNode {
+	private Point2D boundP;
+	private Dimension2D boundD;
 
-	private String init;
-	private String condition;
-	private String amount;
-	private Vector<CShapeManager> body;
-
-	public CIteratorManager(String condition) {
+	public CIteratorManager(String type, String condition, CShapeNode parent) {
 		super();
-		this.condition = condition;
-		this.body = new Vector<>();
+		this.type = type;
+		this.parent = parent;
+		this.bodies = new Vector<>();
+		this.bodies.add(new CConditionManager(condition, this));
 	}
 	
-	public void addBody(CShapeManager csm){
-		this.body.add(csm);
-	}
-
-	public String getInit() {
-		return init;
-	}
-
-	public String getCondition() {
-		return condition;
-	}
-
-	public String getAmount() {
-		return amount;
-	}
-
-	public void setInit(String init) {
-		this.init = init;
-	}
-
-	public void setCondition(String condition) {
-		this.condition = condition;
-	}
-
-	public void setAmount(String amount) {
-		this.amount = amount;
+	public CIteratorManager(String type, String init, String condition, String amount, CShapeNode parent) {
+		super();
+		this.type = type;
+		this.parent = parent;
+		this.bodies = new Vector<>();
+		this.bodies.add(new CCodeManager(init, this));
+		this.bodies.add(new CConditionManager(condition, this));
+		this.bodies.add(new CCodeManager(amount, this));
 	}
 	
-	public Vector<CShapeManager> getShapes(){
-		Vector<CShapeManager> shapes = new Vector<>();
-		shapes.add(new CRectangleManager(init));
-		shapes.add(new CDiamondManager(condition));
-		for(CShapeManager csm : body){
-			shapes.add(csm);
-		}
-		shapes.add(new CRectangleManager(amount));
-		return shapes;
+	public void addBody(CShapeNode csn){
+		this.bodies.add(csn);
+	}	
+	
+	@Override
+	public String getType() {
+		return type;
 	}
+
+	@Override
+	public CShapeManager getShape() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+//	public Shape getBound(){
+//		Rectangle r = new Rectangle();
+//		double bufferX = Constants.centerAxisX;
+//		double bufferD = 0;
+//		double y = body.get(0).p.getY()-20;
+//		double h = (body.get(body.size()-1).p.getY()) + 10;
+//		for(CShapeManager csm : body){
+//			if(csm.p.getX() < bufferX){
+//				bufferX = csm.p.getX();
+//			}
+//			if(csm.d.getWidth() > bufferD){
+//				bufferD = csm.d.getWidth();
+//			}
+//		}
+//		bufferX -= 10;
+//		bufferD += 20;
+//		return r;
+//	}
 }

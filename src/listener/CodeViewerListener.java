@@ -1,6 +1,5 @@
 package listener;
 
-import java.util.List;
 import java.util.Vector;
 
 import javax.swing.event.CaretEvent;
@@ -12,6 +11,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.Trees;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
+import Settings.CConstants;
+import Settings.Constants;
 import adapter.TreeToShape;
 import parser.CLexer;
 import parser.CParser;
@@ -19,6 +20,7 @@ import parser.CSemanticAnalysis;
 import parser.CVisitor;
 import parser.TreeData;
 import parser.TreeNode;
+import shapes.CShapeNode;
 
 public class CodeViewerListener implements CaretListener {
 	public String buffer;
@@ -40,7 +42,6 @@ public class CodeViewerListener implements CaretListener {
 		if(source.getText().length()>1){
 			if(!buffer.equals(source.getText())){
 				buffer = source.getText();
-				System.out.println(buffer);
 				ANTLRInputStream in = new ANTLRInputStream(buffer);
 //				// input Stream into lexer
 			    CLexer lexer = new CLexer(in);
@@ -65,28 +66,70 @@ public class CodeViewerListener implements CaretListener {
 			    	    semanticAnalysis.analyzeCompoundStatement(parseTree.getChild(i));
 			    	}
 			    }
-			      
-			    //semanticAnalysis.test();
+			    
+//			    for(int j = 0; j < parent.getChildList().get(i).getData().getCodeVector().size(); ++j){
+//					System.out.println(parent.getChildList().get(i).getData().getCodeVector().get(j).getText());	
+//				}
+//			    semanticAnalysis.test();
+			    //Prepare Canvas
+			    tts.prepareCanvas(); 
+			    //Split to type and body
+			    TreeNode<TreeData> parent = semanticAnalysis.getParent();
+//			    semanticAnalysis.getLine(parent);
+			    
+			    semanticAnalysis.getLine(parent.getChildList().get(0));
+			    Vector<String> st = semanticAnalysis.getST();
+			    CShapeNode shape;
+			    for(int i = 0; i < parent.getChildList().size(); ++i){
+		    		Vector<String> sts = new Vector<>();
+		    		ParseTree tree = parent.getChildList().get(i).getData().getParseTree();
+			    	if(parent.getChildList().get(i).getData().getNodeType().equals(CConstants.CODE)){
+			    		sts.add(st.get(i));
+			    		shape = tts.declareToShape(sts,Constants.CODE);
+			    		
+			    	} else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.IF)){
+			    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
+			    		sts.add(body);
+			    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
+			    		sts.add(condition);
+			    		shape = tts.declareToShape(sts, Constants.IF);
+			    	} else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.WHILE)){
+			    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
+			    		sts.add(body);
+			    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
+			    		sts.add(condition);
+			    		shape = tts.declareToShape(sts, Constants.WHILE);
+			    	} else if (semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.FOR)){
+			    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
+			    		sts.add(body);
+			    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
+			    		sts.add(condition);
+			    		shape = tts.declareToShape(sts, Constants.FOR);
+			    	} else {
+			    		shape = null;
+			    	}
+		    		parent.getChildList().get(i).getData().setShapeNode(shape);
+				}
 //			    semanticAnalysis.makeTree(parseTrees);
-			    System.out.println(semanticAnalysis.getParent().getChildList());
-			    List<TreeNode<TreeData>> tnl = semanticAnalysis.getParent().getChildList();
-			    Vector<String> lines = new Vector<>();
-			    for(TreeNode<TreeData> tn : tnl){
-			    		lines.add(semanticAnalysis.getLine(tn.getData().getParseTree()));
-			    }
-			    for(String s : lines){
-			    	System.out.println(s);
-			    	System.out.println(s.matches("^if[(]{1}"));
-			    }
+//			    System.out.println(semanticAnalysis.getParent().getChildList());
+//			    List<TreeNode<TreeData>> tnl = semanticAnalysis.getParent().getChildList();
+//			    Vector<String> lines = new Vector<>();
+//			    for(TreeNode<TreeData> tn : tnl){
+//			    		lines.add(semanticAnalysis.getLine(tn.getData().getParseTree()));
+//			    }
 			    //java.util.MissingFormatArgumentException
-				tts.declareToShape(buffer);
+				tts.drawRoot();//tts.drawToCanvas();
 			}
 		} else {
 			buffer = source.getText();
 		}
 	}
 
-
+	public void showParent(TreeNode<TreeData> parent){
+		for(int i = 0; i < parent.getChildList().size(); i++){
+			System.out.println(parent.getChildList().get(i).getData().getShapeNode());
+		}
+	}
 
 
 	public String getBuffer() {

@@ -17,9 +17,11 @@ public class CStartEndManager extends CShapeManager {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Circle shape;
+	private int flag;
 	
 	public CStartEndManager(int flag){
 		super();
+		this.flag = flag;
 		// TODO Auto-generated constructor stub
 		if(flag==Constants.EShapeType.START.ordinal()){
 			this.setD(new Dimension2D(20, 20));
@@ -31,7 +33,7 @@ public class CStartEndManager extends CShapeManager {
 			this.setTp(new Point2D((this.getP().getX()+(this.getD().getWidth()+5)), (this.getP().getY()+5.0)));
 		} else if(flag == Constants.EShapeType.STOP.ordinal()){
 			this.setD(new Dimension2D(20, 20));
-			this.setP(new Point2D((Constants.windowWidth/2), Constants.windowHeight-50));
+			this.setP(new Point2D((Constants.windowWidth/2), Constants.windowHeight-30));
 			this.setBody("End");
 			Text t = new Text(this.getBody());
 			t.setFont(new Font("Arial", Double.parseDouble("10.0")));
@@ -42,6 +44,7 @@ public class CStartEndManager extends CShapeManager {
 	}
 	public CStartEndManager(int flag, Point2D p){
 		super();
+		this.flag = flag;
 		// TODO Auto-generated constructor stub
 		if(flag==Constants.EShapeType.START.ordinal()){
 			this.setD(new Dimension2D(20, 20));
@@ -79,7 +82,11 @@ public class CStartEndManager extends CShapeManager {
 	@Override
 	public Shape getShape() {
 		shape = new Circle(p.getX(), p.getY(), 15);
-		shape.setFill(Color.BLACK);
+		if(flag == Constants.EShapeType.START.ordinal()){
+			shape.setFill(Color.GREEN);
+		} else {
+			shape.setFill(Color.RED);
+		}
 		return shape;
 	}
 	
@@ -93,6 +100,7 @@ public class CStartEndManager extends CShapeManager {
 		text = new Text(body);
 		text.setX(tp.getX());
 		text.setY(tp.getY());
+		text.setFill(Color.BLACK);
 		return text;
 	}
 

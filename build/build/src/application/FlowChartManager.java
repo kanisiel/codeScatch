@@ -1,20 +1,22 @@
 package application;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import Settings.Constants;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.paint.Color;
+import javafx.scene.Group;
 import shapes.CShapeManager;
-import shapes.CStartEndManager;
 
 public class FlowChartManager {
 	private Vector<CShapeManager> nodes;
-	private Vector<Canvas> canvases;
+	private Vector<Group> allnodes;
+	private Map<String, Group> connects;
 	
 	public FlowChartManager(){
 		this.nodes = new Vector<>();
-		this.canvases = new Vector<>();
+		this.allnodes = new Vector<>();
+		this.setConnects(new LinkedHashMap<>());
 	}
 	public void initManager(CShapeManager start, CShapeManager end){
 		this.nodes.clear();
@@ -23,18 +25,25 @@ public class FlowChartManager {
 	}
 	public void initManager(){
 		this.nodes.clear();
-		CStartEndManager sems = new CStartEndManager(Constants.EShapeType.START.ordinal());
-		sems.setFill(Color.BLACK);
-		sems.setStroke(Color.BLACK);
-		CStartEndManager seme = new CStartEndManager(Constants.EShapeType.STOP.ordinal());
-		seme.setFill(Color.BLACK);
-		seme.setStroke(Color.BLACK);
-		this.nodes.add(sems);
-		this.nodes.add(seme);
+		this.allnodes.clear();
 	}
-	
+	public CShapeManager getEndNode(){
+		return nodes.get(nodes.size()-1);
+	}
 	public void addNode(CShapeManager node){
-		this.nodes.add((this.nodes.size()-1), node);
+		Boolean flag = false;
+		int index = -1;
+		for(CShapeManager s : this.nodes){
+			if(s.getText().equals(Constants.EShapeType.STOP.name())){
+				flag = true;
+				index = this.nodes.indexOf(s);
+			}
+		}
+		if(flag && index > 0){
+			this.nodes.insertElementAt(node, index);
+		} else {
+			this.nodes.add(node);
+		}
 	}
 	
 	public int findNode(CShapeManager node){
@@ -48,27 +57,35 @@ public class FlowChartManager {
 		}
 	}
 	public CShapeManager findNext(CShapeManager node){
-		if(nodes.indexOf(node)==nodes.size()){
+		if(nodes.indexOf(node) < nodes.size()-1){
+			return nodes.get(nodes.indexOf(node)+1);
+		}else {
 			return node;
 		}
-		return nodes.get(nodes.indexOf(node)+1);
 	}
-	public Canvas startCanvas(){
-		return this.canvases.get(0);
+	public void updateConnect(String key, Group g){
+		this.connects.replace(key, g);
 	}
-	public Canvas endCanvas(){
-		return this.canvases.get(this.canvases.size());
+	
+	public int findAllNode(CShapeManager node){
+		return allnodes.indexOf(node);
 	}
 	public Vector<CShapeManager> getNodes() {
 		return nodes;
 	}
-	public Vector<Canvas> getCanvases() {
-		return canvases;
+	public Vector<Group> getAllNodes() {
+		return allnodes;
 	}
 	public void setNodes(Vector<CShapeManager> nodes) {
 		this.nodes = nodes;
 	}
-	public void setCanvases(Vector<Canvas> canvases) {
-		this.canvases = canvases;
+	public void setCanvases(Vector<Group> allnodes) {
+		this.allnodes = allnodes;
+	}
+	public Map<String, Group> getConnects() {
+		return connects;
+	}
+	public void setConnects(Map<String, Group> connects) {
+		this.connects = connects;
 	}
 }

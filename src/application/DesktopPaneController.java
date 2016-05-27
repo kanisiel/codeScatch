@@ -16,10 +16,13 @@ import Settings.Windows.InternalWindows;
 import adapter.TreeToShape;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Shape;
@@ -38,6 +41,7 @@ public class DesktopPaneController extends VBox {
 	final int windowHeight = Constants.FRAME_H-50;
 	public FlowChartCanvas fcc;
 	public RSyntaxTextArea textArea;
+	public ScrollPane sp;
 	public TreeToShape tts;
 	
     
@@ -85,8 +89,6 @@ public class DesktopPaneController extends VBox {
  
         //Initialize components
         SwingNode swingNode = new SwingNode();
-//        swingNode.prefWidth(w.getPrefWidth());
-//        swingNode.prefHeight(w.getPrefHeight());
         createAndSetSwingContent(swingNode, title);
         
         // add some content
@@ -108,15 +110,15 @@ public class DesktopPaneController extends VBox {
 				}
 			});
         	Pane p = new Pane();
+        	sp = new ScrollPane();
         	fcc = new FlowChartCanvas();
         	ScrollBar sc = new ScrollBar();
-        	 sc.setLayoutX(w.getPrefWidth()-sc.getWidth());
-             sc.setMin(0);
-             sc.setOrientation(Orientation.VERTICAL);
-             sc.setPrefHeight(w.getPrefHeight()-30);
-             sc.setMax(3000);
-             sc.valueProperty().addListener(new ChangeListener<Number>() {
-                 public void changed(ObservableValue<? extends Number> ov,
+        	sc.setLayoutX(w.getPrefWidth()-sc.getWidth());
+        	sc.setMin(0);
+        	sc.setOrientation(Orientation.VERTICAL);
+        	sc.setPrefHeight(w.getPrefHeight()-30);
+        	sc.valueProperty().addListener(new ChangeListener<Number>() {
+        		public void changed(ObservableValue<? extends Number> ov,
                      Number old_val, Number new_val) {
                 	 for(javafx.scene.Node n : fcc.getChildren()){
         	 			int index = fcc.getChildren().indexOf(n);
@@ -139,7 +141,30 @@ public class DesktopPaneController extends VBox {
             	 		}	
         	 		}
                  }
-             });
+        	});
+        	fcc.getChildren().addListener(new ListChangeListener<Node>(){
+
+				@Override
+				public void onChanged(javafx.collections.ListChangeListener.Change<? extends Node> c) {
+//					WritableImage image = fcc.snapshot(new SnapshotParameters(), null);
+//					sp.setContent(new ImageView(image));
+					double thumb = 0;
+					if(fcc.getManager().getNodes().size()>0){
+						double bottom = fcc.getManager().getNodes().lastElement().getP().getY();
+						thumb = (sc.getPrefHeight()-10)/bottom;
+						if(thumb < 1){
+							sc.visibleAmountProperty().set(100*thumb);
+							sc.setMax(300*bottom/(sc.getPrefHeight()-20));
+						}else {
+							sc.visibleAmountProperty().set(100);
+							sc.setMax(100);
+						}
+					}
+					
+				}
+        	
+        	});
+        	
         	p.getChildren().addAll(fcc, sc);
         	w.setContentPane(p);
         }

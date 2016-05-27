@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
 public abstract class CShapeManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 	protected String body;
-	protected Point2D p, tp, upperAnchor, lowerAnchor;
+	protected Point2D p, tp, upperAnchor, lowerAnchor, leftAnchor, rightAnchor;
 	protected Dimension2D d, td;
 	protected Color fill;
 	protected Color stroke;
@@ -77,6 +77,19 @@ public abstract class CShapeManager implements Serializable {
 	}
 	public void setLowerAnchor(Point2D lowerAnchor) {
 		this.lowerAnchor = lowerAnchor;
+	}
+	public abstract Shape Shape();
+	public Point2D getLeftAnchor() {
+		return leftAnchor;
+	}
+	public Point2D getRightAnchor() {
+		return rightAnchor;
+	}
+	public void setLeftAnchor(Point2D leftAnchor) {
+		this.leftAnchor = leftAnchor;
+	}
+	public void setRightAnchor(Point2D rightAnchor) {
+		this.rightAnchor = rightAnchor;
 	}
 	
 }

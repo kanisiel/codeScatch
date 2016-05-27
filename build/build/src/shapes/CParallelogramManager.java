@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 public class CParallelogramManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
 	private Point2D ul, ur, dl, dr;
-	
+	private Polygon poly;
 	public CParallelogramManager(String body){
 		super();
 		this.body = body;
@@ -32,12 +32,12 @@ public class CParallelogramManager extends CShapeManager {
 	@Override
 	public Shape getShape() {
 		// TODO Auto-generated method stub
-		Polygon p = new Polygon();
-		p.setFill(Color.TRANSPARENT);
-		p.setStroke(stroke);
-		p.setStrokeWidth(2);
-		p.getPoints().addAll(ul.getX(),ul.getY(),ur.getX(),ur.getY(), dr.getX(), dr.getY(), dl.getX(), dl.getY());
-		return p;
+		poly = new Polygon();
+		poly.setFill(Color.TRANSPARENT);
+		poly.setStroke(stroke);
+		poly.setStrokeWidth(2);
+		poly.getPoints().addAll(ul.getX(),ul.getY(),ur.getX(),ur.getY(), dr.getX(), dr.getY(), dl.getX(), dl.getY());
+		return poly;
 	}
 	@Override
 	public Text getText() {
@@ -64,6 +64,12 @@ public class CParallelogramManager extends CShapeManager {
 
 		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
 		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
+	}
+
+	@Override
+	public Shape Shape() {
+		// TODO Auto-generated method stub
+		return poly;
 	}
 	
 //	public CParallelogramManager(EShapeType shapeType) {

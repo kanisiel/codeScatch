@@ -4,60 +4,96 @@ import java.util.Vector;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import Settings.CConstants;
+import Settings.Constants;
 import application.FlowChartCanvas;
 import javafx.application.Platform;
-import shapes.CDiamondManager;
-import shapes.CParallelogramManager;
-import shapes.CRectangleManager;
+import shapes.CCodeManager;
+import shapes.CIfManager;
+import shapes.CIteratorManager;
+import shapes.CRootManager;
 import shapes.CShapeManager;
+import shapes.CShapeNode;
+import shapes.CStartEndNode;
 
 public class TreeToShape {
 	private ParseTree tree;
 	private FlowChartCanvas canvas;
 	private Vector<CShapeManager> list;
+	private CRootManager rootNode;
+	private CShapeNode rv;
 	
 	public TreeToShape(FlowChartCanvas canvas){
 		this.canvas = canvas;
 		this.list = new Vector<>();
+		this.rootNode = new CRootManager();
+		rootNode.addNode(new CStartEndNode(Constants.EShapeType.START.name(), rootNode));
+		rootNode.addNode(new CStartEndNode(Constants.EShapeType.STOP.name(), rootNode));
+		canvas.setRootNode(rootNode);
 	}
 	
-	public void declareToShape(String body){
-		
+	public void prepareCanvas(){
 		Platform.runLater(new Runnable(){
-			//String buffer;
 			@Override
 			public void run() {
 				list.clear();
 				canvas.init();
 				canvas.clearCanvas();
-				//String[] stmts = body.split("\n");
-				for(String stmt : body.split("\n")){
-					stmt.replace("\t", "");
-					if(stmt.contains("=")){
-						CRectangleManager declare = new CRectangleManager(stmt);
-						list.add(declare);
-					} else if(stmt.contains("if(")){
-						CDiamondManager declare = new CDiamondManager(stmt);
-						declare.setBody(stmt);
-						list.add(declare);
-					} else if(stmt.contains("for(")){
-						String[] token1D = stmt.split("for(");
-						System.out.println(token1D.length);
-//						String type = token1D[0];
-//						String[] token2D = token1D[1]
-						
-					} else {
-						CParallelogramManager declare = new CParallelogramManager(stmt);
-						declare.setBody(stmt);
-						list.add(declare);
-					}
-				}
+				rootNode.clearNodes();
+				rootNode.addNode(new CStartEndNode(Constants.EShapeType.START.name(), rootNode));
+				rootNode.addNode(new CStartEndNode(Constants.EShapeType.STOP.name(), rootNode));
+			}
+		});
+	}
+	public void drawToCanvas(){
+		Platform.runLater(new Runnable(){
+			@Override
+			public void run() {
 				for(CShapeManager e : list){
 					canvas.addShape(e);
 				}
 			}
-			
 		});
-		
+	}
+	public void drawRoot(){
+		Platform.runLater(new Runnable(){
+			@Override
+			public void run() {
+				canvas.redraw(rootNode);
+//				System.out.println(canvas.getManager().getConnects());
+			}
+		});
+	}
+	public CShapeNode declareToShape(Vector<String> body, int type){
+		rv = null;
+//		Platform.runLater(new Runnable(){
+//			//String buffer;
+//			
+//			@Override
+//			public void run() {
+				//String[] stmts = body.split("\n");
+				if(type == Constants.CODE){
+					rv = new CCodeManager(body.get(0), rootNode);
+					rootNode.addNode(rootNode.getNodes().size()-1, rv);
+				} else if(type == Constants.IF){
+					rv = new CIfManager(body.get(1), rootNode);
+					rootNode.addNode(rootNode.getNodes().size()-1,rv);
+					rv.addNode(new CCodeManager(body.get(0), rv));
+				} else if(type == Constants.WHILE){
+					rv = new CIteratorManager(CConstants.WHILE, body.get(1), rootNode);
+					rootNode.addNode(rootNode.getNodes().size()-1,rv);
+					rv.addNode(new CCodeManager(body.get(0), rv));
+//					
+				} else if(type == Constants.FOR){
+					String condition[] = body.get(1).split(";");
+					rv = new CIteratorManager(CConstants.FOR, condition[0], condition[1], condition[2], rootNode);
+					rootNode.addNode(rootNode.getNodes().size()-1,rv);
+					rv.addNode(new CCodeManager(body.get(0), rv));
+				}
+//				System.out.println(rootNode.getNodes());
+//			}
+//			
+//		});
+		return rv;
 	}
 }

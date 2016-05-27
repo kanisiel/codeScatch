@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 public class CDiamondManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
 	private Point2D e, w, s, n;
-	
+	private Polygon poly;
 	public CDiamondManager(String body){
 		super();
 		this.body = body;
@@ -36,12 +36,12 @@ public class CDiamondManager extends CShapeManager {
 	@Override
 	public Shape getShape() {
 		// TODO Auto-generated method stub
-		Polygon p = new Polygon();
-		p.setFill(Color.TRANSPARENT);
-		p.setStroke(stroke);
-		p.setStrokeWidth(2);
-		p.getPoints().addAll(e.getX(),e.getY(),n.getX(),n.getY(), w.getX(), w.getY(), s.getX(), s.getY());
-		return p;
+		Polygon poly = new Polygon();
+		poly.setFill(Color.TRANSPARENT);
+		poly.setStroke(stroke);
+		poly.setStrokeWidth(2);
+		poly.getPoints().addAll(e.getX(),e.getY(),n.getX(),n.getY(), w.getX(), w.getY(), s.getX(), s.getY());
+		return poly;
 	}
 	@Override
 	public Text getText() {
@@ -67,7 +67,17 @@ public class CDiamondManager extends CShapeManager {
 		this.n = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY());
 		this.s = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY()+this.getD().getHeight());
 
-		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
-		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
+		upperAnchor = this.n;
+		lowerAnchor = this.s;
+		leftAnchor = this.e;
+		rightAnchor = this.w;
+	}
+
+
+
+	@Override
+	public Shape Shape() {
+		// TODO Auto-generated method stub
+		return poly;
 	}
 }

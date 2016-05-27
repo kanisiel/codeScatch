@@ -42,16 +42,12 @@ public class Constants {
 	
 	//TREE Type
 	public static final int PARSEROOT = 99;
-	public static final int ASSIGN = 1;
-	public static final int ARITH = 2;
-	public static final int IF = 3;
-	public static final int FOR = 4;
-	public static final int WHILE = 5;
-	public static final int DO = 6;
-	public static final int FUNCTION = 7;
-	public static final int VDECLARE = 8;
-	public static final int FDECLARE = 9;
-	public static final int LOGICAL = 10;
+	public static final int CODE = 1;
+	public static final int IF = 2;
+	public static final int FOR = 3;
+	public static final int WHILE = 4;
+	public static final int DO = 5;
+	public static final int SWITCH = 6;
 	
 	//Node Type
 	public static final int NUMERIC = 1;

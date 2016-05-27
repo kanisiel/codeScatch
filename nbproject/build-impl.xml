@@ -1419,57 +1419,57 @@ is divided into following sections:
 		<mkdir dir="externalLibs" />
 	
 		<copy todir="externalLibs">
-			<fileset dir="libs/jvxfx-1.0">
+			<fileset dir="../libs/jvxfx-1.0">
 				<filename name="jvxfx.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-labs-8.0-r4.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-window-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/antlr-4.5.3">
+			<fileset dir="../libs/antlr-4.5.3">
 				<filename name="antlr-4.5.3-complete.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/rsyntaxtextarea-2.5.7">
+			<fileset dir="../libs/rsyntaxtextarea-2.5.7">
 				<filename name="rsyntaxtextarea-2.5.7.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-controls-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-menu-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-fxml-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/miglayout-5.1">
+			<fileset dir="../libs/miglayout-5.1">
 				<filename name="miglayout-core-5.1-20160416.220029-387.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/miglayout-5.1">
+			<fileset dir="../libs/miglayout-5.1">
 				<filename name="miglayout-swing-5.1-20160419.220020-390.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="libs/jfxtras">
+			<fileset dir="../libs/jfxtras">
 				<filename name="jfxtras-common-8.0-r5-SNAPSHOT.jar"/>
 			</fileset>
 		</copy>
@@ -1510,7 +1510,7 @@ is divided into following sections:
 	
 		<!-- Copy project sources itself -->
 		<copy todir="build/src">
-			<fileset dir="project/src">
+			<fileset dir="../src">
 				<include name="**/*"/>
 			</fileset>
 		</copy>
@@ -1525,7 +1525,7 @@ is divided into following sections:
 	
 		<!-- Copy over none Java-Files -->
 		<copy todir="build/classes">
-		<fileset dir="project/src">
+		<fileset dir="../src">
 			<exclude name="**/*.java"/>
 		</fileset>
 		</copy>

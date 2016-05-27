@@ -1,268 +1,147 @@
 package parser;
+import java.util.Vector;
+
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.Trees;
+
+import Settings.CConstants;
 
 
 public class CSemanticAnalysis {
 	private CParser parser;
-	private String variableType = "";
-	private String variableIds = "";
-	private String functionReturnType = "";
-	private String functionName = "";
-	private String parameterList = "";
-	private Boolean isTypedefNode = false;
-	private Boolean assignmentFlag = false;
-	private String flag = "";
+	private ParseTree rootParseTree;
+	private Vector<ParseTree> parseTrees;
+	private TreeNode<TreeData> parent;
+	private String line;
+	public Vector<String> st;
 
 	
+	public void setParseTree(ParseTree parseTree) {this.rootParseTree = parseTree;}
+
 	
 	public CSemanticAnalysis(CParser parser){
 		this.parser = parser;
-	}	
-	
-	public void ClearVariable(){
-		this.variableType = "";
-		this.variableIds = "";
-		this.functionReturnType = "";
-		this.functionName = "";
-		this.parameterList = "";
-		this.isTypedefNode = false;
-		this.assignmentFlag = false;
-		this.flag = "";
+		this.parseTrees = new Vector<ParseTree>();
+		this.parent = new TreeNode<TreeData>(null);
+		this.st = new Vector<>();
+		this.line = "";
 	}
 	
+
 	// analyze external declaration
-	public void analyzeDCLR(ParseTree parseTree) {
-		// TODO Auto-generated method stub
-		String paren = "(";
-		String declaration = "declaration";
-		String functionDefinition = "functionDefinition";
+	public void analyzeCompoundStatement(ParseTree parseTree) {
 		
-		// function declaration
-		if(Trees.getNodeText(parseTree, this.parser).equals(declaration) && parseTree.getText().contains(paren)){
-			analyzeFunDCLR(parseTree);
-			System.out.println("external declaration");
-			funtest();
-			ClearVariable();
+		if(parseTree.getChildCount() > 0){
+			for(int i = 0; i < parseTree.getChildCount(); ++i){
+				if(Trees.getNodeText(parseTree.getChild(i), parser).equals(CConstants.BLOCKITEM)){
+					parseTrees.add(parseTree.getChild(i));
+					return ;
+				}	
+				analyzeCompoundStatement(parseTree.getChild(i));
+			}
 		}
-		// variable declaration
-		else if(Trees.getNodeText(parseTree, this.parser).equals(declaration) && !(parseTree.getText().contains(paren))){
-			searchTypedefNode(parseTree);
-			if(isTypedefNode == false){
-				System.out.println("external variable");
-				analyzeVarDCLR(parseTree);
+		else{;}
+	}
+	
+	public void test(){
+		// make tree
+		
+			makeTree(parseTrees);
+		// merge code
+			mergeCode(this.parent);
+		
+		
+		
+		for(int i = 0; i < parseTrees.size(); ++i){
+			System.out.println(parseTrees.get(i).getText());
+		}
+		System.out.println("");
+		
+		// tree print
+		for(int i = 0; i < parent.getChildList().size(); ++i){
+			System.out.println(parent.getChildList().get(i).getData().getNodeType());
+		}
+
+		// print tree after merge
+		System.out.println("\nmerge after!!!");
+		for(int i = 0; i < parent.getChildList().size(); ++i){
+			System.out.println(parent.getChildList().get(i).getData().getNodeType());
+		}
+		System.out.println("");
+		
+		//print sourcecode
+		for(int i = 0; i < parent.getChildList().size(); ++i){
+			if(parent.getChildList().get(i).getData().getNodeType().equals("code")){
+				for(int j = 0; j < parent.getChildList().get(i).getData().getCodeVector().size(); ++j){
+					System.out.println(parent.getChildList().get(i).getData().getCodeVector().get(j).getText());	
+				}
 			}
 			else{
-				System.out.println("external variable");
-				analyzeVarDCLRTypedef(parseTree);
-			}
-			vartest();
-			ClearVariable();
-		}
-		else if(Trees.getNodeText(parseTree, this.parser).equals(functionDefinition)){
-			String compoundStatement = "compoundStatement";
-			System.out.println("function definition");
-			// 0 is declarator
-			analyzeFun(parseTree);
-			funtest();
-			ClearVariable();
-			
-			// 1 is compoundStatement
-			for(int i = 0; i < parseTree.getChildCount(); ++i){
-				if(Trees.getNodeText(parseTree.getChild(i), parser).equals(compoundStatement)){
-					analyzeFunDef(parseTree);
-				}
+				System.out.println(parent.getChildList().get(i).getData().getParseTree().getText());
 			}
 		}
 	}
-	
-	// analyze function definition
-	public void analyzeFunDef(ParseTree parseTree){
-		String compoundStatement = "compoundStatement";
-		
-		if(parseTree.getChildCount() > 0){
-			for(int i = 0; i < parseTree.getChildCount(); ++i){
-				if(Trees.getNodeText(parseTree, parser).equals(compoundStatement)){
-					analyzeCMPNDStatement(parseTree);
-					return ;
-				}
-				analyzeFunDef(parseTree.getChild(i));
-			}
-		}
-		else{;}
+	public Vector<String> getST(){
+		return st;
+	}
+	public void getLine(TreeNode<TreeData> parents){		
+		visitChild(parents);
 	}
 	
-	public void analyzeCMPNDStatement(ParseTree parseTree){
-		String declaration = "declaration";
-		String statement = "statement";
-		String paren = "(";
-		
-		if(parseTree.getChildCount() > 0){
-			for(int i = 0; i < parseTree.getChildCount(); ++i){
-				if(Trees.getNodeText(parseTree, this.parser).equals(declaration) && parseTree.getText().contains(paren)){
-					System.out.println("paren");
-					return ;
+	public void visitChild(TreeNode<TreeData> parents) {
+		for(int i = 0; i < parent.getChildList().size(); ++i){
+			line = "";
+			if(parent.getChildList().get(i).getData().getNodeType().equals("code")){
+				for(int j = 0; j < parent.getChildList().get(i).getData().getCodeVector().size(); ++j){
+					visitChildren(parent.getChildList().get(i).getData().getCodeVector().get(j));					
 				}
-				else if(Trees.getNodeText(parseTree, this.parser).equals(declaration) && !(parseTree.getText().contains(paren))){
-					
-					searchTypedefNode(parseTree);
-					
-					if(isTypedefNode == false){
-						analyzeVarDCLR(parseTree);
-						vartest();
-						ClearVariable();
-					}
-					else{
-						analyzeVarDCLRTypedef(parseTree);
-						vartest();
-						ClearVariable();
-					}
-					return ;
-				}
-				else if(Trees.getNodeText(parseTree, parser).equals(statement)){
-					System.out.println("statement : " + parseTree.getText());
-					return ;
-				}
-				analyzeCMPNDStatement(parseTree.getChild(i));
+				st.add(line);
 			}
-		}
-		else{;}
-	}
-	
-	// variable declaration(type, initDeclaratorList), when don't have typedefName
-	public void analyzeVarDCLR(ParseTree parseTree) {
-		// TODO Auto-generated method stub
-		String typeSpecifier = "typeSpecifier";
-		String initDeclaratorList = "initDeclaratorList";
-		
-		if(parseTree.getChildCount() > 0){
-			for(int i = 0; i < parseTree.getChildCount(); ++i){
-				if(Trees.getNodeText(parseTree, this.parser).equals(typeSpecifier)){
-					variableType = parseTree.getText();
-					this.assignmentFlag = true;
-					return ;
-				}		
-				else if(Trees.getNodeText(parseTree, this.parser).equals(initDeclaratorList)){
-					getInitDeclarator(parseTree);
-					return ;
-				}
-				analyzeVarDCLR(parseTree.getChild(i));
-			}
-		}
-		else{;}
-	}
-	
-	// variable declaration(type, id), when have typedefName
-	public void analyzeVarDCLRTypedef(ParseTree parseTree) {
-		// TODO Auto-generated method stub
-		String typeSpecifier = "typeSpecifier";
-		String typedefName = "typedefName";
-		
-		if(parseTree.getChildCount() > 0){
-			for(int i = 0; i < parseTree.getChildCount(); ++i){
-				if(Trees.getNodeText(parseTree, this.parser).equals(typedefName)){
-					this.variableIds = parseTree.getText();
-					this.assignmentFlag = true;
-					return ;
-				}
-				else if(Trees.getNodeText(parseTree, this.parser).equals(typeSpecifier) &&
-						this.assignmentFlag == false){
-					variableType = parseTree.getText();
-					this.assignmentFlag = true;
-					return ;
-				}		
-				analyzeVarDCLRTypedef(parseTree.getChild(i));
-			}
-		}
-		else{;}
-	}
-	
-	// when variable have initDeclaratorList, analyze ids, don't have typedefName node
-	public void getInitDeclarator(ParseTree parseTree){
-		if(parseTree.getChildCount() > 0){
-			for(int i = 0; i < parseTree.getChildCount(); ++i){
-				getInitDeclarator(parseTree.getChild(i));
-			}
-		}
-		else{
-			this.variableIds += parseTree.getText() + " ";
-		}
-	}
-	
-	// search TypedefName node
-	public void searchTypedefNode(ParseTree parseTree) {
-		String typedefName = "typedefName";
-		
-		if(parseTree.getChildCount() > 0){
-			for(int i = 0; i < parseTree.getChildCount(); ++i){
-				if(!(Trees.getNodeText(parseTree, this.parser).equals(typedefName))){
-					searchTypedefNode(parseTree.getChild(i));
-				}
-				else{
-					this.isTypedefNode = true;
-				}	
+			else{
+				st.add(parent.getChildList().get(i).getData().getParseTree().getText());
 			}
 		}
 	}
-	
-	// function declaration return type, function name, parameterList
-	public void analyzeFunDCLR(ParseTree parseTree) {
-		// TODO Auto-generated method stub
-		String typeSpecifier = "typeSpecifier";
-		String directDeclarator = "directDeclarator";
-		String parameterList = "parameterList";
-		
-		if(parseTree.getChildCount() > 0){
-			for(int i = 0; i < parseTree.getChildCount(); ++i){
-				if(Trees.getNodeText(parseTree, this.parser).equals(typeSpecifier)
-						&& this.assignmentFlag == false){
-					this.functionReturnType = parseTree.getText();
-					this.assignmentFlag = true;
+	public String getCondition(ParseTree parseTree){//TreeNode<TreeData> parents){
+//		ParseTree parseTree = parents.getData().getParseTree();
+		String buffer = "";
+		int s = 0, e = 0;
+		String open = "(", close = ")";
+		if(parseTree.getChildCount()>1){
+			for(int i = 1; i< parseTree.getChildCount(); i++){
+				if(parseTree.getChild(i).getText().equals(open)){
+					s = i+1;
+				}else if(parseTree.getChild(i).getText().equals(close)){
+					e = i;
 				}
-				else if(Trees.getNodeText(parseTree, this.parser).equals(directDeclarator)){
-					functionName = parseTree.getChild(0).getText();
-				}			
-				else if(Trees.getNodeText(parseTree, this.parser).equals(parameterList)){
-					getParameterList(parseTree);
-					return ;
+			}
+			for(int i = s; i < e; i++){
+				buffer += parseTree.getChild(i).getText();
+			}
+			return buffer;
+		} else {
+			return getCondition(parseTree.getChild(0));//parents.getChildList().get(0));
+		}
+	}
+	public String getBody(ParseTree parseTree){//TreeNode<TreeData> parents){
+//		ParseTree parseTree = parents.getData().getParseTree();
+		int flag = 0;
+		String open = "{";
+		if(parseTree.getChildCount()>1){
+			for(int i = 1; i< parseTree.getChildCount(); i++){
+				if(parseTree.getChild(i).getText().contains(open)){
+					flag = i;
 				}
-				analyzeFunDCLR(parseTree.getChild(i));
 			}
-		}
-		else{;}
-	}
-	
-	// get function parameterList
-	public void getParameterList(ParseTree parseTree) {
-		if(parseTree.getChildCount() > 0){
-			for(int i = 0; i < parseTree.getChildCount(); ++i){
-				getParameterList(parseTree.getChild(i));
-			}
-		}
-		else{
-			this.parameterList += parseTree.getText() + " ";
+//			System.out.println(flag);
+			String buffer = parseTree.getChild(flag).getText();
+			buffer = buffer.replace("{", "");
+			buffer = buffer.replace("}", "");
+			return buffer;
+		} else {
+			return getBody(parseTree.getChild(0));//parents.getChildList().get(0));
 		}
 	}
-	
-	//look for type, name, parameterList in function definition 
-	public void analyzeFun(ParseTree parseTree){
-		String declarationSpecifiers = "declarationSpecifiers";
-		String declarator = "declarator";
-		
-		for(int i = 0; i < parseTree.getChildCount(); ++i){
-			if(Trees.getNodeText(parseTree.getChild(i), parser).equals(declarationSpecifiers)){
-				this.functionReturnType = parseTree.getChild(i).getText();
-			}
-			else if(Trees.getNodeText(parseTree.getChild(i), parser).equals(declarator)){
-				this.functionName = parseTree.getChild(i).getChild(0).getChild(0).getText();
-				// get parameterList
-				analyzeFunDCLR(parseTree.getChild(i));
-			}
-		}
-	}
-	
-	
-	
 	public void visitChildren(ParseTree parseTree) {
 		if(parseTree.getChildCount() > 0){
 			for(int i = 0; i < parseTree.getChildCount(); ++i){
@@ -270,20 +149,117 @@ public class CSemanticAnalysis {
 			}
 		}
 		else{
-			;
+			if(Trees.getNodeText(parseTree.getParent(), parser).equals("typeSpecifier")){
+				line += parseTree.getText() + " ";
+			} else {
+				line += parseTree.getText();
+			}
 		}
 	}
 	
-	public void vartest(){
-		System.out.println("Var analyze");
-		System.out.println("type: " + this.variableType);
-		System.out.println("ids: "+ this.variableIds);
+	public String analyzeParseTreeType(ParseTree parseTree){
+		String type = "";
+		
+		if(Trees.getNodeText(parseTree.getChild(0).getChild(0), parser).equals(CConstants.ITERATIONSTATEMENT)){
+			type = CConstants.ITERATIONSTATEMENT;
+			return type;
+		}
+		else if(Trees.getNodeText(parseTree.getChild(0).getChild(0), parser).equals(CConstants.SELECTIONSTATEMENT)){
+			type = CConstants.SELECTIONSTATEMENT;
+			return type;
+		}
+		else if(Trees.getNodeText(parseTree.getChild(0).getChild(0), parser).equals(CConstants.JUMPSTATEMENT)){
+			type = CConstants.JUMPSTATEMENT;
+			return type;
+		}
+		else{
+			type = CConstants.CODE;
+			return type;
+		}
 	}
 	
-	public void funtest(){
-		System.out.println("Fun analyze");
-		System.out.println("type: " + this.functionReturnType);
-		System.out.println("functionName: "+ this.functionName);
-		System.out.println("parameterList: "+ this.parameterList);
+	public String analyzeParseTreeKind(ParseTree parseTree){
+		String kind = "";
+		
+		if(Trees.getNodeText(parseTree.getChild(0).getChild(0), parser).equals(CConstants.ITERATIONSTATEMENT)){
+			if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.FOR)){
+				kind = CConstants.FOR;
+			}
+			else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.WHILE)){
+				kind = CConstants.WHILE;
+			}
+			else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.DO)){
+				kind = CConstants.DO;
+			}
+			return kind;
+		}
+		else if(Trees.getNodeText(parseTree.getChild(0).getChild(0), parser).equals(CConstants.SELECTIONSTATEMENT)){
+			if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.IF)){
+				kind = CConstants.IF;
+				return kind;
+			}
+			else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.SWITCH)){
+				kind = CConstants.SWITCH;
+				return kind;
+			}
+		}
+		else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.JUMPSTATEMENT)){
+			kind = CConstants.RETURN;
+			return kind;
+		}
+		else{
+			kind = "none";
+			return kind;
+		}
+		return kind;
 	}
+	
+	public void makeTree(Vector<ParseTree> parseTrees){
+		String root = "root";
+		
+		TreeData treeData = new TreeData(null, root, root);
+		this.parent = new TreeNode<TreeData>(treeData);
+		
+		for(int i = 0; i < parseTrees.size(); ++i){
+			parent.addChild(new TreeData(parseTrees.get(i), analyzeParseTreeType(parseTrees.get(i)), 
+					analyzeParseTreeKind(parseTrees.get(i))));
+		}
+	}
+	
+	public void mergeCode(TreeNode<TreeData> parent){
+		if(parent.getChildList().size() < 2){
+			return ;
+		}
+		
+		for(int index = 0; index < parent.getChildList().size()-1; ++index){
+			if(parent.getChildList().get(index).getData().getNodeType().equals(CConstants.CODE)){
+				if(parent.getChildList().get(index+1).getData().getNodeType().equals(CConstants.CODE)){		
+					parent.getChildList().get(index).getData().getCodeVector().add(parent.getChildList().get(index+1).getData().getParseTree());
+					parent.getChildList().remove(index+1);
+				}
+			}
+			else{
+				;
+			}
+		}
+	}
+
+
+	public TreeNode<TreeData> getParent() {
+		// make tree
+		
+			makeTree(parseTrees);
+		// merge code
+			mergeCode(this.parent);
+		return parent;
+	}
+
+
+	public void setParent(TreeNode<TreeData> parent) {
+		this.parent = parent;
+	}
+
 }
+
+
+

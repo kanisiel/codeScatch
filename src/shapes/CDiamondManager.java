@@ -67,8 +67,10 @@ public class CDiamondManager extends CShapeManager {
 		this.n = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY());
 		this.s = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY()+this.getD().getHeight());
 
-		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
-		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
+		upperAnchor = this.n;
+		lowerAnchor = this.s;
+		leftAnchor = this.e;
+		rightAnchor = this.w;
 	}
 
 

@@ -4,12 +4,15 @@ import java.util.Vector;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import shapes.CShapeNode;
+
 
 public class TreeData {
 	private ParseTree parseTree;
 	private Vector<ParseTree> codeVector;
 	private String nodeType;
     private String kind; 
+    private CShapeNode shapeNode;
     
 	public ParseTree getParseTree() {return parseTree;}
 	public void setParseTree(ParseTree parseTree) {this.parseTree = parseTree;}
@@ -27,5 +30,11 @@ public class TreeData {
     	this.codeVector = new Vector<ParseTree>();
     	this.codeVector.add(this.parseTree);
     }
+	public CShapeNode getShapeNode() {
+		return shapeNode;
+	}
+	public void setShapeNode(CShapeNode shapeNode) {
+		this.shapeNode = shapeNode;
+	}
     
 }
