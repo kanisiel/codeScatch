@@ -187,8 +187,8 @@ public class CSemanticAnalysis {
 						for(int k = 0; k < isNeedMerge(parent); k++){
 							mergeCode(parent);
 						}
-						System.out.println(parent.getParent().getChildList().size());
-						System.out.println(parseTree.getChild(0).getChild(0).getChild(6).getChild(0).getText());
+//						System.out.println(parent.getParent().getChildList().size());
+//						System.out.println(parseTree.getChild(0).getChild(0).getChild(6).getChild(0).getText());
 						
 						
 					}
@@ -399,29 +399,34 @@ public class CSemanticAnalysis {
 		if(parent.getChildList().size() < 2){
 			return ;
 		}
-		Boolean flag = false;
-		Vector<Integer> codeIndex = new Vector<>();
+//		Vector<Integer> codeIndex = new Vector<>();
+//		for(TreeNode<TreeData> node : parent.getChildList()){
+//			if(node.getData().getNodeType().equals(CConstants.CODE)){
+//				merge(parent,parent.getChildList().indexOf(node),isNeedMerge(parent));
+//			}
+//			else{
+//				for(int j = 0; j < node.getChildList().size() ; j++){
+//					System.out.println(node.getChildList().get(j).getData().getNodeType());
+//					System.out.println();
+//					
+//				}
+//			}
+//		}
 		for(int index = 0; index < parent.getChildList().size(); ++index){
-			if(parent.getChildList().get(index).getData().getNodeType().equals(CConstants.CODE)){
-				if(index+1 <  parent.getChildList().size()){
-					if(!flag){
-						if(parent.getChildList().get(index+1).getData().getNodeType().equals(CConstants.CODE)){
-							flag = true;
-						}
-					}
-				}
-				if(flag){
-					codeIndex.add(index);
-				}
+			TreeNode<TreeData> node = parent.getChildList().get(index);
+			
+			if(node.getData().getNodeType().equals(CConstants.CODE)){
+				merge(parent,index,isNeedMerge(parent));
 			}
 			else{
-				if(flag){
-					break;
+				for(int j = 0; j < node.getChildList().size() ; j++){
+					System.out.println(node.getChildList().get(j).getData().getNodeType());
+					System.out.println();
+//					
 				}
 			}
 			
 		}
-		merge(parent, codeIndex.firstElement(), codeIndex.lastElement());
 	}
 	
 	public int isNeedMerge(TreeNode<TreeData> parent){
@@ -432,16 +437,18 @@ public class CSemanticAnalysis {
 		int need = 0;
 		for(int index = 0; index < parent.getChildList().size()-1; ++index){
 			if(parent.getChildList().get(index).getData().getNodeType().equals(CConstants.CODE)){
-				if(!flag){
-					flag = true;
-					need++;
-				}		
+				if(parent.getChildList().get(index+1).getData().getNodeType().equals(CConstants.CODE)){
+					if(!flag){
+						flag = true;
+						need++;
+					}		
+				}
 			}
 			else{
 				flag=false;
+				break;
 			}
 		}
-		//System.out.println(need);
 		return need;
 	}
 	public void merge(TreeNode<TreeData> parent, int start, int end){
@@ -457,7 +464,14 @@ public class CSemanticAnalysis {
 
 	public void setParent(TreeNode<TreeData> parent) {this.parent = parent;}
 	
-	
+	public void parseCompound(ParseTree parseTree){
+		for(int i = 0; i < parseTree.getChildCount(); ++i){
+	    	  if(Trees.getNodeText(parseTree.getChild(i), parser).equals(CConstants.COMPOUNDSTATEMENT)){
+	    		  setParseTree(parseTree.getChild(i));
+	    		  analyzeFunc(parseTree.getChild(i));
+	    	  }
+	    }
+	}
 }
 
 

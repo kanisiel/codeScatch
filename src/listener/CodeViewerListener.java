@@ -8,7 +8,6 @@ import javax.swing.event.CaretListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.Trees;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 import Settings.CConstants;
@@ -59,15 +58,16 @@ public class CodeViewerListener implements CaretListener {
 			    parseTree = visitor.getFunDefinition(parseTrees);
 			    
 			    CSemanticAnalysis semanticAnalysis = new CSemanticAnalysis(parser);   
-			      
-			    for(int i = 0; i < parseTree.getChildCount(); ++i){
-			    	  if(Trees.getNodeText(parseTree.getChild(i), parser).equals(CConstants.COMPOUNDSTATEMENT)){
-			    		  semanticAnalysis.setParseTree(parseTree.getChild(i));
-			    		  semanticAnalysis.analyzeFunc(parseTree.getChild(i));
-			    	  }
-			    }
+			     
+			    semanticAnalysis.parseCompound(parseTree);
+//			    for(int i = 0; i < parseTree.getChildCount(); ++i){
+//			    	  if(Trees.getNodeText(parseTree.getChild(i), parser).equals(CConstants.COMPOUNDSTATEMENT)){
+//			    		  semanticAnalysis.setParseTree(parseTree.getChild(i));
+//			    		  semanticAnalysis.analyzeFunc(parseTree.getChild(i));
+//			    	  }
+//			    }
 			   
-			    // getParent ¼öÁ¤
+			    // getParent ï¿½ï¿½ï¿½ï¿½
 			    TreeNode<TreeData> parent = semanticAnalysis.init();
 
 			
@@ -76,9 +76,9 @@ public class CodeViewerListener implements CaretListener {
 			    //Split to type and body
 			    
 //			    semanticAnalysis.getLine(parent);
-			    for(int i = 0; i < parent.getChildList().size(); ++i){
-			    	System.out.println(parent.getChildList().get(i).getData().getNodeType());
-			    }
+//			    for(int i = 0; i < parent.getChildList().size(); ++i){
+//			    	System.out.println(parent.getChildList().get(i).getData().getNodeType());
+//			    }
 			    
 			    // make for full tree
 			    //semanticAnalysis.analyzeNode(parent);
@@ -137,11 +137,6 @@ public class CodeViewerListener implements CaretListener {
 		}
 	}
 
-	public void showParent(TreeNode<TreeData> parent){
-		for(int i = 0; i < parent.getChildList().size(); i++){
-			System.out.println(parent.getChildList().get(i).getData().getShapeNode());
-		}
-	}
 
 
 	public String getBuffer() {

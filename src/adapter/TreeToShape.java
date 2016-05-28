@@ -87,7 +87,7 @@ public class TreeToShape {
 				} else if(type == Constants.FOR){
 					String condition[] = body.get(1).split(";");
 					rv = new CIteratorManager(CConstants.FOR, condition[0], condition[1], condition[2], rootNode);
-					rootNode.addNode(rootNode.getNodes().size()-1,rv);
+					rootNode.addLast(rv);
 					rv.addNode(new CCodeManager(body.get(0), rv));
 				}
 //				System.out.println(rootNode.getNodes());

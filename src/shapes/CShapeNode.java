@@ -46,6 +46,12 @@ public abstract class CShapeNode {
 		childNum++;
 		node.depth = this.depth+1;
 	}
+	public void addLast(CShapeNode node){
+		int index = this.bodies.indexOf(this.bodies.lastElement());
+		this.bodies.add(index-1, node);
+		childNum++;
+		node.depth = this.depth+1;	
+	}
 	public int findNode(CShapeNode node){
 		return this.bodies.indexOf(node);
 	}

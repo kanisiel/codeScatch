@@ -1,14 +1,14 @@
 package parser;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 
 public class TreeNode<TreeData> implements Iterable<TreeNode<TreeData>>{
 	
     private TreeNode<TreeData> parent;
-    private List<TreeNode<TreeData>> children;
+    private Vector<TreeNode<TreeData>> children;
     private TreeData data;
 
 	public TreeData getData() {return data;}
@@ -17,7 +17,7 @@ public class TreeNode<TreeData> implements Iterable<TreeNode<TreeData>>{
 	
 	public TreeNode(TreeData child) {
 		this.data = child;
-        this.children = new LinkedList<TreeNode<TreeData>>(); 
+        this.children = new Vector<TreeNode<TreeData>>(); 
 	}
 
 	public void addChild(TreeData child) {

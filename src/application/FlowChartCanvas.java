@@ -227,7 +227,6 @@ public class FlowChartCanvas extends BorderPane {
 		}
 		//node.getType().equals(CConstants.CODE)&&
 //		System.out.println(parent.findNode(node) +" : "+ (parent.getNodes().size()-1) );//&&parent.getParent().findNext(parent) == parent.getParent().getNodes().get(parent.getParent().getNodes().size()-1) ));
-		System.out.println();
 		if(!(node.getType().equals(CConstants.CODE) && parent.getType().equals(CConstants.WHILE))&&!(parent.findNext(node).equals(this.manager.getNodes().lastElement()))){//&&parent.findNode(node)==parent.getNodes().size()-1)){
 			CShapeManager next = this.manager.findNext(node.shape);
 			cm.setVertex(node.shape.getLowerAnchor(), next.getUpperAnchor());
