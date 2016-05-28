@@ -25,9 +25,9 @@ public class MainUIController implements Initializable {
     public MainUIController(){
 
     }
-    public void init(VBox desktopPane, VBox toolBar){
+    public void init(VBox desktopPane){//, VBox toolBar){
     	desktopPaneController = new DesktopPaneController(desktopPane);   	
-    	toolBarController = new ToolBarController(toolBar, desktopPaneController.getFlowChartCanvas());
+//    	toolBarController = new ToolBarController(toolBar, desktopPaneController.getFlowChartCanvas());
 
     }
 	@Override

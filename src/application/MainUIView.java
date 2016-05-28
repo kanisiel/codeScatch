@@ -24,8 +24,8 @@ public class MainUIView extends VBox{
 	    	 content = loader.getRoot();
 	    	 BorderPane p = (BorderPane)content.getChildren().get(0);
 	    	 desktopPane = (VBox)p.getChildren().get(1);
-	    	 toolBar = (VBox)p.getChildren().get(2);
-	    	 controller.init(desktopPane, toolBar);
+//	    	 toolBar = (VBox)p.getChildren().get(2);
+	    	 controller.init(desktopPane);//, toolBar);
 	     }
 		
 		public VBox getContent() {

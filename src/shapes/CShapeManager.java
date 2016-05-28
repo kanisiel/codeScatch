@@ -20,7 +20,7 @@ public abstract class CShapeManager implements Serializable {
 	
 	public CShapeManager(){
 		this.stroke = Color.BLACK;
-		this.fill = Color.BLACK;
+		this.fill = Color.WHITE;
 	}
 	public String getBody(){return body;}
 	public void setBody(String body){ this.body = body;}

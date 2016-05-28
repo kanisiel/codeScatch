@@ -3,7 +3,6 @@ package shapes;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
@@ -37,7 +36,7 @@ public class CDiamondManager extends CShapeManager {
 	public Shape getShape() {
 		// TODO Auto-generated method stub
 		Polygon poly = new Polygon();
-		poly.setFill(Color.TRANSPARENT);
+		poly.setFill(fill);
 		poly.setStroke(stroke);
 		poly.setStrokeWidth(2);
 		poly.getPoints().addAll(e.getX(),e.getY(),n.getX(),n.getY(), w.getX(), w.getY(), s.getX(), s.getY());

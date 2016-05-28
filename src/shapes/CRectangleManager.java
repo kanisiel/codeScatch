@@ -47,7 +47,7 @@ public class CRectangleManager extends CShapeManager {
 		r = new Rectangle(p.getX(), p.getY(), d.getWidth(), d.getHeight());
 		r.setStroke(stroke);
 		r.setStrokeWidth(2);
-		r.setFill(Color.TRANSPARENT);
+		r.setFill(fill);
 		return r;
 	}
 	@Override

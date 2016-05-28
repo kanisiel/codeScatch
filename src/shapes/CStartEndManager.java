@@ -24,7 +24,7 @@ public class CStartEndManager extends CShapeManager {
 		this.flag = flag;
 		// TODO Auto-generated constructor stub
 		if(flag==Constants.EShapeType.START.ordinal()){
-			this.setD(new Dimension2D(20, 20));
+			this.setD(new Dimension2D(40, 40));
 			this.setP(new Point2D((Constants.windowWidth/2), 30));
 			this.setBody("Start");
 			Text t = new Text(this.getBody());
@@ -32,7 +32,7 @@ public class CStartEndManager extends CShapeManager {
 			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
 			this.setTp(new Point2D((this.getP().getX()+(this.getD().getWidth()+5)), (this.getP().getY()+5.0)));
 		} else if(flag == Constants.EShapeType.STOP.ordinal()){
-			this.setD(new Dimension2D(20, 20));
+			this.setD(new Dimension2D(40, 40));
 			this.setP(new Point2D((Constants.windowWidth/2), Constants.windowHeight-30));
 			this.setBody("End");
 			Text t = new Text(this.getBody());
@@ -47,7 +47,7 @@ public class CStartEndManager extends CShapeManager {
 		this.flag = flag;
 		// TODO Auto-generated constructor stub
 		if(flag==Constants.EShapeType.START.ordinal()){
-			this.setD(new Dimension2D(20, 20));
+			this.setD(new Dimension2D(40, 40));
 			this.setP(p);
 			this.setBody("Start");
 			Text t = new Text(this.getBody());
@@ -55,7 +55,7 @@ public class CStartEndManager extends CShapeManager {
 			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
 			this.setTp(new Point2D((this.getP().getX()+(this.getD().getWidth()+5)), (this.getP().getY()+5.0)));
 		} else if(flag == Constants.EShapeType.STOP.ordinal()){
-			this.setD(new Dimension2D(20, 20));
+			this.setD(new Dimension2D(40, 40));
 			this.setP(p);
 			this.setBody("End");
 			Text t = new Text(this.getBody());

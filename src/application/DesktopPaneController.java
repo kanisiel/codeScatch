@@ -18,14 +18,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.embed.swing.SwingNode;
-import javafx.geometry.Orientation;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Shape;
 import jfxtras.scene.control.window.CloseIcon;
 import jfxtras.scene.control.window.MinimizeIcon;
 import jfxtras.scene.control.window.Window;
@@ -37,7 +34,7 @@ public class DesktopPaneController extends VBox {
 //    private FXDesktopPane fxDesktopPane;
 //   
 //    private FXDesktopWindowManager manager;
-	final int windowWidth = (Constants.FRAME_W-76)/2;
+	final int windowWidth = (Constants.FRAME_W)/2;
 	final int windowHeight = Constants.FRAME_H-50;
 	public FlowChartCanvas fcc;
 	public RSyntaxTextArea textArea;
@@ -70,7 +67,7 @@ public class DesktopPaneController extends VBox {
 		Window w = new Window(title);
         // set the window position to 10,10 (coordinates inside canvas)
 		if(title.equals(Windows.InternalWindows.Code.getTitle())){
-	        w.setLayoutX((Constants.FRAME_W-76)/2);
+	        w.setLayoutX((Constants.FRAME_W)/2);
 	        w.setLayoutY(0);
 		} else {
 //			Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
@@ -109,63 +106,24 @@ public class DesktopPaneController extends VBox {
 					fcc.setPrefHeight(w.heightProperty().get()-30);					
 				}
 			});
-        	Pane p = new Pane();
+//        	Pane p = new Pane();
         	sp = new ScrollPane();
         	fcc = new FlowChartCanvas();
-        	ScrollBar sc = new ScrollBar();
-        	sc.setLayoutX(w.getPrefWidth()-sc.getWidth());
-        	sc.setMin(0);
-        	sc.setOrientation(Orientation.VERTICAL);
-        	sc.setPrefHeight(w.getPrefHeight()-30);
-        	sc.valueProperty().addListener(new ChangeListener<Number>() {
-        		public void changed(ObservableValue<? extends Number> ov,
-                     Number old_val, Number new_val) {
-                	 for(javafx.scene.Node n : fcc.getChildren()){
-        	 			int index = fcc.getChildren().indexOf(n);
-        	 			n.setLayoutY(-new_val.doubleValue());
-        	 			Group g = (Group) n;
-    	 				Shape s = (Shape) g.getChildren().get(0);
-	 					if(index == 0 || index == fcc.getChildren().size()-1){
-        	 				if(Double.parseDouble(s.getId()) + n.getLayoutY()<0){
-                	 			n.setVisible(false);
-                	 		} else {
-                	 			n.setVisible(true);
-                	 		}
-    	 				}
-            	 		 else {
-            	 			if(Double.parseDouble(s.getId()) + n.getLayoutY()<=0){
-                	 			n.setVisible(false);
-                	 		} else {
-                	 			n.setVisible(true);
-                	 		}
-            	 		}	
-        	 		}
-                 }
-        	});
         	fcc.getChildren().addListener(new ListChangeListener<Node>(){
-
 				@Override
 				public void onChanged(javafx.collections.ListChangeListener.Change<? extends Node> c) {
-//					WritableImage image = fcc.snapshot(new SnapshotParameters(), null);
-//					sp.setContent(new ImageView(image));
-					double thumb = 0;
-					if(fcc.getManager().getNodes().size()>0){
-						double bottom = fcc.getManager().getNodes().lastElement().getP().getY();
-						thumb = (sc.getPrefHeight()-10)/bottom;
-						if(thumb < 1){
-							sc.visibleAmountProperty().set(100*thumb);
-							sc.setMax(300*bottom/(sc.getPrefHeight()-20));
-						}else {
-							sc.visibleAmountProperty().set(100);
-							sc.setMax(100);
-						}
-					}
+					fcc.setPrefHeight(fcc.height);
+					sp.setContent(null);
+					sp.setContent(fcc);//new ImageView(image));
+					sp.setPrefHeight(windowHeight-30);
+					sp.setPrefWidth(windowWidth);
+					sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+					sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 					
 				}
-        	
         	});
-        	
-        	p.getChildren().addAll(fcc, sc);
+//        	p.getChildren().add(sp);
+        	BorderPane p = new BorderPane(sp);
         	w.setContentPane(p);
         }
         w.setVisible(true);
@@ -173,7 +131,7 @@ public class DesktopPaneController extends VBox {
         return w;
     }
     private void setContent(Window w, SwingNode swingNode){
-        Pane p = new Pane(swingNode);
+        BorderPane p = new BorderPane(swingNode);
         w.setContentPane(p);
 	
     }
@@ -192,6 +150,7 @@ public class DesktopPaneController extends VBox {
         	        textArea.setCodeFoldingEnabled(true);
         	        textArea.setFont(Preference.defaultFont);
         	        textArea.addCaretListener(new CodeViewerListener(tts));
+        	        textArea.setEditable(true);
         	        sp = new RTextScrollPane(textArea);
         	        cp.add(sp);
         	        swingNode.setContent(cp);
