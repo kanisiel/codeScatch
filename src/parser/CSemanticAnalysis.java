@@ -17,16 +17,55 @@ public class CSemanticAnalysis {
 
 	
 	public void setParseTree(ParseTree parseTree) {this.rootParseTree = parseTree;}
-
+	public TreeNode<TreeData> getParent() {return this.parent;}
 	
 	public CSemanticAnalysis(CParser parser){
 		this.parser = parser;
 		this.parseTrees = new Vector<ParseTree>();
 		this.parent = new TreeNode<TreeData>(null);
+		TreeData treeData = new TreeData(null, "root", "root");
+		this.parent = new TreeNode<TreeData>(treeData);
 		this.st = new Vector<>();
 		this.line = "";
 	}
 	
+	public TreeNode<TreeData> init(){
+		// make tree
+		makeTree(parseTrees, this.parent);
+		// merge code
+		for(int i = 0; i < isNeedMerge(this.parent); i++){
+			mergeCode(this.parent);
+		}
+		return parent;
+		
+	}
+	
+	public void analyzeFunc(ParseTree parseTree) {
+		
+		if(parseTree.getChildCount() > 0){
+			for(int i = 0; i < parseTree.getChildCount(); ++i){
+				if(Trees.getNodeText(parseTree.getChild(i), parser).equals(CConstants.BLOCKITEM)){
+					parseTrees.add(parseTree.getChild(i));
+					return ;
+				}	
+				analyzeFunc(parseTree.getChild(i));
+			}
+		}
+		else{;}
+	}
+	
+	// iteration or selection
+	public void analyzeNode(TreeNode<TreeData> parent){
+		for(int i = 0; i < parent.getChildList().size(); ++i){		
+			if(parent.getChildList().get(i).getData().getNodeType().equals(CConstants.ITERATIONSTATEMENT)){
+				analyzeIterationStatement(parent.getChildList().get(i).getData().getParseTree(), parent.getChildList().get(i));
+			}
+			if(parent.getChildList().get(i).getData().getNodeType().equals(CConstants.SELECTIONSTATEMENT)){
+				//analyzeSelectionStatement(parent.getChildList().get(i).getData().getParseTree(), parent.getChildList().get(i));
+				//System.out.println("here");
+			}
+		}
+	}
 
 	// analyze external declaration
 	public void analyzeCompoundStatement(ParseTree parseTree) {
@@ -43,46 +82,169 @@ public class CSemanticAnalysis {
 		else{;}
 	}
 	
-	public void test(){
-		// make tree
+	//input parseTree.getChild(0).getChild(0), look for else in if_parsetree
+	public boolean lookForElse(ParseTree parseTree){
+		boolean isElse = false;
 		
-			makeTree(parseTrees);
-		// merge code
-			for(int i = 0; i < isNeedMerge(this.parent); i++){
-				mergeCode(this.parent);
+		for(int i = 0; ++i < parseTree.getChildCount(); ++i){
+			if(Trees.getNodeText(parseTree.getChild(i), parser).equals(CConstants.ELSE)){
+				isElse = true;
 			}
-		
-		
-		
-		for(int i = 0; i < parseTrees.size(); ++i){
-			System.out.println(parseTrees.get(i).getText());
 		}
-		System.out.println("");
 		
-		// tree print
-		for(int i = 0; i < parent.getChildList().size(); ++i){
-			System.out.println(parent.getChildList().get(i).getData().getNodeType());
-		}
-
-		// print tree after merge
-		System.out.println("\nmerge after!!!");
-		for(int i = 0; i < parent.getChildList().size(); ++i){
-			System.out.println(parent.getChildList().get(i).getData().getNodeType());
-		}
-		System.out.println("");
-		
-		//print sourcecode
-		for(int i = 0; i < parent.getChildList().size(); ++i){
-			if(parent.getChildList().get(i).getData().getNodeType().equals("code")){
-				for(int j = 0; j < parent.getChildList().get(i).getData().getCodeVector().size(); ++j){
-					System.out.println(parent.getChildList().get(i).getData().getCodeVector().get(j).getText());	
+		return isElse;
+	}
+	
+	public void analyzeSelectionStatement(ParseTree parseTree, TreeNode<TreeData> parent){
+		//parseTree nodename is blockItem in here
+		//System.out.println("in parent : " + parent.getData().getKind());
+		if(parseTree.getChild(0).getChild(0).getChild(0).getText().equals(CConstants.IF)){
+			boolean  isElse = lookForElse(parseTree.getChild(0).getChild(0));
+			
+			if(isElse == false){
+				for(int i = 0; i < parseTree.getChild(0).getChild(0).getChildCount(); ++i){
+					if( Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i), parser)
+							.equals(CConstants.STATEMENT)){
+						if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser)
+								.equals(CConstants.COMPOUNDSTATEMENT)){
+							this.parseTrees.clear();
+							analyzeCompoundStatement(parseTree.getChild(0).getChild(0).getChild(i).getChild(0));
+							makeTree(this.parseTrees, parent);
+							for(int k = 0; k < isNeedMerge(parent); k++){
+								mergeCode(parent);
+							}
+						}
+						else{
+							//System.out.println(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser));
+							if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser)
+									.equals(CConstants.ITERATIONSTATEMENT)){
+								parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), CConstants.ITERATIONSTATEMENT, 
+										parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0).getText()));
+							}
+							else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0), parser)
+									.equals(CConstants.SELECTIONSTATEMENT)){
+								parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), CConstants.SELECTIONSTATEMENT, 
+										parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0).getText()));
+							}
+							else{
+								parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), CConstants.CODE, 
+										parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0).getText()));
+							}
+						}
+					}
 				}
 			}
+			// is else
 			else{
-				System.out.println(parent.getChildList().get(i).getData().getParseTree().getText());
+				// else if, compoundStatement
+				if( Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(4), parser)
+						.equals(CConstants.STATEMENT) && 
+						Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(6).getChild(0), parser)
+						.equals(CConstants.SELECTIONSTATEMENT)){
+					if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(4).getChild(0), parser)
+							.equals(CConstants.COMPOUNDSTATEMENT)){
+						this.parseTrees.clear();
+						analyzeCompoundStatement(parseTree.getChild(0).getChild(0).getChild(4).getChild(0));
+						//this.parseTrees.add(parseTree.getChild(0).getChild(0).getChild(6).getChild(0));
+						makeTree(this.parseTrees, parent);
+						for(int k = 0; k < isNeedMerge(parent); k++){
+							mergeCode(parent);
+						}
+						makeTree(parseTree.getChild(0).getChild(0).getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);
+						//parent.add
+					}
+					// else if, statement
+					else{
+						//System.out.println(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser));
+						if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(4).getChild(0), parser)
+								.equals(CConstants.ITERATIONSTATEMENT)){
+							parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(4).getChild(0), CConstants.ITERATIONSTATEMENT, 
+									parseTree.getChild(0).getChild(0).getChild(4).getChild(0).getChild(0).getText()));
+							makeTree(parseTree.getChild(0).getChild(0).getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);
+						}
+						else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(4).getChild(0).getChild(0), parser)
+								.equals(CConstants.SELECTIONSTATEMENT)){
+							parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(4).getChild(0), CConstants.SELECTIONSTATEMENT, 
+									parseTree.getChild(0).getChild(0).getChild(4).getChild(0).getChild(0).getText()));
+							makeTree(parseTree.getChild(0).getChild(0).getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);
+						}
+						else{
+							parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(4).getChild(0), CConstants.CODE, 
+									parseTree.getChild(0).getChild(0).getChild(4).getChild(0).getChild(0).getText()));
+							makeTree(parseTree.getChild(0).getChild(0).getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);
+						}
+					}
+				}
+				// else
+				else{
+					// else, compoundStatement
+					if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(4).getChild(0), parser)
+							.equals(CConstants.COMPOUNDSTATEMENT) && Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(6).getChild(0), parser)
+							.equals(CConstants.COMPOUNDSTATEMENT)){
+						this.parseTrees.clear();			
+						analyzeCompoundStatement(parseTree.getChild(0).getChild(0).getChild(4).getChild(0));
+						makeTree(this.parseTrees, parent);
+						for(int k = 0; k < isNeedMerge(parent); k++){
+							mergeCode(parent);
+						}
+						System.out.println(parent.getParent().getChildList().size());
+						System.out.println(parseTree.getChild(0).getChild(0).getChild(6).getChild(0).getText());
+						
+						
+					}
+					// else, statement
+					else{
+						
+					}
+				}
+			}
+		}
+		
+		//switch
+		else if(parseTree.getChild(0).getChild(0).getChild(0).getText().equals(CConstants.SWITCH)){
+			
+		}
+
+	}
+	
+	public void analyzeIterationStatement(ParseTree parseTree, TreeNode<TreeData> parent){
+		//parseTree nodename is blockItem in here
+		//System.out.println("in parent : " +  parent.getData().getKind());
+		//System.out.println(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(4), parser));
+		for(int i = 0; i < parseTree.getChild(0).getChild(0).getChildCount(); ++i){
+			if( Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i), parser)
+					.equals(CConstants.STATEMENT)){
+				if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser)
+						.equals(CConstants.COMPOUNDSTATEMENT)){
+					this.parseTrees.clear();
+					analyzeCompoundStatement(parseTree.getChild(0).getChild(0).getChild(i).getChild(0));
+					makeTree(this.parseTrees, parent);
+					for(int k = 0; k < isNeedMerge(parent); k++){
+						mergeCode(parent);
+					}
+				}
+				else{
+					//System.out.println(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser));
+					if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser)
+							.equals(CConstants.ITERATIONSTATEMENT)){
+						parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), CConstants.ITERATIONSTATEMENT, 
+								parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0).getText()));
+					}
+					else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0), parser)
+							.equals(CConstants.SELECTIONSTATEMENT)){
+						parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), CConstants.SELECTIONSTATEMENT, 
+								parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0).getText()));
+					}
+					else{
+						parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), CConstants.CODE, 
+								parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0).getText()));
+					}
+				}		
 			}
 		}
 	}
+	
+	
 	public Vector<String> getST(){
 		return st;
 	}
@@ -206,8 +368,14 @@ public class CSemanticAnalysis {
 			}
 		}
 		else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.JUMPSTATEMENT)){
-			kind = CConstants.RETURN;
-			return kind;
+			if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.RETURN)){
+				kind = CConstants.RETURN;
+				return kind;
+			}
+			if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.BREAK)){
+				kind = CConstants.BREAK;
+				return kind;
+			}
 		}
 		else{
 			kind = "none";
@@ -216,16 +384,15 @@ public class CSemanticAnalysis {
 		return kind;
 	}
 	
-	public void makeTree(Vector<ParseTree> parseTrees){
-		String root = "root";
-		
-		TreeData treeData = new TreeData(null, root, root);
-		this.parent = new TreeNode<TreeData>(treeData);
-		
+	public void makeTree(Vector<ParseTree> parseTrees, TreeNode<TreeData> parent){
 		for(int i = 0; i < parseTrees.size(); ++i){
 			parent.addChild(new TreeData(parseTrees.get(i), analyzeParseTreeType(parseTrees.get(i)), 
 					analyzeParseTreeKind(parseTrees.get(i))));
 		}
+	}
+	
+	public void makeTree(ParseTree parseTree, TreeNode<TreeData> parent, String type, String elseFlag){
+		parent.addChild(new TreeData(parseTree, type, elseFlag));
 	}
 	
 	public void mergeCode(TreeNode<TreeData> parent){
@@ -255,27 +422,8 @@ public class CSemanticAnalysis {
 			
 		}
 		merge(parent, codeIndex.firstElement(), codeIndex.lastElement());
-//		for(int i = 0; i < codeIndex.size()-1; i++){
-//			System.out.println(codeIndex.get(i+1)-codeIndex.get(i));
-//			if(codeIndex.get(i+1)-codeIndex.get(i)>1){
-//				merge(parent, start, i);
-//				start = i+1;
-//			}
-//		}
-		
-		
-//		parent.getChildList().get(start).getData().getCodeVector().add(parent.getChildList().get(index).getData().getParseTree());
-//		parent.getChildList().remove(index);
-//		index--;
-//		if(start >= 0){
-//			for(int index = start+1; index < parent.getChildList().size()-1; ++index){
-//				if(parent.getChildList().get(index).getData().getNodeType().equals(CConstants.CODE)){
-//					parent.getChildList().get(start).getData().getCodeVector().add(parent.getChildList().get(index).getData().getParseTree());
-//					parent.getChildList().remove(index);
-//				}
-//			}
-//		}
 	}
+	
 	public int isNeedMerge(TreeNode<TreeData> parent){
 		if(parent.getChildList().size() < 2){
 			return 0;
@@ -307,21 +455,9 @@ public class CSemanticAnalysis {
 		
 	}
 
-	public TreeNode<TreeData> getParent() {
-		// make tree
-			makeTree(parseTrees);
-		// merge code
-			for(int i = 0; i < isNeedMerge(this.parent); i++){
-				mergeCode(this.parent);
-			}
-		return parent;
-	}
-
-
-	public void setParent(TreeNode<TreeData> parent) {
-		this.parent = parent;
-	}
-
+	public void setParent(TreeNode<TreeData> parent) {this.parent = parent;}
+	
+	
 }
 
 

@@ -13,7 +13,8 @@ public class TreeNode<TreeData> implements Iterable<TreeNode<TreeData>>{
 
 	public TreeData getData() {return data;}
 	public void setData(TreeData data) {this.data = data;}
-
+	public TreeNode<TreeData> getParent() {return parent;}
+	
 	public TreeNode(TreeData child) {
 		this.data = child;
         this.children = new LinkedList<TreeNode<TreeData>>(); 
@@ -34,5 +35,6 @@ public class TreeNode<TreeData> implements Iterable<TreeNode<TreeData>>{
         // TODO Auto-generated method stub
         return null;
     }
+
 }
 

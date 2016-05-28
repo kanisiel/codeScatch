@@ -61,21 +61,33 @@ public class CodeViewerListener implements CaretListener {
 			    CSemanticAnalysis semanticAnalysis = new CSemanticAnalysis(parser);   
 			      
 			    for(int i = 0; i < parseTree.getChildCount(); ++i){
-			    	if(Trees.getNodeText(parseTree.getChild(i), parser).equals("compoundStatement")){
-			    		semanticAnalysis.setParseTree(parseTree.getChild(i));
-			    	    semanticAnalysis.analyzeCompoundStatement(parseTree.getChild(i));
-			    	}
+			    	  if(Trees.getNodeText(parseTree.getChild(i), parser).equals(CConstants.COMPOUNDSTATEMENT)){
+			    		  semanticAnalysis.setParseTree(parseTree.getChild(i));
+			    		  semanticAnalysis.analyzeFunc(parseTree.getChild(i));
+			    	  }
 			    }
-			    
-//			    for(int j = 0; j < parent.getChildList().get(i).getData().getCodeVector().size(); ++j){
-//					System.out.println(parent.getChildList().get(i).getData().getCodeVector().get(j).getText());	
-//				}
-//			    semanticAnalysis.test();
+			   
+			    // getParent ¼öÁ¤
+			    TreeNode<TreeData> parent = semanticAnalysis.init();
+
+			
 			    //Prepare Canvas
 			    tts.prepareCanvas(); 
 			    //Split to type and body
-			    TreeNode<TreeData> parent = semanticAnalysis.getParent();
+			    
 //			    semanticAnalysis.getLine(parent);
+			    for(int i = 0; i < parent.getChildList().size(); ++i){
+			    	System.out.println(parent.getChildList().get(i).getData().getNodeType());
+			    }
+			    
+			    // make for full tree
+			    //semanticAnalysis.analyzeNode(parent);
+			    
+			    /*
+			    for(int i = 0; i < parent.getChildList().size(); ++i){
+			    	for(int j = 0; j < parent.getChildList().get(j).getChildList().size(); ++j)
+			    		System.out.println(parent.getChildList().get(i).getChildList().get(j).getData().getNodeType());
+			    }*/
 			    
 			    semanticAnalysis.getLine(parent.getChildList().get(0));
 			    Vector<String> st = semanticAnalysis.getST();
