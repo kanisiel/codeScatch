@@ -76,12 +76,18 @@ public class CodeViewerListener implements CaretListener {
 			    //Split to type and body
 			    
 //			    semanticAnalysis.getLine(parent);
-//			    for(int i = 0; i < parent.getChildList().size(); ++i){
-//			    	System.out.println(parent.getChildList().get(i).getData().getNodeType());
-//			    }
+			    for(int i = 0; i < parent.getChildList().size(); ++i){
+			    	TreeNode<TreeData> child = parent.getChildList().get(i);
+			    	System.out.println(child.getData().getNodeType());
+			    	if(!child.getData().getNodeType().equals(CConstants.CODE)){
+			    		for(int j = 0; j < child.getChildList().size(); j++){
+			    			System.out.println(child.getChildList().get(j).getData().getNodeType());
+			    		}
+			    	}
+			    }
 			    
 			    // make for full tree
-			    //semanticAnalysis.analyzeNode(parent);
+			    semanticAnalysis.analyzeNode(parent);
 			    
 			    /*
 			    for(int i = 0; i < parent.getChildList().size(); ++i){
