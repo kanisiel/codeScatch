@@ -12,7 +12,10 @@ public class TreeData {
 	private Vector<ParseTree> codeVector;
 	private String nodeType;
     private String kind; 
-    private CShapeNode shapeNode;
+    
+    
+	
+	private CShapeNode shapeNode;
     
 	public ParseTree getParseTree() {return parseTree;}
 	public void setParseTree(ParseTree parseTree) {this.parseTree = parseTree;}
@@ -22,6 +25,8 @@ public class TreeData {
 	public void setNodeType(String nodeType) {this.nodeType = nodeType;}
 	public String getKind() {return kind;}
 	public void setKind(String kind) {this.kind = kind;}
+
+
 
     public TreeData(ParseTree parseTree, String nodeType, String kind){
     	this.parseTree = parseTree;
