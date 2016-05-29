@@ -1,11 +1,13 @@
 package shapes;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 import Settings.CConstants;
 import javafx.scene.shape.Shape;
 
-public abstract class CShapeNode {
+public abstract class CShapeNode implements Serializable {
+	public static final long serialVersionUID = 1L;
 	protected String type;
 	protected String condition;
 	protected Vector<CShapeNode> bodies;

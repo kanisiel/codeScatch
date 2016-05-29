@@ -372,8 +372,8 @@ public class FlowChartCanvas extends BorderPane {
 			this.getChildren().remove(g);	
 		}
 	}
-	public FlowChartManager getManager(){
-		return manager;
-	}
+	
+	public FlowChartManager getManager() {	return manager;	}	
+	public CRootManager getRootNode() { return this.root; }
 }
 

@@ -33,14 +33,18 @@ public class CodeViewerListener implements CaretListener {
 	
 	public CodeViewerListener(TreeToShape tts) {
 		this.tts = tts;
+		buffer = "";
 	}
 	@Override
 	public void caretUpdate(CaretEvent e) {
 		// TODO Auto-generated method stub
 		RSyntaxTextArea source = (RSyntaxTextArea)e.getSource();
-		if(source.getText().length()>1){
+		if(source.getText().length() > 1) {
 			if(!buffer.equals(source.getText())){
 				buffer = source.getText();
+				if (buffer.startsWith("#"))
+					buffer = buffer.substring(buffer.indexOf('\n'));
+				System.out.println(buffer);
 				ANTLRInputStream in = new ANTLRInputStream(buffer);
 //				// input Stream into lexer
 			    CLexer lexer = new CLexer(in);

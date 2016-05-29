@@ -150,7 +150,7 @@ public class DesktopPaneController extends VBox {
         	        textArea.setCodeFoldingEnabled(true);
         	        textArea.setFont(Preference.defaultFont);
         	        textArea.addCaretListener(new CodeViewerListener(tts));
-        	        textArea.setEditable(true);
+        	        textArea.setEditable(false);
         	        sp = new RTextScrollPane(textArea);
         	        cp.add(sp);
         	        swingNode.setContent(cp);

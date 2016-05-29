@@ -3,6 +3,7 @@ package shapes;
 import Settings.CConstants;
 
 public class CCodeManager extends CShapeNode {
+	private static final long serialVersionUID = 1L;
 	public String body;
 
 	public CCodeManager(String body, CShapeNode parent) {

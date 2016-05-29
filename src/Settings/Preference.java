@@ -9,7 +9,7 @@ import panels.PreferenceDetailPanel;
 public class Preference {
 	
 	public static final String settingFile = "setting.ini";
-	public static final Font defaultFont = new Font("NanumGothic", Font.PLAIN, 9);
+	public static final Font defaultFont = new Font("NanumGothic", Font.PLAIN, 13);
 	public static final String fontSizes[] = { "8", "10", "11", "12", "14", "16", "18", "20", "24", "30", "36", "40", "48", "60", "72" };
 	
 	public static final int preferenceDetailPanel_W = (Constants.PFRAME_W/3)*2;

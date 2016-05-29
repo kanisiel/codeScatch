@@ -13,22 +13,23 @@ public class MainUIView extends VBox{
 	@FXML public VBox desktopPane;
 	@FXML public VBox toolBar;
 	public MainUIController controller;
-		public MainUIView() throws IOException {
-
-	    	 controller = new MainUIController();
-	    	 URL url = MainUIView.class.getResource("MainUI.fxml");
-	    	 
-	    	 FXMLLoader loader = new FXMLLoader(url);
-	    	 loader.setController(controller);
-	    	 loader.load();
-	    	 content = loader.getRoot();
-	    	 BorderPane p = (BorderPane)content.getChildren().get(0);
-	    	 desktopPane = (VBox)p.getChildren().get(1);
-//	    	 toolBar = (VBox)p.getChildren().get(2);
-	    	 controller.init(desktopPane);//, toolBar);
-	     }
 		
-		public VBox getContent() {
-	        return content;
-	    }
+	public MainUIView() throws IOException {
+
+		controller = new MainUIController();
+	   	URL url = MainUIView.class.getResource("MainUI.fxml");
+	    	 
+	   	FXMLLoader loader = new FXMLLoader(url);
+	   	loader.setController(controller);
+	   	loader.load();
+	   	content = loader.getRoot();
+	   	BorderPane p = (BorderPane)content.getChildren().get(0);
+	   	desktopPane = (VBox)p.getChildren().get(1);
+//	   	toolBar = (VBox)p.getChildren().get(2);
+	   	controller.init(desktopPane);//, toolBar);
+	}
+		
+	public VBox getContent() {
+		return content;
+	}
 }
