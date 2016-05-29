@@ -50,6 +50,7 @@ public class Constants {
 	public static final int WHILE = 4;
 	public static final int DO = 5;
 	public static final int SWITCH = 6;
+	public static final int ELSE = 7;
 	
 	//Node Type
 	public static final int NUMERIC = 1;

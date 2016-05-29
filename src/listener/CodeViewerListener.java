@@ -111,6 +111,14 @@ public class CodeViewerListener implements CaretListener {
 			    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
 			    		sts.add(condition);
 			    		shape = tts.declareToShape(sts, Constants.IF);
+			    		TreeData elses = parent.getChildList().get(i).getELSE();
+			    		if(elses!=null){
+			    			Vector<String> stelse = new Vector<>();
+			    			String elsebody = semanticAnalysis.getElseBody(elses.getParseTree());
+			    			stelse.add(elsebody);
+			    			System.out.println(elsebody);
+			    			shape = tts.declareToShape(stelse, Constants.ELSE);
+			    		}
 			    	} else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.WHILE)){
 			    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
 			    		sts.add(body);
@@ -123,6 +131,15 @@ public class CodeViewerListener implements CaretListener {
 			    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
 			    		sts.add(condition);
 			    		shape = tts.declareToShape(sts, Constants.FOR);
+			    	} else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.ELSE)){
+			    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
+			    		sts.add(body);
+			    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
+			    		sts.add(condition);
+			    		for(String str : sts){
+			    			System.out.println(str);
+			    		}
+			    		shape = tts.declareToShape(sts, Constants.ELSE);
 			    	} else {
 			    		shape = null;
 			    	}

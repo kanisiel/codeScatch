@@ -113,12 +113,22 @@ public class FlowChartCanvas extends BorderPane {
 		setCoord(shape);
 	}
 	public void drawAllNodes(CRootManager root){
-//		this.root = root;
+//		showAll(root);
 		drawNodes(root);
 		drawBounds(root);
 		drawConnects(root);
 	}
-
+	public void showAll(CShapeNode root){
+		
+//		for(CShapeNode node : root.getNodes()){
+//			if(node.getNodes().size()==0){
+//				System.out.print(node.getParent().getType()+":"+node.getType());
+//				System.out.println();
+//			} else {
+//				showAll(node);
+//			}
+//		}
+	}
 	public void drawNodes(CShapeNode root){
 		Vector<CShapeNode> nodes = root.getNodes();
 		this.boundaryWidth.put(root.getType()+root.getDepth(), 0.0);
@@ -148,7 +158,7 @@ public class FlowChartCanvas extends BorderPane {
 	public void drawBounds(CShapeNode root){
 //		Vector<CShapeNode> nodes = ;
 		for(CShapeNode node : root.getNodes()){
-			if(node.getClass().equals(CIteratorManager.class)||node.getType().equals(CConstants.IF)){
+			if(node.getClass().equals(CIteratorManager.class)||node.getType().equals(CConstants.IF)||node.getType().equals(CConstants.ELSE)){
 				drawBound(node);
 			}
 		}
@@ -156,7 +166,6 @@ public class FlowChartCanvas extends BorderPane {
 	public void drawBound(CShapeNode node){
 		double width = 0;
 		double height = 0;
-		System.out.println(node.getNodes().firstElement().shape.sid);
 		CShapeNode first = node.getNodes().firstElement();
 		CShapeNode last = node.getNodes().lastElement();
 		StackPane fsp = find(first);
@@ -201,25 +210,6 @@ public class FlowChartCanvas extends BorderPane {
 		Label label = new Label(node.getType());
 		label.setLayoutX(centerLineX-(rect.getWidth()/2)+5);
 		label.setLayoutY(upperAnchor-25);
-//		StackPane bsp = new StackPane(rect);
-//		bsp.setLayoutX(centerLineX);
-//		bsp.setLayoutY(upperAnchor);
-//		bsp.setPrefHeight(rect.getHeight());
-//		bsp.setPrefWidth(rect.getWidth());
-//		bsp.setUserData(-1);
-//		bsp.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-//		    @Override
-//		    public void handle(MouseEvent event) {
-//		        if(event.isPrimaryButtonDown()){
-//		        	System.out.println("Axis Y : "+bsp.getLayoutY());
-//		        	System.out.println("Height : "+bsp.getPrefHeight());
-//		        	System.out.println("Sum : "+(bsp.getLayoutY()+bsp.getPrefHeight()));
-////		        	Text t = (Text)sp.getChildren().get(1);
-////		    		System.out.println(t.getWidth());
-//		        }
-//		    }
-//		});
-//		Label label = new Label(node.getType(),bsp);
 		Group bound = new Group();
 		bound.getChildren().addAll(rect,label);
 		this.getChildren().add(1, bound);
@@ -260,6 +250,7 @@ public class FlowChartCanvas extends BorderPane {
 		    @Override
 		    public void handle(MouseEvent event) {
 		        if(event.isPrimaryButtonDown()){
+		        	
 		        	System.out.println("Axis Y : "+sp.getLayoutY());
 		        	System.out.println("Height : "+sp.getPrefHeight());
 		        	System.out.println("Sum : "+(sp.getLayoutY()+sp.getPrefHeight()));
@@ -302,6 +293,9 @@ public class FlowChartCanvas extends BorderPane {
 				if(isRoot(node.getParent())){
 					if(node.getParent().findPrev(node).getClass().equals(CIteratorManager.class)){
 						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
+					} else if(node.getParent().findPrev(node).getType().equals(CConstants.ELSE)){
+						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
+						System.out.println(sp.getLayoutY());
 					}
 				}else{
 					sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+40);

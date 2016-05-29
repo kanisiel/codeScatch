@@ -76,7 +76,11 @@ public class TreeToShape {
 					rv = new CCodeManager(body.get(0), rootNode);
 					rootNode.addNode(rootNode.getNodes().size()-1, rv);
 				} else if(type == Constants.IF){
-					rv = new CIfManager(body.get(1), rootNode);
+					rv = new CIfManager(CConstants.IF, body.get(1), rootNode);
+					rootNode.addNode(rootNode.getNodes().size()-1,rv);
+					rv.addNode(new CCodeManager(body.get(0), rv));
+				} else if(type == Constants.ELSE){
+					rv = new CIfManager(CConstants.ELSE, "", rootNode);
 					rootNode.addNode(rootNode.getNodes().size()-1,rv);
 					rv.addNode(new CCodeManager(body.get(0), rv));
 				} else if(type == Constants.WHILE){

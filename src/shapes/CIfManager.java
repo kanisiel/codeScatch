@@ -6,13 +6,15 @@ import Settings.CConstants;
 
 public class CIfManager extends CShapeNode {
 	
-	public CIfManager(String condition, CShapeNode parent) {
+	public CIfManager(String type, String condition, CShapeNode parent) {
 		super();
 		this.parent = parent;
-		type = CConstants.IF;
+		this.type = type;
 		this.bodies = new Vector<>();
 		this.condition = condition;
-		this.bodies.add(new CConditionManager(condition, this));
+		if(type.equals(CConstants.IF)){
+			this.bodies.add(new CConditionManager(condition, this));
+		}
 		// TODO Auto-generated constructor stub
 	}
 	

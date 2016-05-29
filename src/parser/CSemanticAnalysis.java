@@ -219,7 +219,7 @@ public class CSemanticAnalysis {
 						}
 					}
 				}
-				// ©╘╠Б╨нем ╢ы╫ц 
+				// О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ы╫О©╫ 
 				// else
 				else{
 					// if-else, both compoundStatement
@@ -401,6 +401,13 @@ public class CSemanticAnalysis {
 			return getBody(parseTree.getChild(0));//parents.getChildList().get(0));
 		}
 	}
+	public String getElseBody(ParseTree parseTree){//TreeNode<TreeData> parents){
+		String buffer = parseTree.getText();
+		buffer = buffer.replace("{", "");
+		buffer = buffer.replace("}", "");
+		return buffer;
+
+	}
 	public void visitChildren(ParseTree parseTree) {
 		if(parseTree.getChildCount() > 0){
 			for(int i = 0; i < parseTree.getChildCount(); ++i){
@@ -455,6 +462,10 @@ public class CSemanticAnalysis {
 		else if(Trees.getNodeText(parseTree.getChild(0).getChild(0), parser).equals(CConstants.SELECTIONSTATEMENT)){
 			if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.IF)){
 				kind = CConstants.IF;
+				return kind;
+			}
+			else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.ELSE)){
+				kind = CConstants.ELSE;
 				return kind;
 			}
 			else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(0), parser).equals(CConstants.SWITCH)){
