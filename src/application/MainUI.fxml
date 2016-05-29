@@ -15,17 +15,17 @@
 		    <top>
 		        <MenuBar BorderPane.alignment="CENTER">
 		            <menus>
-		                <Menu mnemonicParsing="false" text="File">
+		                <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
 		                    <items>
-		                        <MenuItem mnemonicParsing="false" text="Open" />
-		                        <MenuItem mnemonicParsing="false" text="Save" />
-		                        <MenuItem mnemonicParsing="false" text="Save As" />
+		                        <MenuItem mnemonicParsing="false" text="Open" onAction="#open" />
+		                <!--    <MenuItem mnemonicParsing="false" text="Save" />
+		                        <MenuItem mnemonicParsing="false" text="Save As" /> -->
 		                        <SeparatorMenuItem mnemonicParsing="false" />
 		                        <MenuItem mnemonicParsing="false" text="Close" />
-		                        <MenuItem mnemonicParsing="false" text="Exit" />
+		                        <MenuItem mnemonicParsing="false" text="Exit" onAction="#exit" />
 		                    </items>
 		                </Menu>
-		                <Menu mnemonicParsing="false" text="Edit">
+		                <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
 		                    <items>
 		                        <MenuItem mnemonicParsing="false" text="Undo" />
 		                        <MenuItem mnemonicParsing="false" text="Redo" />
@@ -36,7 +36,7 @@
 		                        <MenuItem mnemonicParsing="false" text="Delete" />
 		                    </items>
 		                </Menu>
-		                <Menu mnemonicParsing="false" text="Window">
+		                <Menu fx:id="windowMenu" mnemonicParsing="false" text="Window">
 		                    <items>
 		                        <MenuItem mnemonicParsing="false" text="Code Viewer" />
 		                        <MenuItem mnemonicParsing="false" text="Flow Chart" />
@@ -45,7 +45,7 @@
 		                        <MenuItem mnemonicParsing="false" text="Preference" />
 		                    </items>
 		                </Menu>
-		                <Menu mnemonicParsing="false" text="Help">
+		                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
 		                    <items>
 		                        <MenuItem mnemonicParsing="false" text="About" />
 		                    </items>

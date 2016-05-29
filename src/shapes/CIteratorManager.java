@@ -6,6 +6,7 @@ import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 
 public class CIteratorManager extends CShapeNode {
+	private static final long serialVersionUID = 1L;
 	private Point2D boundP;
 	private Dimension2D boundD;
 

@@ -619,5 +619,5 @@ public class FlowChartCanvas extends BorderPane {
 	public FlowChartManager getManager(){
 		return manager;
 	}
+	public CRootManager getRootNode() { return this.root; }
 }
-

@@ -5,6 +5,7 @@ import java.util.Vector;
 import Settings.CConstants;
 
 public class CIfManager extends CShapeNode {
+	private static final long serialVersionUID = 1L;
 	
 	public CIfManager(String type, String condition, CShapeNode parent) {
 		super();

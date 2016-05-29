@@ -12,9 +12,10 @@ public class ActionHandler implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		System.out.println(e.getActionCommand());
 		CMenu target = MenuItems.valueOf(e.getActionCommand()).getInvoke();
 		target.init(parents);
-		target.invokedMethod(target.getMenuItem().toLowerCase());
+		//target.invokedMethod(target.getMenuItem().toLowerCase());
 		
 	}
 	public void init(CFrame parents){

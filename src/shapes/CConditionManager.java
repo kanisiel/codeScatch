@@ -3,6 +3,7 @@ package shapes;
 import Settings.CConstants;
 
 public class CConditionManager extends CShapeNode {
+	private static final long serialVersionUID = 1L;
 	
 	public CConditionManager(String condition, CShapeNode parent) {
 		super();

@@ -33,6 +33,7 @@ public class CMenu extends JMenu {
 		this.actionHandler = new ActionHandler();
 		for(MenuItem item : items){
 			JMenuItem menuItem = new JMenuItem(item.getName());
+			System.out.println(item.getName());
 			menuItem.setActionCommand(item.getName());
 			menuItem.addActionListener(actionHandler);
 			this.add(menuItem);
