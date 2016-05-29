@@ -114,7 +114,7 @@ public class DesktopPaneController extends VBox {
 				public void onChanged(javafx.collections.ListChangeListener.Change<? extends Node> c) {
 					fcc.setPrefHeight(fcc.height);
 					sp.setContent(null);
-					sp.setContent(fcc);//new ImageView(image));
+					sp.setContent(fcc);
 					sp.setPrefHeight(windowHeight-30);
 					sp.setPrefWidth(windowWidth);
 					sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -122,7 +122,6 @@ public class DesktopPaneController extends VBox {
 					
 				}
         	});
-//        	p.getChildren().add(sp);
         	BorderPane p = new BorderPane(sp);
         	w.setContentPane(p);
         }

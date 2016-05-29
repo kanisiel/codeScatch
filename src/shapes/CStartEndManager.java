@@ -4,6 +4,7 @@ import Settings.Constants;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -27,6 +28,7 @@ public class CStartEndManager extends CShapeManager {
 			this.setD(new Dimension2D(40, 40));
 			this.setP(new Point2D((Constants.windowWidth/2), 30));
 			this.setBody("Start");
+			label = new Label("Start");
 			Text t = new Text(this.getBody());
 			t.setFont(new Font("Arial", Double.parseDouble("10.0")));
 			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
@@ -35,6 +37,7 @@ public class CStartEndManager extends CShapeManager {
 			this.setD(new Dimension2D(40, 40));
 			this.setP(new Point2D((Constants.windowWidth/2), Constants.windowHeight-30));
 			this.setBody("End");
+			label = new Label("End");
 			Text t = new Text(this.getBody());
 			t.setFont(new Font("Arial", Double.parseDouble("10.0")));
 			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
@@ -50,6 +53,7 @@ public class CStartEndManager extends CShapeManager {
 			this.setD(new Dimension2D(40, 40));
 			this.setP(p);
 			this.setBody("Start");
+			label = new Label("Start");
 			Text t = new Text(this.getBody());
 			t.setFont(new Font("Arial", Double.parseDouble("10.0")));
 			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
@@ -58,6 +62,7 @@ public class CStartEndManager extends CShapeManager {
 			this.setD(new Dimension2D(40, 40));
 			this.setP(p);
 			this.setBody("End");
+			label = new Label("End");
 			Text t = new Text(this.getBody());
 			t.setFont(new Font("Arial", Double.parseDouble("10.0")));
 			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));

@@ -65,8 +65,10 @@ public abstract class CShapeNode {
 	public CShapeNode findPrev(CShapeNode node){
 		if(findNode(node)>0){
 			return this.bodies.get(findNode(node)-1);
-		}else {
+		}else if(findNode(node)==0){
 			return this.bodies.firstElement();
+		} else {
+			return parent.findPrev(this).getNodes().lastElement();
 		}
 	}
 	public CShapeNode findCondition(){

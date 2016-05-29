@@ -63,6 +63,27 @@ public class CArrowHead extends CShapeManager {
 		}
 		
 	}
+	public void setHead(String arrowTo, Point2D endP){
+		cp = endP;
+		if(arrowTo.equals(Constants.EAST)){
+			lp = new Point2D(endP.getX()-10, endP.getY()-10);
+			rp = new Point2D(endP.getX()-10, endP.getY()+10);
+			p = new Point2D(cp.getX()-10, cp.getY());
+		}else if(arrowTo.equals(Constants.WEST)){
+			lp = new Point2D(endP.getX()+10, endP.getY()+10);
+			rp = new Point2D(endP.getX()+10, endP.getY()-10);
+			p = new Point2D(cp.getX()+10, cp.getY());
+		}else if(arrowTo.equals(Constants.SOUTH)){
+			lp = new Point2D(endP.getX()+10, endP.getY()-10);
+			rp = new Point2D(endP.getX()-10, endP.getY()-10);
+			p = new Point2D(cp.getX(), cp.getY()-10);
+		}else if(arrowTo.equals(Constants.NORTH)){
+			lp = new Point2D(endP.getX()-10, endP.getY()+10);
+			rp = new Point2D(endP.getX()+10, endP.getY()+10);
+			p = new Point2D(cp.getX(), cp.getY()+10);
+		}
+		
+	}
 
 	@Override
 	public void draw(GraphicsContext gc) {

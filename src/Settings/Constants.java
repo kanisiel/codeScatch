@@ -13,6 +13,8 @@ public class Constants {
 	public static final String WEST = "WEST";
 	public static final String SOUTH = "SOUTH";
 	public static final String NORTH = "NORTH";
+	public static final String NO = "No";
+	public static final String ITERATE = "ITERATE";
 	
 	public static enum EJFrame{
 		Toolbar,

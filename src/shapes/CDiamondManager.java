@@ -3,6 +3,7 @@ package shapes;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
@@ -14,6 +15,7 @@ public class CDiamondManager extends CShapeManager {
 	public CDiamondManager(String body){
 		super();
 		this.body = body;
+		label = new Label(body);
 	}
 
 

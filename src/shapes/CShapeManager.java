@@ -1,34 +1,49 @@
 package shapes;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 public abstract class CShapeManager implements Serializable {
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6177225616280087402L;
+	public double sid;
 	protected String body;
 	protected Point2D p, tp, upperAnchor, lowerAnchor, leftAnchor, rightAnchor;
 	protected Dimension2D d, td;
 	protected Color fill;
 	protected Color stroke;
 	protected Text text;
+	protected Label label;
+	protected int lines;
 	
 	public CShapeManager(){
 		this.stroke = Color.BLACK;
 		this.fill = Color.WHITE;
+		Random r = new Random();
+		r.setSeed(System.currentTimeMillis());
+		sid = Math.abs(r.nextGaussian());
 	}
+	public void setLines(int lines){ this.lines = lines; }
 	public String getBody(){return body;}
-	public void setBody(String body){ this.body = body;}
+	public void setBody(String body){ this.body = body; }
 	public abstract void draw(GraphicsContext gc);
 	public abstract void drawText(GraphicsContext gc);
 	public abstract Shape getShape();
 	public abstract Text getText();
 	public abstract void setCoords(Point2D p, Dimension2D d, Dimension2D w);
+	public Label getLabel(){
+		return label;
+	}
 	public Point2D getP() {
 		return p;
 	}
