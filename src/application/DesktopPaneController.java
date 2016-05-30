@@ -13,6 +13,7 @@ import Settings.Constants;
 import Settings.Preference;
 import Settings.Windows;
 import Settings.Windows.InternalWindows;
+import adapter.CodeToTree;
 import adapter.TreeToShape;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,7 +27,6 @@ import javafx.scene.layout.VBox;
 import jfxtras.scene.control.window.CloseIcon;
 import jfxtras.scene.control.window.MinimizeIcon;
 import jfxtras.scene.control.window.Window;
-import listener.CodeViewerListener;
 
 public class DesktopPaneController extends VBox {
     
@@ -40,6 +40,7 @@ public class DesktopPaneController extends VBox {
 	public RSyntaxTextArea textArea;
 	public ScrollPane sp;
 	public TreeToShape tts;
+	public CodeToTree ctt;
 	
     
     public DesktopPaneController(VBox desktopPane){
@@ -50,6 +51,7 @@ public class DesktopPaneController extends VBox {
     	
     	addInternalFrames(canvas);
     	this.tts = new TreeToShape(fcc);
+    	this.ctt = new CodeToTree(tts);
     }
 
     private void addInternalFrames(Pane canvas){
@@ -148,7 +150,7 @@ public class DesktopPaneController extends VBox {
         	        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
         	        textArea.setCodeFoldingEnabled(true);
         	        textArea.setFont(Preference.defaultFont);
-        	        textArea.addCaretListener(new CodeViewerListener(tts));
+//        	        textArea.addCaretListener(new CodeViewerListener(tts));
         	        textArea.setEditable(false);
         	        sp = new RTextScrollPane(textArea);
         	        cp.add(sp);

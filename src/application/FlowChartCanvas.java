@@ -23,7 +23,6 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
@@ -113,13 +112,15 @@ public class FlowChartCanvas extends BorderPane {
 		setCoord(shape);
 	}
 	public void drawAllNodes(CRootManager root){
-//		showAll(root);
 		drawNodes(root);
 		drawBounds(root);
 		drawConnects(root);
+//		showAll();//root);
 	}
-	public void showAll(CShapeNode root){
-		
+	public void showAll(){//CShapeNode root){
+		for(Node n :this.getChildren()){
+			System.out.println(n);
+		}
 //		for(CShapeNode node : root.getNodes()){
 //			if(node.getNodes().size()==0){
 //				System.out.print(node.getParent().getType()+":"+node.getType());
@@ -293,12 +294,13 @@ public class FlowChartCanvas extends BorderPane {
 				if(isRoot(node.getParent())){
 					if(node.getParent().findPrev(node).getClass().equals(CIteratorManager.class)){
 						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
-					} else if(node.getParent().findPrev(node).getType().equals(CConstants.ELSE)){
-						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
-						System.out.println(sp.getLayoutY());
-					}
+					} 
 				}else{
-					sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+40);
+					if(node.getParent().getParent().findPrev(node.getParent()).getType().equals(CConstants.ELSE)){
+						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
+					}else {
+						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+40);
+					}
 				}
 			}
 			if(root.findNode(node)==1&&!node.getType().equals(Constants.EShapeType.STOP.name())){
@@ -326,7 +328,7 @@ public class FlowChartCanvas extends BorderPane {
 		
 	}
 	public void drawOrthogoral(CShapeNode node, StackPane fromPane, StackPane toPane, String to){
-		Point2D north, east, south, west;
+		Point2D north, east, south, west, southD;
 		CShapeNode parent = node.getParent();
 		Group arrow = new Group();
 		CConnectManager cm = new CConnectManager();
@@ -363,14 +365,22 @@ public class FlowChartCanvas extends BorderPane {
 		}if(to.equals(CConstants.ITERATIONSTATEMENT)){
 			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
 			west = new Point2D(toPane.getLayoutX()-(toPane.getPrefWidth()/2), toPane.getLayoutY());
-			CShapeNode endBody = parent.getNodes().lastElement();//node.getParent().findNode(node)+1).getNodes().get(0);
 			cm.setVVertex(south, west, gap);
 			lh.setHead(Constants.EAST, cm.lower, cm.upper);
 			line = cm.getShape();
-//			System.out.println(lineW);
 			head = lh.getShape();
 			arrow.getChildren().addAll(line, head);
 			this.manager.getConnects().put(node.getType()+node.getDepth()+"While", arrow);
+			this.getChildren().add(arrow);		
+		}if(to.equals(CConstants.ELSE)){
+			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
+			southD = new Point2D(toPane.getLayoutX(), toPane.getLayoutY()-(toPane.getPrefHeight()/2));
+			cm.setVVertexL(south, southD, gap);
+			lh.setHead(Constants.SOUTH, cm.lower, cm.upper);
+			line = cm.getShape();
+			head = lh.getShape();
+			arrow.getChildren().addAll(line, head);
+			this.manager.getConnects().put(node.getType()+node.getDepth()+"Else", arrow);
 			this.getChildren().add(arrow);		
 		}
 	}
@@ -378,7 +388,7 @@ public class FlowChartCanvas extends BorderPane {
 		Group arrow = new Group();
 		CConnectManager cm = new CConnectManager();
 		CArrowHead lh = new CArrowHead();
-		Point2D north, east, south, west;
+		Point2D north, south;
 		south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
 		north = new Point2D(toPane.getLayoutX(), toPane.getLayoutY()-(toPane.getPrefHeight()/2));
 		cm.setVertex(south, north);
@@ -398,10 +408,6 @@ public class FlowChartCanvas extends BorderPane {
 	}
 	public void drawConnect(CShapeNode node){
 		//StackPane spConnect = new StackPane();
-		Point2D north, east, south, west;
-		Group arrow = new Group();
-		CConnectManager cm = new CConnectManager();
-		CArrowHead lh = new CArrowHead();
 		CShapeNode parent = node.getParent();
 		if(node.getType().equals(CConstants.CONDITION)){
 			StackPane nextShape = findNext(node);
@@ -413,7 +419,6 @@ public class FlowChartCanvas extends BorderPane {
 			}else {
 				nextBody = ancester.findNext(parent).getFirstNode();
 			}
-			double gap = boundaryWidth.get(parent.getType()+parent.getDepth())/2;
 			drawOrthogoral(node, sp, nextShape, Constants.NO);
 			int index = this.getChildren().indexOf(sp);
 			StackPane next = (StackPane) this.getChildren().get(index+1);
@@ -424,11 +429,23 @@ public class FlowChartCanvas extends BorderPane {
 			int index = this.getChildren().indexOf(sp);
 			StackPane next = (StackPane) this.getChildren().get(index+1);
 			if(prev!=null){
+				System.out.println(parent.findNext(node).getType());
 				StackPane prevShape = find(prev);
 				if(parent.findNode(node) == (parent.getNodes().size()-1)&&!(parent.getType().equals(CConstants.IF))){
 					drawOrthogoral(node, sp, prevShape, CConstants.ITERATIONSTATEMENT);
-				}else {
-					drawStraight(node, sp, next);
+				} else {
+					if(parent.getType().equals(CConstants.IF)){
+						CShapeNode ancester = parent.getParent();
+						if(ancester.findNext(parent).getType().equals(CConstants.ELSE)){
+							CShapeNode elsenode = parent.getParent().findNext(parent);
+							CShapeNode nextBlock = ancester.findNext(elsenode);
+							CShapeNode nextBlockFirst = nextBlock.getNodes().firstElement();
+							StackPane nextBShape = find(nextBlockFirst);
+							drawOrthogoral(node, sp, nextBShape, CConstants.ELSE);
+						}
+					}else {
+						drawStraight(node, sp, next);
+					}
 				}
 			} else {
 				drawStraight(node, sp, next);
@@ -443,7 +460,6 @@ public class FlowChartCanvas extends BorderPane {
 		}
 		Group g = this.manager.getConnects().get(Constants.EShapeType.STOP.name()+"1");
 		if(g!=null){
-			Path p = (Path) g.getChildren().get(0);
 			this.getChildren().remove(g);	
 		}
 	}

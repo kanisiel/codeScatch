@@ -16,12 +16,9 @@ import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -36,7 +33,7 @@ public class MainUIController implements Initializable {
 	public DesktopPaneController desktopPaneController;
 	public ToolBarController toolBarController;
 	@FXML private Menu fileMenu;
-	
+	private String code = " ";
     public MainUIController() {}
     
     
@@ -80,7 +77,6 @@ public class MainUIController implements Initializable {
 		fileChooser.setTitle("Select Resource file");
 		fileChooser.setInitialDirectory(new File("."));
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("C Sources(*.c)", "*.c"));
-		
 		try {
 			File selectedFile = fileChooser.showOpenDialog(null);
 			String filePath = selectedFile.getAbsolutePath();
@@ -95,13 +91,22 @@ public class MainUIController implements Initializable {
 		            fileData.append(String.valueOf(buf, 0, numRead));
 		        
 		        reader.close();
-				desktopPaneController.textArea.setText(fileData.toString());
+		        code = fileData.toString();
+				desktopPaneController.textArea.setText(code);
+				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (NullPointerException e) {}
+		} catch (NullPointerException e) {
+			
+		} finally {
+			doParse();
+		}
+		
 	}
-    
+	public void doParse(){
+		desktopPaneController.ctt.doParse(code);
+	}
 	@FXML
 	public void exit() {
 		System.exit(0);

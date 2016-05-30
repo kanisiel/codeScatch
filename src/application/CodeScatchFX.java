@@ -36,7 +36,6 @@ public class CodeScatchFX extends Application {
 	    init(primaryStage);
 	    primaryStage.show();
 	
-	
 	}
 
     /**

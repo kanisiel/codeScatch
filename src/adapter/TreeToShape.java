@@ -60,7 +60,6 @@ public class TreeToShape {
 			@Override
 			public void run() {
 				canvas.redraw(rootNode);
-//				System.out.println(canvas.getManager().getConnects());
 			}
 		});
 	}
