@@ -21,6 +21,7 @@ public class CCodeManager extends CShapeNode {
 				this.body +=lineSeparator;
 			}
 		}
+//		this.bodies.add(this);
 	}
 
 	@Override

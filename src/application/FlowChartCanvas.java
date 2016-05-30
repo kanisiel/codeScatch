@@ -350,11 +350,19 @@ public class FlowChartCanvas extends BorderPane {
 				if(isRoot(node.getParent())){
 					if(node.getParent().findPrev(node).getClass().equals(CIteratorManager.class)){
 						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
-					} 
+					} else if(node.getParent().findPrev(node).getType().equals(CConstants.ELSE)){
+						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
+					} else if(node.getParent().findPrev(node).getType().equals(CConstants.IF)){
+						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
+					} else {
+						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
+					}
 				}else{
 					if(node.getParent().getParent().findPrev(node.getParent()).getType().equals(CConstants.ELSE)){
 						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
-					}else {
+					} else if(node.getParent().getParent().findPrev(node.getParent()).getType().equals(CConstants.IF)){
+						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
+					} else {
 						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+40);
 					}
 				}
@@ -494,7 +502,12 @@ public class FlowChartCanvas extends BorderPane {
 						if(ancester.findNext(parent).getType().equals(CConstants.ELSE)){
 							CShapeNode elsenode = parent.getParent().findNext(parent);
 							CShapeNode nextBlock = ancester.findNext(elsenode);
-							CShapeNode nextBlockFirst = nextBlock.getNodes().firstElement();
+							CShapeNode nextBlockFirst;
+							if(nextBlock.getType().equals(CConstants.CODE)){
+								nextBlockFirst = nextBlock;
+							} else {
+								nextBlockFirst = nextBlock.getNodes().firstElement();
+							}
 							StackPane nextBShape = find(nextBlockFirst);
 							drawOrthogoral(node, sp, nextBShape, CConstants.ELSE);
 						}
