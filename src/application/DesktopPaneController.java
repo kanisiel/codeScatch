@@ -110,7 +110,7 @@ public class DesktopPaneController extends VBox {
 			});
 //        	Pane p = new Pane();
         	sp = new ScrollPane();
-        	fcc = new FlowChartCanvas();
+        	fcc = new FlowChartCanvas(this);
         	fcc.getChildren().addListener(new ListChangeListener<Node>(){
 				@Override
 				public void onChanged(javafx.collections.ListChangeListener.Change<? extends Node> c) {

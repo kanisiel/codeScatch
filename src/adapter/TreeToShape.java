@@ -63,7 +63,7 @@ public class TreeToShape {
 			}
 		});
 	}
-	public CShapeNode declareToShape(Vector<String> body, int type){
+	public CShapeNode declareToShape(Vector<String> body, int type, int[] lines){
 		rv = null;
 //		Platform.runLater(new Runnable(){
 //			//String buffer;
@@ -73,23 +73,28 @@ public class TreeToShape {
 				//String[] stmts = body.split("\n");
 				if(type == Constants.CODE){
 					rv = new CCodeManager(body.get(0), rootNode);
+					rv.setLines(lines);
 					rootNode.addNode(rootNode.getNodes().size()-1, rv);
 				} else if(type == Constants.IF){
 					rv = new CIfManager(CConstants.IF, body.get(1), rootNode);
+					rv.setLines(lines);
 					rootNode.addNode(rootNode.getNodes().size()-1,rv);
 					rv.addNode(new CCodeManager(body.get(0), rv));
 				} else if(type == Constants.ELSE){
 					rv = new CIfManager(CConstants.ELSE, "", rootNode);
+					rv.setLines(lines);
 					rootNode.addNode(rootNode.getNodes().size()-1,rv);
 					rv.addNode(new CCodeManager(body.get(0), rv));
 				} else if(type == Constants.WHILE){
 					rv = new CIteratorManager(CConstants.WHILE, body.get(1), rootNode);
+					rv.setLines(lines);
 					rootNode.addNode(rootNode.getNodes().size()-1,rv);
 					rv.addNode(new CCodeManager(body.get(0), rv));
 //					
 				} else if(type == Constants.FOR){
 					String condition[] = body.get(1).split(";");
 					rv = new CIteratorManager(CConstants.FOR, condition[0], condition[1], condition[2], rootNode);
+					rv.setLines(lines);
 					rootNode.addNode(rootNode.getNodes().size()-1,rv);
 					rv.addNode(rv.getNodes().size()-1, new CCodeManager(body.get(0), rv));
 				}

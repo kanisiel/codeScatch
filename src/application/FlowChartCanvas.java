@@ -4,6 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.text.BadLocationException;
+
 import Settings.CConstants;
 import Settings.Constants;
 import javafx.event.EventHandler;
@@ -44,8 +46,11 @@ public class FlowChartCanvas extends BorderPane {
 	private Map<String, Double> lastLowerAnchor;
 	private double centerLineX = (Constants.windowWidth/2);
 	public double height = Constants.windowHeight-30;
+	private DesktopPaneController parent;
+	private Vector<Object> tags;
 	
-	public FlowChartCanvas() {
+	public FlowChartCanvas(DesktopPaneController parent) {
+		this.parent = parent;
 		Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
     	BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
     	this.setBackground(new Background(bi));
@@ -54,6 +59,7 @@ public class FlowChartCanvas extends BorderPane {
 		this.boundaryWidth = new LinkedHashMap<>();
 		this.layoutY = new LinkedHashMap<>();
 		this.lastLowerAnchor = new LinkedHashMap<>();
+		this.tags = new Vector<>();
 		canvas = new Canvas();
 		startPoint = new Point2D(0, 0);
 		this.setPrefSize(Constants.windowWidth-30, Constants.windowHeight-30);
@@ -212,10 +218,44 @@ public class FlowChartCanvas extends BorderPane {
 		label.setLayoutX(centerLineX-(rect.getWidth()/2)+5);
 		label.setLayoutY(upperAnchor-25);
 		Group bound = new Group();
+		bound.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent event) {
+		       rect.setStroke(Color.RED);
+		       int[] lines = node.lines;
+		       for(int i = lines[0]; i < lines[1]; i++){
+		    	   try {
+		    		   Object tag = parent.textArea.addLineHighlight(i, java.awt.Color.ORANGE);
+		    		   tags.add(tag);
+		    	   } catch (BadLocationException e) {
+		    		   // TODO Auto-generated catch block
+		    		   e.printStackTrace();
+		    	   }
+		       }
+		    }
+		});
+		bound.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent event) {
+		       rect.setStroke(stroke);
+		       for(Object tag : tags){
+		    	   parent.textArea.removeLineHighlight(tag);
+		       }
+		       tags.clear();
+		    }
+		});
 		bound.getChildren().addAll(rect,label);
 		this.getChildren().add(1, bound);
 	}
-	
+	public Boolean checkBlock(CShapeNode node){
+		if(isRoot(node.getParent())){
+			if(node.getType().equals(CConstants.CODE)){
+				return true;
+			} else return false;
+		}else {
+			return checkBlock(node.getParent());
+		}
+	}
 	public void draw(CShapeNode node){
 		CShapeManager shape = node.getShape();
 		this.manager.addNode(shape);
@@ -247,33 +287,49 @@ public class FlowChartCanvas extends BorderPane {
 		StackPane sp = new StackPane();
 		sp.setPrefSize(shape.getD().getWidth(),	 shape.getD().getHeight());
 		sp.getChildren().addAll(s, text);
-		sp.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		        if(event.isPrimaryButtonDown()){
-		        	
-		        	System.out.println("Axis Y : "+sp.getLayoutY());
-		        	System.out.println("Height : "+sp.getPrefHeight());
-		        	System.out.println("Sum : "+(sp.getLayoutY()+sp.getPrefHeight()));
-//		        	Text t = (Text)sp.getChildren().get(1);
-//		    		System.out.println(t.getWidth());
-		        }
-		    }
-		});
-		sp.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		       Shape s = (Shape) sp.getChildren().get(0);
-		       s.setStroke(Color.RED);
-		    }
-		});
-		sp.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		       Shape s = (Shape) sp.getChildren().get(0);
-		       s.setStroke(Color.BLACK);
-		    }
-		});
+//		sp.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+//		    @Override
+//		    public void handle(MouseEvent event) {
+//		        if(event.isPrimaryButtonDown()){
+//		        	
+//		        	System.out.println("Axis Y : "+sp.getLayoutY());
+//		        	System.out.println("Height : "+sp.getPrefHeight());
+//		        	System.out.println("Sum : "+(sp.getLayoutY()+sp.getPrefHeight()));
+////		        	Text t = (Text)sp.getChildren().get(1);
+////		    		System.out.println(t.getWidth());
+//		        }
+//		    }
+//		});
+		if(checkBlock(node)){
+			sp.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			    @Override
+			    public void handle(MouseEvent event) {
+			       Shape s = (Shape) sp.getChildren().get(0);
+			       s.setStroke(Color.RED);
+			       int[] lines = node.lines;
+			       for(int i = lines[0]; i < lines[1]; i++){
+			    	   try {
+			    		   Object tag = parent.textArea.addLineHighlight(i, java.awt.Color.ORANGE);
+			    		   tags.add(tag);
+			    	   } catch (BadLocationException e) {
+			    		   // TODO Auto-generated catch block
+			    		   e.printStackTrace();
+			    	   }
+			       }
+			    }
+			});
+			sp.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			    @Override
+			    public void handle(MouseEvent event) {
+			       Shape s = (Shape) sp.getChildren().get(0);
+			       s.setStroke(Color.BLACK);
+			       for(Object tag : tags){
+			    	   parent.textArea.removeLineHighlight(tag);
+			       }
+			       tags.clear();
+			    }
+			});
+		}
 		sp.setLayoutX(centerLineX);
 		if(this.getChildren().size()<1){
 			sp.setLayoutY(30);
@@ -429,7 +485,6 @@ public class FlowChartCanvas extends BorderPane {
 			int index = this.getChildren().indexOf(sp);
 			StackPane next = (StackPane) this.getChildren().get(index+1);
 			if(prev!=null){
-				System.out.println(parent.findNext(node).getType());
 				StackPane prevShape = find(prev);
 				if(parent.findNode(node) == (parent.getNodes().size()-1)&&!(parent.getType().equals(CConstants.IF))){
 					drawOrthogoral(node, sp, prevShape, CConstants.ITERATIONSTATEMENT);

@@ -17,6 +17,7 @@ public abstract class CShapeNode implements Serializable {
 	protected CShapeNode parent;
 	protected CShapeNode firstNode;
 	protected Vector<Shape> connections;
+	public int[] lines;
 	
 	public String getType(){
 		return type;
@@ -108,5 +109,11 @@ public abstract class CShapeNode implements Serializable {
 	}
 	public void setConnections(Vector<Shape> connections) {
 		this.connections = connections;
+	}
+	public int[] getLines() {
+		return lines;
+	}
+	public void setLines(int[] lines) {
+		this.lines = lines;
 	}
 }
