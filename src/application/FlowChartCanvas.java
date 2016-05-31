@@ -50,9 +50,8 @@ public class FlowChartCanvas extends BorderPane {
 	private Vector<Object> tags;
 	
 	public FlowChartCanvas(DesktopPaneController parent) {
-		this.parent = parent;
-		Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
-    	BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+		this.parent = parent;Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
+    	BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);		
     	this.setBackground(new Background(bi));
 //    	this.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
 		this.manager = new FlowChartManager();

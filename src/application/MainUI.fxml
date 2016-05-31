@@ -25,7 +25,7 @@
 		                        <MenuItem mnemonicParsing="false" text="Exit" onAction="#exit" />
 		                    </items>
 		                </Menu>
-		                <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+		                <!-- <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
 		                    <items>
 		                        <MenuItem mnemonicParsing="false" text="Undo" />
 		                        <MenuItem mnemonicParsing="false" text="Redo" />
@@ -35,14 +35,17 @@
 		                        <MenuItem mnemonicParsing="false" text="Paste" />
 		                        <MenuItem mnemonicParsing="false" text="Delete" />
 		                    </items>
-		                </Menu>
+		                </Menu> -->
 		                <Menu fx:id="windowMenu" mnemonicParsing="false" text="Window">
 		                    <items>
 		                        <MenuItem mnemonicParsing="false" text="Code Viewer" />
-		                        <MenuItem mnemonicParsing="false" text="Flow Chart" />
-		                        <MenuItem mnemonicParsing="false" text="Task List" />
 		                        <SeparatorMenuItem mnemonicParsing="false" />
-		                        <MenuItem mnemonicParsing="false" text="Preference" />
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <MenuItem mnemonicParsing="false" text="Flow Chart" />
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <MenuItem mnemonicParsing="false" id="Graph Paper" text="- Graph Paper" onAction="#background"/>
+		                        <MenuItem mnemonicParsing="false" id="Blank Paper" text="- Blank Paper" onAction="#background"/>
+		                        <!-- <MenuItem mnemonicParsing="false" text="Preference" /> -->
 		                    </items>
 		                </Menu>
 		                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">

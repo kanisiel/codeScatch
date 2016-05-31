@@ -15,11 +15,22 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 /**
@@ -34,6 +45,8 @@ public class MainUIController implements Initializable {
 	public ToolBarController toolBarController;
 	@FXML private Menu fileMenu;
 	private String code = " ";
+	private int trimmed = 0;
+	
     public MainUIController() {}
     
     
@@ -92,7 +105,27 @@ public class MainUIController implements Initializable {
 		        
 		        reader.close();
 		        code = fileData.toString();
-				desktopPaneController.textArea.setText(code);
+		        String buffer, trim;
+		        String buffers[];
+				buffer = code;
+				buffers = buffer.split(System.getProperty("line.separator"));
+				Vector<String> trimCode = new Vector<>(); 
+				for(String str : buffers){
+					if(str.trim().equals("")){
+						trimmed++;
+					} else if (str.startsWith("#")){
+						trimmed++;
+					} else {
+						trimCode.add(str);
+					}
+				}
+//				System.out.println(trimCode.firstElement());
+				trim = String.join(System.getProperty("line.separator"), trimCode);
+//				System.out.println(trim);
+				buffer = trim;
+				trim = code;
+				code = buffer;
+				desktopPaneController.textArea.setText(trim);
 				
 			}
 		} catch (IOException e) {
@@ -103,6 +136,28 @@ public class MainUIController implements Initializable {
 			doParse();
 		}
 		
+	}
+	
+	@FXML
+	public void background(ActionEvent event){
+		MenuItem source = (MenuItem) event.getSource();
+		String sourceId = source.getId();
+		Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
+    	BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+    	Background bg;
+    	switch(sourceId){
+    	case "Graph Paper":
+    		bg = new Background(bi);
+    		break;
+    	case "Blank Paper":
+    		bg = new Background(new BackgroundFill(Color.WHITE, null, null));
+    		break;
+    	default:
+			bg = new Background(bi);
+			break;
+    	}
+    	desktopPaneController.fcc.setBackground(bg);
+//		System.out.println(sourceId);
 	}
 	public void doParse(){
 		desktopPaneController.ctt.doParse(code);
