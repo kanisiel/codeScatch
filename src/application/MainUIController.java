@@ -14,14 +14,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import Settings.Constants;
+import adapter.CodeToTree;
+import adapter.TreeToShape;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -29,10 +36,12 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import jfxtras.scene.control.window.Window;
 /**
  *
  * @author newmacpro
@@ -134,8 +143,14 @@ public class MainUIController implements Initializable {
 			
 		} finally {
 			doParse();
+//			desktopPaneController.fcc.showAll();
 		}
 		
+	}
+	
+	@FXML
+	public void close(ActionEvent event){
+		prepare();
 	}
 	
 	@FXML
@@ -158,6 +173,26 @@ public class MainUIController implements Initializable {
     	}
     	desktopPaneController.fcc.setBackground(bg);
 //		System.out.println(sourceId);
+	}
+	public void prepare(){
+		Pane canvas = (Pane) desktopPaneController.getDesktopPane().getChildren().get(0);
+		Map<String, Window> windows = new LinkedHashMap<>();
+		for(Node n : canvas.getChildren()){
+			Window w = (Window) n;
+			windows.put(w.getTitle(), w);
+		}
+		Window flowchart = windows.get("Flow Chart");
+		ScrollPane sp = desktopPaneController.sp;
+		FlowChartCanvas fcc = desktopPaneController.fcc;
+		sp.setPrefSize(flowchart.getPrefWidth(), flowchart.getPrefHeight());
+		fcc.setPrefSize(flowchart.getPrefWidth(), flowchart.getPrefHeight());
+		fcc.height = Constants.canvasHeight;
+		desktopPaneController.setFcc(fcc);
+		desktopPaneController.setTts(new TreeToShape(fcc));
+		desktopPaneController.setCtt(new CodeToTree(desktopPaneController.getTts()));
+		code = "";
+		desktopPaneController.textArea.setText(code);
+		
 	}
 	public void doParse(){
 		desktopPaneController.ctt.doParse(code);

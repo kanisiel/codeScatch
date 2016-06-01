@@ -41,8 +41,7 @@ public class CodeToTree {
 				parse(buffer);
 			}
 		};
-		timer.schedule(task, 10);
-//		timer.schedule(parse(buffer), 1000);
+		timer.schedule(task, 20);
 	}
 	public void parse(String buffer){
 		
@@ -170,7 +169,6 @@ public class CodeToTree {
 			int firstSC = context.indexOf(";");
 			String target = context.substring(0, firstSC);
 			int start = text.replace(", ", ",").indexOf(target);
-			System.out.println(text + " : " + start);
 			String forward = text.substring(0, start);
 			String forwards[] = forward.split(System.getProperty("line.separator"));
 			int startLine = forwards.length-1;

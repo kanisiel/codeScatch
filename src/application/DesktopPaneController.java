@@ -1,6 +1,8 @@
 package application;
 
 import java.awt.BorderLayout;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -41,9 +43,13 @@ public class DesktopPaneController extends VBox {
 	public ScrollPane sp;
 	public TreeToShape tts;
 	public CodeToTree ctt;
+	private VBox desktopPane;
+	public Map<String, Window> windows;
 	
     
     public DesktopPaneController(VBox desktopPane){
+    	this.windows = new LinkedHashMap<>();
+    	this.setDesktopPane(desktopPane);
     	Pane canvas = new Pane();
     	desktopPane.getChildren().add(canvas);
 //    	Window w = new Window("test");
@@ -59,7 +65,7 @@ public class DesktopPaneController extends VBox {
 		for(InternalWindows item : InternalWindows.values()){
 	    	
 			Window w = createWindow(item.getTitle());
-
+			windows.put(w.getTitle(), w);
 	        // add Node
 	        canvas.getChildren().add(w);
 		} 
@@ -81,6 +87,7 @@ public class DesktopPaneController extends VBox {
 		}
         // define the initial window size
         w.setPrefSize(windowWidth, windowHeight);
+       
         // either to the left
         w.getLeftIcons().add(new CloseIcon(w));
         // .. or to the right
@@ -98,23 +105,31 @@ public class DesktopPaneController extends VBox {
 
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-					fcc.setPrefWidth(w.widthProperty().get()-5);					
+					if(fcc.getPrefWidth()<newValue.doubleValue()){
+						sp.setPrefWidth(newValue.doubleValue());
+						fcc.setPrefWidth(newValue.doubleValue());
+					}			
 				}
 			});
         	w.heightProperty().addListener(new ChangeListener<Number>() {
 
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-					fcc.setPrefHeight(w.heightProperty().get()-30);					
+					if(fcc.getPrefHeight()<newValue.doubleValue()){
+						sp.setPrefHeight(newValue.doubleValue());
+						fcc.setPrefHeight(newValue.doubleValue());			
+					}
 				}
 			});
-//        	Pane p = new Pane();
         	sp = new ScrollPane();
         	fcc = new FlowChartCanvas(this);
         	fcc.getChildren().addListener(new ListChangeListener<Node>(){
 				@Override
 				public void onChanged(javafx.collections.ListChangeListener.Change<? extends Node> c) {
 					fcc.setPrefHeight(fcc.height);
+					if(fcc.getPrefWidth()<w.getPrefWidth()){
+						fcc.prefWidth(w.getPrefWidth());
+					}
 					sp.setContent(null);
 					sp.setContent(fcc);
 					sp.setPrefHeight(windowHeight-30);
@@ -163,4 +178,44 @@ public class DesktopPaneController extends VBox {
     public FlowChartCanvas getFlowChartCanvas(){
     	return fcc;
     }
+
+	public CodeToTree getCtt() {
+		return ctt;
+	}
+
+	public void setCtt(CodeToTree ctt) {
+		this.ctt = ctt;
+	}
+
+	public VBox getDesktopPane() {
+		return desktopPane;
+	}
+
+	public void setDesktopPane(VBox desktopPane) {
+		this.desktopPane = desktopPane;
+	}
+
+	public TreeToShape getTts() {
+		return tts;
+	}
+
+	public void setTts(TreeToShape tts) {
+		this.tts = tts;
+	}
+
+	public FlowChartCanvas getFcc() {
+		return fcc;
+	}
+
+	public void setFcc(FlowChartCanvas fcc) {
+		this.fcc = fcc;
+	}
+
+	public Map<String, Window> getWindows() {
+		return windows;
+	}
+
+	public void setWindows(Map<String, Window> windows) {
+		this.windows = windows;
+	}
 }
