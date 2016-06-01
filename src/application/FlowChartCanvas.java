@@ -450,7 +450,12 @@ public class FlowChartCanvas extends BorderPane {
 			tn.setY(east.getY()-10);
 			arrow.getChildren().addAll(line, head, tn);
 			this.manager.getConnects().put(node.getType()+node.getDepth()+"N", arrow);
-			this.getChildren().add(arrow);
+			sp = new StackPane(arrow);
+			sp.setPrefHeight(line.getLayoutBounds().getHeight());
+			sp.setPrefWidth(line.getLayoutBounds().getWidth());
+			sp.layoutXProperty().bind(fromPane.layoutXProperty().add(Math.floor(sp.getPrefWidth()/2)));
+			sp.layoutYProperty().bind(fromPane.layoutYProperty().add((sp.getPrefHeight()/2)-20.0));
+			this.getChildren().add(sp);
 		}if(to.equals(CConstants.ITERATIONSTATEMENT)){
 			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
 			west = new Point2D(toPane.getLayoutX()-(toPane.getPrefWidth()/2), toPane.getLayoutY());
@@ -475,7 +480,12 @@ public class FlowChartCanvas extends BorderPane {
 			head = lh.getShape();
 			arrow.getChildren().addAll(line, head);
 			this.manager.getConnects().put(node.getType()+node.getDepth()+"Else", arrow);
-			this.getChildren().add(arrow);		
+			sp = new StackPane(arrow);
+			sp.setPrefHeight(line.getLayoutBounds().getHeight());
+			sp.setPrefWidth(line.getLayoutBounds().getWidth());
+			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(Math.floor(sp.getPrefWidth()/2)-5));
+			sp.layoutYProperty().bind(fromPane.layoutYProperty().add((sp.getPrefHeight()/2)+20.0));
+			this.getChildren().add(sp);		
 		}
 	}
 	public void drawStraight(CShapeNode node, StackPane fromPane, StackPane toPane){

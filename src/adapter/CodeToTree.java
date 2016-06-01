@@ -168,7 +168,7 @@ public class CodeToTree {
 		if(type.equals(CConstants.CODE)){
 			int firstSC = context.indexOf(";");
 			String target = context.substring(0, firstSC);
-			int start = text.replace(", ", ",").indexOf(target);
+			int start = text.replace(", ", ",").replace(" = ", "=").indexOf(target);
 			String forward = text.substring(0, start);
 			String forwards[] = forward.split(System.getProperty("line.separator"));
 			int startLine = forwards.length-1;
