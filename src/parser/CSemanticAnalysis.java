@@ -527,7 +527,9 @@ public class CSemanticAnalysis {
 			}
 			
 		}
-		merge(parent, codeIndex.firstElement(), codeIndex.lastElement());
+		if(codeIndex.size()>0){
+			merge(parent, codeIndex.firstElement(), codeIndex.lastElement());
+		}
 	}
 	
 	public int isNeedMerge(TreeNode<TreeData> parent){

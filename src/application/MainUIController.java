@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-import Settings.Constants;
 import adapter.CodeToTree;
 import adapter.TreeToShape;
 import javafx.event.ActionEvent;
@@ -116,11 +115,15 @@ public class MainUIController implements Initializable {
 		        code = fileData.toString();
 		        String buffer, trim;
 		        String buffers[];
+		        Boolean flag = false;
 				buffer = code;
 				buffers = buffer.split(System.getProperty("line.separator"));
 				Vector<String> trimCode = new Vector<>(); 
 				for(String str : buffers){
-					if(str.trim().equals("")){
+					if(str.contains("{")){
+						flag = true;
+					}
+					if(str.trim().equals("")&&!flag){
 						trimmed++;
 					} else if (str.startsWith("#")){
 						trimmed++;
@@ -128,6 +131,7 @@ public class MainUIController implements Initializable {
 						trimCode.add(str);
 					}
 				}
+				desktopPaneController.fcc.setTrimmed(trimmed);
 //				System.out.println(trimCode.firstElement());
 				trim = String.join(System.getProperty("line.separator"), trimCode);
 //				System.out.println(trim);
@@ -184,9 +188,7 @@ public class MainUIController implements Initializable {
 		Window flowchart = windows.get("Flow Chart");
 		ScrollPane sp = desktopPaneController.sp;
 		FlowChartCanvas fcc = desktopPaneController.fcc;
-		sp.setPrefSize(flowchart.getPrefWidth(), flowchart.getPrefHeight());
-		fcc.setPrefSize(flowchart.getPrefWidth(), flowchart.getPrefHeight());
-		fcc.height = Constants.canvasHeight;
+		fcc.height = flowchart.getPrefHeight()-30;
 		desktopPaneController.setFcc(fcc);
 		desktopPaneController.setTts(new TreeToShape(fcc));
 		desktopPaneController.setCtt(new CodeToTree(desktopPaneController.getTts()));

@@ -14,10 +14,16 @@ import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -33,32 +39,33 @@ import shapes.CShapeNode;
 import shapes.CStartEndManager;
 
 public class FlowChartCanvas extends BorderPane {
-	private Canvas canvas;
+	public Pane canvas;
 	private FlowChartManager manager;
 	private Point2D startPoint;
 	private CRootManager root;
 	private Map<String, Double> boundaryWidth;
 	private Map<String, Double> layoutY;
 	private Map<String, Double> lastLowerAnchor;
-	private double centerLineX;
+	private double centerLineX = (Constants.windowWidth/2);
 	public double height = Constants.windowHeight-30;
 	private DesktopPaneController parent;
 	private Vector<Object> tags;
-	private int trimmed;
 	
 	public FlowChartCanvas(DesktopPaneController parent) {
 		this.parent = parent;
-
+		Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
+    	BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);		
+    	this.setBackground(new Background(bi));
 //    	this.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
 		this.manager = new FlowChartManager();
 		this.boundaryWidth = new LinkedHashMap<>();
 		this.layoutY = new LinkedHashMap<>();
 		this.lastLowerAnchor = new LinkedHashMap<>();
 		this.tags = new Vector<>();
-		canvas = new Canvas();
+		canvas = new Pane();
 		startPoint = new Point2D(0, 0);
-		this.setPrefSize(Constants.windowWidth, Constants.windowHeight-30);
-		this.centerLineX = this.getPrefWidth()/2;
+		this.setPrefSize(Constants.windowWidth, Constants.windowHeight);
+		this.getChildren().add(canvas);
 		//Initialize canvas component;
 		this.manager.initManager();		
 	}
@@ -75,7 +82,7 @@ public class FlowChartCanvas extends BorderPane {
 		this.layoutY = new LinkedHashMap<>();
 		this.lastLowerAnchor = new LinkedHashMap<>();
 		this.tags = new Vector<>();
-		canvas = new Canvas();
+		canvas = new Pane();
 		this.getChildren().clear();
 		Window w = parent.getWindows().get(InternalWindows.Flow.getTitle());
 		if(w != null){
@@ -104,8 +111,6 @@ public class FlowChartCanvas extends BorderPane {
 	}
 	public void reDraw(){
 		clearCanvas();
-		this.manager.getNodes().clear();
-		drawAllNodes(root);
 	}
 	public void redraw(CRootManager root){
 		clearCanvas();
@@ -132,6 +137,7 @@ public class FlowChartCanvas extends BorderPane {
 		setCoord(shape);
 	}
 	public void drawAllNodes(CRootManager root){
+//		showAll();
 		drawNodes(root);
 		drawBounds(root);
 		drawConnects(root);
@@ -241,7 +247,7 @@ public class FlowChartCanvas extends BorderPane {
 		       int[] lines = node.lines;
 		       for(int i = lines[0]; i < lines[1]; i++){
 		    	   try {
-		    		   Object tag = parent.textArea.addLineHighlight(i+trimmed, java.awt.Color.ORANGE);
+		    		   Object tag = parent.textArea.addLineHighlight(i, java.awt.Color.ORANGE);
 		    		   tags.add(tag);
 		    	   } catch (BadLocationException e) {
 		    		   // TODO Auto-generated catch block
@@ -261,11 +267,7 @@ public class FlowChartCanvas extends BorderPane {
 		    }
 		});
 		bound.getChildren().addAll(rect,label);
-		StackPane sp = new StackPane(bound);
-		sp.setUserData(0);
-		sp.layoutXProperty().bind(this.prefWidthProperty().divide(2));
-		sp.setLayoutY(upperAnchor+(height/2)-10);
-		this.getChildren().add(1, sp);
+		canvas.getChildren().add(1, bound);
 	}
 	public Boolean checkBlock(CShapeNode node){
 		if(isRoot(node.getParent())){
@@ -283,7 +285,7 @@ public class FlowChartCanvas extends BorderPane {
 		if(node.getType().equals(Constants.EShapeType.STOP.name())){
 			if(node.getParent().getchildNum()>2){
 				startPoint = this.manager.findPrev(node.shape).getLowerAnchor();
-				Point2D p = new Point2D(centerLineX, this.getPrefHeight()-30);
+				Point2D p = new Point2D(startPoint.getX(), startPoint.getY()+55);
 				CStartEndManager end = (CStartEndManager) this.manager.getNodes().lastElement();
 				end.setP(p);
 				end.setTp(new Point2D(p.getX()+(end.getD().getWidth()+5), (p.getY())+(5.0)));
@@ -291,13 +293,14 @@ public class FlowChartCanvas extends BorderPane {
 				this.height = p.getY()+40;
 				CStartEndManager start = (CStartEndManager) this.manager.getNodes().firstElement();
 				startPoint = node.shape.getUpperAnchor();
-				Point2D p2 = new Point2D(centerLineX, 30);
+				Point2D p2 = new Point2D(startPoint.getX(), 30);
 				start.setP(p2);
 				start.setTp(new Point2D(p2.getX()+(start.getD().getWidth()+5), (p2.getY())+(5.0)));
 				start.setLowerAnchor(new Point2D(p2.getX(), p2.getY()+15));
 				StackPane sp = findFirst();
 				sp.getChildren().set(0,start.getShape()); 
 			}
+			
 		}
 		Shape s = shape.getShape();
 		s.setUserData(shape.getUpperAnchor().getY());
@@ -306,20 +309,19 @@ public class FlowChartCanvas extends BorderPane {
 		StackPane sp = new StackPane();
 		sp.setPrefSize(shape.getD().getWidth(),	 shape.getD().getHeight());
 		sp.getChildren().addAll(s, text);
-		sp.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		        if(event.isPrimaryButtonDown()){
-		        	
-		        	System.out.println("Axis X : "+sp.getLayoutX());
-		        	System.out.println("Center Axis X : "+centerLineX);
+//		sp.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+//		    @Override
+//		    public void handle(MouseEvent event) {
+//		        if(event.isPrimaryButtonDown()){
+//		        	
+//		        	System.out.println("Axis Y : "+sp.getLayoutY());
 //		        	System.out.println("Height : "+sp.getPrefHeight());
 //		        	System.out.println("Sum : "+(sp.getLayoutY()+sp.getPrefHeight()));
-//		        	Text t = (Text)sp.getChildren().get(1);
-//		    		System.out.println(t.getWidth());
-		        }
-		    }
-		});
+////		        	Text t = (Text)sp.getChildren().get(1);
+////		    		System.out.println(t.getWidth());
+//		        }
+//		    }
+//		});
 		if(checkBlock(node)){
 			sp.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			    @Override
@@ -329,7 +331,7 @@ public class FlowChartCanvas extends BorderPane {
 			       int[] lines = node.lines;
 			       for(int i = lines[0]; i < lines[1]; i++){
 			    	   try {
-			    		   Object tag = parent.textArea.addLineHighlight(i+trimmed, java.awt.Color.ORANGE);
+			    		   Object tag = parent.textArea.addLineHighlight(i, java.awt.Color.ORANGE);
 			    		   tags.add(tag);
 			    	   } catch (BadLocationException e) {
 			    		   // TODO Auto-generated catch block
@@ -350,10 +352,11 @@ public class FlowChartCanvas extends BorderPane {
 			    }
 			});
 		}
-		if(this.getChildren().size()<1){
+		sp.setLayoutX(centerLineX);
+		if(canvas.getChildren().size()<1){
 			sp.setLayoutY(30);
 		}else {
-			StackPane prev = (StackPane) this.getChildren().get(this.getChildren().size()-1);
+			StackPane prev = (StackPane) canvas.getChildren().get(canvas.getChildren().size()-1);
 			
 			if(node.getType().equals(Constants.EShapeType.STOP.name())){
 				if(prev.getLayoutY()<this.getPrefHeight()-30){
@@ -363,7 +366,6 @@ public class FlowChartCanvas extends BorderPane {
 				} else {
 					sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+40);
 					height = sp.getLayoutY()+sp.getPrefHeight();
-					this.setPrefHeight(height);
 				}
 			} else {
 //				if(node.getParent().getClass().equals(CIteratorManager.class)){
@@ -410,13 +412,10 @@ public class FlowChartCanvas extends BorderPane {
 				this.boundaryWidth.replace(node.getParent().getType()+node.getParent().getDepth(), sp.getPrefWidth()/2);
 			}
 		}
-
-		sp.layoutXProperty().bind(this.prefWidthProperty().divide(2));
-		this.getChildren().add(sp);
+		canvas.getChildren().add(sp);
 		
 	}
 	public void drawOrthogoral(CShapeNode node, StackPane fromPane, StackPane toPane, String to){
-		StackPane sp;
 		Point2D north, east, south, west, southD;
 		CShapeNode parent = node.getParent();
 		Group arrow = new Group();
@@ -428,8 +427,8 @@ public class FlowChartCanvas extends BorderPane {
 		Shape head;
 		StackPane prev = null;
 		for(int i = this.getChildren().indexOf(fromPane)-1; i > 0; i--){
-			if(this.getChildren().get(i).getClass().equals(StackPane.class)){
-				prev = (StackPane) this.getChildren().get(i);
+			if(canvas.getChildren().get(i).getClass().equals(StackPane.class)){
+				prev = (StackPane) canvas.getChildren().get(i);
 			}
 		}
 		if(ancester.findNext(parent).getType().equals(CConstants.CODE)||ancester.findNext(parent).getType().equals(Constants.EShapeType.STOP.name())){
@@ -450,7 +449,7 @@ public class FlowChartCanvas extends BorderPane {
 			tn.setY(east.getY()-10);
 			arrow.getChildren().addAll(line, head, tn);
 			this.manager.getConnects().put(node.getType()+node.getDepth()+"N", arrow);
-			this.getChildren().add(arrow);
+			canvas.getChildren().add(arrow);
 		}if(to.equals(CConstants.ITERATIONSTATEMENT)){
 			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
 			west = new Point2D(toPane.getLayoutX()-(toPane.getPrefWidth()/2), toPane.getLayoutY());
@@ -460,12 +459,7 @@ public class FlowChartCanvas extends BorderPane {
 			head = lh.getShape();
 			arrow.getChildren().addAll(line, head);
 			this.manager.getConnects().put(node.getType()+node.getDepth()+"While", arrow);
-			sp = new StackPane(arrow);
-			sp.setPrefHeight(line.getLayoutBounds().getHeight());
-			sp.setPrefWidth(line.getLayoutBounds().getWidth());
-			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(sp.getPrefWidth()/2));
-			sp.layoutYProperty().bind(fromPane.layoutYProperty().subtract((sp.getPrefHeight()/2)-35.0));
-			this.getChildren().add(sp);		
+			canvas.getChildren().add(arrow);		
 		}if(to.equals(CConstants.ELSE)){
 			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
 			southD = new Point2D(toPane.getLayoutX(), toPane.getLayoutY()-(toPane.getPrefHeight()/2));
@@ -475,11 +469,10 @@ public class FlowChartCanvas extends BorderPane {
 			head = lh.getShape();
 			arrow.getChildren().addAll(line, head);
 			this.manager.getConnects().put(node.getType()+node.getDepth()+"Else", arrow);
-			this.getChildren().add(arrow);		
+			canvas.getChildren().add(arrow);		
 		}
 	}
 	public void drawStraight(CShapeNode node, StackPane fromPane, StackPane toPane){
-		double label = 0;
 		Group arrow = new Group();
 		CConnectManager cm = new CConnectManager();
 		CArrowHead lh = new CArrowHead();
@@ -490,26 +483,16 @@ public class FlowChartCanvas extends BorderPane {
 		lh.setHead(Constants.SOUTH, cm.lower, cm.upper);		
 		Shape line = cm.getShape();
 		Shape head = lh.getShape();
-		arrow.getChildren().addAll(line, head);	
-		StackPane sp = new StackPane(arrow);
-		this.manager.getConnects().put(node.getType()+node.getDepth(), arrow);
-		sp.setPrefHeight(north.getY()-south.getY());
-		sp.layoutXProperty().bind(fromPane.layoutXProperty().add(label));
-		double temp = sp.getPrefHeight();
-//		System.out.println(temp);
-		sp.setLayoutY(south.getY()+(sp.getPrefHeight()/2));
 		if(node.getType().equals(CConstants.CONDITION)){
 			Text ty = new Text("Yes");
 			ty.setX(south.getX()+10);
 			ty.setY(south.getY()+20);
-			StackPane lsp = new StackPane(ty);
-			lsp.layoutXProperty().bind(sp.layoutXProperty().add(25.0));
-			lsp.layoutYProperty().bind(sp.layoutYProperty());
-			this.getChildren().addAll(sp,lsp);
+			arrow.getChildren().addAll(line, head, ty);
 		}else {
-			this.getChildren().add(sp);
+			arrow.getChildren().addAll(line, head);	
 		}
-		
+		this.manager.getConnects().put(node.getType()+node.getDepth(), arrow);
+		canvas.getChildren().add(arrow);
 	}
 	public void drawConnect(CShapeNode node){
 		//StackPane spConnect = new StackPane();
@@ -569,11 +552,11 @@ public class FlowChartCanvas extends BorderPane {
 		}
 		Group g = this.manager.getConnects().get(Constants.EShapeType.STOP.name()+"1");
 		if(g!=null){
-			this.getChildren().remove(g);	
+			canvas.getChildren().remove(g);	
 		}
 	}
 	public StackPane findFirst(){
-		for(Node n : this.getChildren()){
+		for(Node n : canvas.getChildren()){
 			if(n.getClass().equals(StackPane.class)){
 				return (StackPane)n;
 			}
@@ -582,7 +565,7 @@ public class FlowChartCanvas extends BorderPane {
 	}
 	public StackPane find(CShapeNode node){
 		double sid = node.shape.sid;
-		for(Node n : this.getChildren()){
+		for(Node n : canvas.getChildren()){
 			if(n.getClass().equals(StackPane.class)){
 				StackPane sp = (StackPane)n;
 				if(n.getUserData().equals(sid)){
@@ -635,16 +618,4 @@ public class FlowChartCanvas extends BorderPane {
 		return manager;
 	}
 	public CRootManager getRootNode() { return this.root; }
-	public double getCenterLineX() {
-		return centerLineX;
-	}
-	public void setCenterLineX(double centerLineX) {
-		this.centerLineX = centerLineX;
-	}
-	public int getTrimmed() {
-		return trimmed;
-	}
-	public void setTrimmed(int trimmed) {
-		this.trimmed = trimmed;
-	}
 }

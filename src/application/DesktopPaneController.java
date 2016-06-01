@@ -23,6 +23,12 @@ import javafx.collections.ListChangeListener;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -105,10 +111,17 @@ public class DesktopPaneController extends VBox {
 
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					double diff = newValue.doubleValue() - oldValue.doubleValue();
 					if(fcc.getPrefWidth()<newValue.doubleValue()){
 						sp.setPrefWidth(newValue.doubleValue());
 						fcc.setPrefWidth(newValue.doubleValue());
-					}			
+					}
+					fcc.setCenterLineX(newValue.doubleValue()/2);
+//					for(Node node : fcc.getChildren()){
+//						if(node.getClass().equals(Group.class)){
+//							node.setLayoutX(node.getLayoutX()+(diff/2));
+//						}
+//					}
 				}
 			});
         	w.heightProperty().addListener(new ChangeListener<Number>() {
@@ -121,24 +134,35 @@ public class DesktopPaneController extends VBox {
 					}
 				}
 			});
+        	Pane pane = new Pane();
         	sp = new ScrollPane();
         	fcc = new FlowChartCanvas(this);
+        	fcc.minWidthProperty().bind(w.prefWidthProperty());
+        	fcc.minHeightProperty().bind(w.prefHeightProperty());
+        	fcc.prefWidthProperty().bind(w.prefWidthProperty());
         	fcc.getChildren().addListener(new ListChangeListener<Node>(){
 				@Override
 				public void onChanged(javafx.collections.ListChangeListener.Change<? extends Node> c) {
 					fcc.setPrefHeight(fcc.height);
+					
 					if(fcc.getPrefWidth()<w.getPrefWidth()){
 						fcc.prefWidth(w.getPrefWidth());
 					}
-					sp.setContent(null);
-					sp.setContent(fcc);
+//					pane.getChildren().set(0, fcc);
 					sp.setPrefHeight(windowHeight-30);
 					sp.setPrefWidth(windowWidth);
-					sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-					sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+					sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+					sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 					
 				}
         	});
+    		Image img = new Image(getClass().getResource("graph-paper2.jpg").toExternalForm());
+        	BackgroundImage bi = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);		
+        	pane.setBackground(new Background(bi));
+        	pane.getChildren().add(fcc);
+        	pane.prefWidthProperty().bind(w.prefWidthProperty());
+        	pane.prefHeightProperty().bind(fcc.prefHeightProperty());
+        	sp.setContent(pane);
         	BorderPane p = new BorderPane(sp);
         	w.setContentPane(p);
         }

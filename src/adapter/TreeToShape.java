@@ -8,6 +8,8 @@ import Settings.CConstants;
 import Settings.Constants;
 import application.FlowChartCanvas;
 import javafx.application.Platform;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import shapes.CCodeManager;
 import shapes.CIfManager;
 import shapes.CIteratorManager;
@@ -30,6 +32,11 @@ public class TreeToShape {
 		rootNode.addNode(new CStartEndNode(Constants.EShapeType.START.name(), rootNode));
 		rootNode.addNode(new CStartEndNode(Constants.EShapeType.STOP.name(), rootNode));
 		canvas.setRootNode(rootNode);
+		for(Node node : canvas.getChildren()){
+			if(node.getClass().equals(Group.class)){
+				node.setLayoutX(0);
+			}
+		}
 	}
 	
 	public void prepareCanvas(){

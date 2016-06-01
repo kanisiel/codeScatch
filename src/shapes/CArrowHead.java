@@ -55,7 +55,7 @@ public class CArrowHead extends CShapeManager {
 		}else if(arrowTo.equals(Constants.SOUTH)){
 			lp = new Point2D(endP.getX()+10, endP.getY()-10);
 			rp = new Point2D(endP.getX()-10, endP.getY()-10);
-			p = new Point2D(cp.getX(), cp.getY()-10);
+			p = new Point2D(cp.getX(), cp.getY()-9);
 		}else if(arrowTo.equals(Constants.NORTH)){
 			lp = new Point2D(endP.getX()-10, endP.getY()+10);
 			rp = new Point2D(endP.getX()+10, endP.getY()+10);
