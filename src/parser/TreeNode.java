@@ -23,7 +23,8 @@ public class TreeNode<TreeData> implements Iterable<TreeNode<TreeData>>{
 	
 	public TreeNode(TreeData child) {
 		this.data = child;
-        this.children = new Vector<TreeNode<TreeData>>(); 
+        this.children = new Vector<TreeNode<TreeData>>();
+        this.ELSEIF = new Vector<TreeData>();
 	}
 
 	public void addChild(TreeData child) {

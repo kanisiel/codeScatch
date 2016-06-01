@@ -88,8 +88,11 @@ public class CodeToTree {
 	    }
 	    System.out.println("------------------------------------------------------");
 	    this.root = parent;
-	    visitChildren(parent);
-	
+	    //visitChildren(parent);
+	    for(int i = 0; i < parent.getChildList().get(1).getELSEIF().size(); ++i){
+	    	System.out.println(parent.getChildList().get(1).getELSEIF().get(i).getParseTree().getText());
+	    }
+	    System.out.println(parent.getChildList().get(1).getELSE().getParseTree().getText());
 	    //Prepare Canvas
 	    tts.prepareCanvas(); 
 	    //Split to type and body
