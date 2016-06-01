@@ -175,7 +175,7 @@ public class CodeToTree {
 			rv[0] = startLine;
 			String contexts[] = context.split(";");
 			String lastContext = contexts[(contexts.length-1)];
-			int last = text.indexOf(lastContext);
+			int last = text.replace(", ", ",").replace(" = ", "=").indexOf(lastContext);
 			forward = text.substring(0, last);
 			forwards = forward.split(System.getProperty("line.separator"));
 			int lastLine = forwards.length;
