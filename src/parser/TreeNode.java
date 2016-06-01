@@ -11,7 +11,10 @@ public class TreeNode<TreeData> implements Iterable<TreeNode<TreeData>>{
     private Vector<TreeNode<TreeData>> children;
     private TreeData data;
     private TreeData ELSE = null;
+    private Vector<TreeData> ELSEIF = null;
 
+	public Vector<TreeData> getELSEIF() {return ELSEIF;}
+	public void setELSEIF(Vector<TreeData> eLSEIF) {ELSEIF = eLSEIF;}
 	public TreeData getELSE() {return ELSE;}
 	public void setELSE(TreeData eLSE) {ELSE = eLSE;}
 	public TreeData getData() {return data;}

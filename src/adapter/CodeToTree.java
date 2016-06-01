@@ -76,10 +76,19 @@ public class CodeToTree {
 //	    	  }
 //	    }
 	   
-	    // getParent ����
+	    // getParent
 	    TreeNode<TreeData> parent = semanticAnalysis.init();
+	    
+	    // make child of child node
+	    semanticAnalysis.analyzeNode(parent);
+	    // function structure
+	    System.out.println("------------------------------------------------------");
+	    for(int i = 0; i < parent.getChildList().size(); ++i){
+	    	System.out.println(parent.getChildList().get(i).getData().getNodeType());
+	    }
+	    System.out.println("------------------------------------------------------");
 	    this.root = parent;
-
+	    visitChildren(parent);
 	
 	    //Prepare Canvas
 	    tts.prepareCanvas(); 
@@ -96,8 +105,6 @@ public class CodeToTree {
 //	    	}
 //	    }
 	    
-	    // make for full tree
-	    semanticAnalysis.analyzeNode(parent);
 	    
 	    /*
 	    for(int i = 0; i < parent.getChildList().size(); ++i){
@@ -283,5 +290,20 @@ public class CodeToTree {
     		}
 		}
 		return rv;
+	}
+	
+	public void visitChildren(TreeNode<TreeData> parent) {
+		if(parent.getChildList().size() > 0){
+			for(int i = 0; i < parent.getChildList().size(); ++i){
+				System.out.println("parent: "+parent.getData().getNodeType());
+				System.out.println(parent.getChildList().get(i).getData().getNodeType());
+				System.out.println(parent.getChildList().get(i).getData().getKind());
+				System.out.println();
+				visitChildren(parent.getChildList().get(i));
+			}
+		}
+		else{
+			;
+		}
 	}
 }

@@ -12,9 +12,11 @@ public class TreeData {
 	private Vector<ParseTree> codeVector;
 	private String nodeType;
     private String kind; 
-    
+    private String condition;
     
 	
+	public String getCondition() {return condition;}
+	public void setCondition(String condition) {this.condition = condition;}
 	private CShapeNode shapeNode;
     
 	public ParseTree getParseTree() {return parseTree;}
