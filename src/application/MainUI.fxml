@@ -17,13 +17,19 @@
 		            <menus>
 		                <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
 		                    <items>
-		                        <MenuItem mnemonicParsing="false" text="Open" onAction="#open" />
-		                <!--    <MenuItem mnemonicParsing="false" text="Save" />
-		                        <MenuItem mnemonicParsing="false" text="Save As" /> -->
+		                        <MenuItem mnemonicParsing="false" text="Open" accelerator="Shortcut+O" onAction="#open" />
+		                   		<MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S" onAction="#save" />
+		                        <MenuItem mnemonicParsing="false" text="Save As" accelerator="Shortcut+A" onAction="#saveAs" />
 		                        <SeparatorMenuItem mnemonicParsing="false" />
 		                        <MenuItem mnemonicParsing="false" text="Close" onAction="#close"/>
-		                        <MenuItem mnemonicParsing="false" text="Exit" onAction="#exit" />
+		                        <MenuItem mnemonicParsing="false" text="Exit" accelerator="Alt+F4" onAction="#exit" />
 		                    </items>
+		                </Menu>
+		                <Menu fx:id="zoomMenu" mnemonicParsing="false" text="Zoom">
+		                	<items>
+		                		<MenuItem mnemonicParsing="false" text="Zoom In" accelerator="Shortcut+UP" onAction="#zoomIn" />
+		                		<MenuItem mnemonicParsing="false" text="Zoom Out" accelerator="Shortcut+DOWN" onAction="#zoomOut" />
+		                	</items>
 		                </Menu>
 		                <!-- <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
 		                    <items>
