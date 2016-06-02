@@ -29,10 +29,11 @@ public class CVisitor implements ParseTreeVisitor<ParseTree>{
 	
 	public ParseTree getFunDefinition(Vector<ParseTree> parseTrees){
 		for(int i = 0; i < parseTrees.size(); ++i){
-	    	  if(Trees.getNodeText(parseTrees.get(i).getChild(0), parser).equals(CConstants.FUNCTIONDEFINITION)){
-	    		  return parseTrees.get(i).getChild(0);
-	    	  }
-	    }
+		   	if(Trees.getNodeText(parseTrees.get(i).getChild(0), parser).equals(CConstants.FUNCTIONDEFINITION)){
+		   		return parseTrees.get(i).getChild(0);
+		   	}
+		}
+		
 		return null;
 	}
 	

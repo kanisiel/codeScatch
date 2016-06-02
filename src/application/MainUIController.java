@@ -6,29 +6,32 @@ package application;
  */
 
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
+
+import Settings.Constants;
 import adapter.CodeToTree;
 import adapter.TreeToShape;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
@@ -43,7 +46,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import jfxtras.scene.control.window.Window;
 /**
  *
- * @author newmacpro
+ * @author
+ *  newmacpro
  */
 public class MainUIController implements Initializable {
     
@@ -65,41 +69,20 @@ public class MainUIController implements Initializable {
     }
     
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle resources) {}
 		
-	}
-	
-	
-	@FXML
-	public void save() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Select Resource file");
-		fileChooser.setInitialDirectory(new File("."));
-		fileChooser.getExtensionFilters().add(new ExtensionFilter("Flow Chart(*.fct)", "*.fct"));
-		
-		try {
-			File selectedFile = fileChooser.showSaveDialog(null);
-			String filePath = selectedFile.getAbsolutePath();
-			
-			if (filePath.endsWith(".fct")) {
-				ObjectOutputStream outputStream = new ObjectOutputStream(
-						new BufferedOutputStream(new FileOutputStream(selectedFile)));
-				outputStream.writeObject(desktopPaneController.fcc.getRootNode().getNodes());
-				outputStream.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {}
-	}
-	
 	@FXML
 	public void open() {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Select Resource file");
+		fileChooser.setTitle("Select C file");
 		fileChooser.setInitialDirectory(new File("."));
-		fileChooser.getExtensionFilters().add(new ExtensionFilter("C Sources(*.c)", "*.c"));
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("C Sources (*.c)", "*.c"));
+		
+		File selectedFile = fileChooser.showOpenDialog(null);
+		
+		if (selectedFile == null) return;
+		
 		try {
-			File selectedFile = fileChooser.showOpenDialog(null);
 			String filePath = selectedFile.getAbsolutePath();
 			
 			if (filePath.endsWith(".c")) {
@@ -112,18 +95,15 @@ public class MainUIController implements Initializable {
 		            fileData.append(String.valueOf(buf, 0, numRead));
 		        
 		        reader.close();
+		        
 		        code = fileData.toString();
 		        String buffer, trim;
 		        String buffers[];
-		        Boolean flag = false;
 				buffer = code;
 				buffers = buffer.split(System.getProperty("line.separator"));
 				Vector<String> trimCode = new Vector<>(); 
 				for(String str : buffers){
-					if(str.contains("{")){
-						flag = true;
-					}
-					if(str.trim().equals("")&&!flag){
+					if(str.trim().equals("")){
 						trimmed++;
 					} else if (str.startsWith("#")){
 						trimmed++;
@@ -131,7 +111,6 @@ public class MainUIController implements Initializable {
 						trimCode.add(str);
 					}
 				}
-				desktopPaneController.fcc.setTrimmed(trimmed);
 //				System.out.println(trimCode.firstElement());
 				trim = String.join(System.getProperty("line.separator"), trimCode);
 //				System.out.println(trim);
@@ -143,15 +122,48 @@ public class MainUIController implements Initializable {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (NullPointerException e) {
-			
 		} finally {
 			doParse();
 //			desktopPaneController.fcc.showAll();
 		}
-		
 	}
 	
+	private WritableImage getSnapshot() {
+		String fcCanvasWidth = String.valueOf(Math.ceil(desktopPaneController.fcc.getWidth()));
+		String fcCanvasHeight = String.valueOf(Math.ceil(desktopPaneController.fcc.getHeight()));
+        WritableImage image = new WritableImage(Integer.parseInt(fcCanvasWidth.substring(0, fcCanvasWidth.indexOf('.'))), 
+				Integer.parseInt(fcCanvasHeight.substring(0, fcCanvasHeight.indexOf('.'))));
+        
+        return desktopPaneController.fcc.snapshot(new SnapshotParameters(), image);
+	}
+	
+	@FXML
+	public void save() {		
+		try {
+			File output = new File("snapshot.png");
+            ImageIO.write(SwingFXUtils.fromFXImage(this.getSnapshot(), null), "png", output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {}
+	}
+	
+	public void saveAs() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select PNG file");
+		fileChooser.setInitialDirectory(new File("."));
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("Portable Network Graphics (*.png)", "*.png"));
+		
+		try {
+			File selectedFile = fileChooser.showSaveDialog(null);
+			
+			if (selectedFile.getAbsolutePath().endsWith(".png")) 
+				ImageIO.write(SwingFXUtils.fromFXImage(this.getSnapshot(), null), "png", selectedFile);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {}
+	}
+		
 	@FXML
 	public void close(ActionEvent event){
 		prepare();
@@ -175,7 +187,7 @@ public class MainUIController implements Initializable {
 			bg = new Background(bi);
 			break;
     	}
-    	desktopPaneController.pane.setBackground(bg);
+    	desktopPaneController.fcc.setBackground(bg);
 //		System.out.println(sourceId);
 	}
 	public void prepare(){
@@ -188,7 +200,9 @@ public class MainUIController implements Initializable {
 		Window flowchart = windows.get("Flow Chart");
 		ScrollPane sp = desktopPaneController.sp;
 		FlowChartCanvas fcc = desktopPaneController.fcc;
-		fcc.height = flowchart.getPrefHeight()-30;
+		sp.setPrefSize(flowchart.getPrefWidth(), flowchart.getPrefHeight());
+		fcc.setPrefSize(flowchart.getPrefWidth(), flowchart.getPrefHeight());
+		fcc.height = Constants.canvasHeight;
 		desktopPaneController.setFcc(fcc);
 		desktopPaneController.setTts(new TreeToShape(fcc));
 		desktopPaneController.setCtt(new CodeToTree(desktopPaneController.getTts()));
@@ -202,5 +216,15 @@ public class MainUIController implements Initializable {
 	@FXML
 	public void exit() {
 		System.exit(0);
+	}
+	
+	@FXML
+	public void zoomIn() {
+		System.out.println("Zoom In");
+	}
+	
+	@FXML
+	public void zoomOut() {
+		System.out.println("Zoom Out");
 	}
 }
