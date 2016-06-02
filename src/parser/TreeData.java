@@ -15,8 +15,9 @@ public class TreeData {
     private String ifCondition;
     
 	
-	public String getCondition() {return ifCondition;}
-	public void setCondition(String condition) {this.ifCondition = condition;}
+
+	public String getIfCondition() {return ifCondition;}
+	public void setIfCondition(String ifCondition) {this.ifCondition = ifCondition;}
 	private CShapeNode shapeNode;
     
 	public ParseTree getParseTree() {return parseTree;}
