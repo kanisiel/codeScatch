@@ -82,18 +82,18 @@ public class CodeToTree {
 	    // make child of child node
 	    semanticAnalysis.analyzeNode(parent);
 	    // function structure
-	    System.out.println("------------------------------------------------------");
-	    for(int i = 0; i < parent.getChildList().size(); ++i){
-	    	System.out.println(parent.getChildList().get(i).getData().getNodeType());
-	    }
-	    System.out.println("------------------------------------------------------");
+//	    System.out.println("------------------------------------------------------");
+//	    for(int i = 0; i < parent.getChildList().size(); ++i){
+//	    	System.out.println(parent.getChildList().get(i).getData().getNodeType());
+//	    }
+//	    System.out.println("------------------------------------------------------");
 	    this.root = parent;
 	    //visitChildren(parent);
 	    
-	    System.out.println(parent.getChildList().get(1).getData().getIfCondition());
-	    for(int i = 0; i < parent.getChildList().get(1).getELSEIF().size(); ++i){
-	    	System.out.println(parent.getChildList().get(1).getELSEIF().get(i).getIfCondition());
-	    }
+//	    System.out.println(parent.getChildList().get(1).getData().getIfCondition());
+//	    for(int i = 0; i < parent.getChildList().get(1).getELSEIF().size(); ++i){
+//	    	System.out.println(parent.getChildList().get(1).getELSEIF().get(i).getIfCondition());
+//	    }
 	    //System.out.println(parent.getChildList().get(1).getELSE().getParseTree().getText());
 	    //Prepare Canvas
 	    tts.prepareCanvas(); 
@@ -144,6 +144,16 @@ public class CodeToTree {
 	    		sts.add(condition);
 	    		shape = tts.declareToShape(sts, Constants.IF, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.IF, findDupOther(parent, parent.getChildList().get(i), i)));
 	    		TreeData elses = parent.getChildList().get(i).getELSE();
+	    		if(parent.getChildList().get(i).getELSEIF().size()>0){
+	    			for(TreeData node : parent.getChildList().get(i).getELSEIF()){
+	    				Vector<String> stelseif = new Vector<>();
+	    				String bodyEI = node.getParseTree().getParent().getText();
+	    				stelseif.add(bodyEI);
+	    	    		String conditionEI = node.getIfCondition();
+	    	    		stelseif.add(conditionEI);
+	    	    		shape = tts.declareToShape(stelseif, Constants.ELSEIF, findLines(buffer, "else if{"+bodyEI, CConstants.ELSEIF, findDupOther(parent, parent.getChildList().get(i), i)));
+	    			}
+	    		}
 	    		if(elses!=null){
 	    			Vector<String> stelse = new Vector<>();
 	    			String elsebody = semanticAnalysis.getElseBody(elses.getParseTree());
@@ -180,14 +190,14 @@ public class CodeToTree {
 		if(type.equals(CConstants.CODE)){
 			int firstSC = context.indexOf(";");
 			String target = context.substring(0, firstSC);
-			int start = text.replace(", ", ",").replace(" = ", "=").indexOf(target);
+			int start = text.replace(", ", ",").replace(" = ", "=").indexOf(target.replace(", ", ",").replace(" = ", "="));
 			String forward = text.substring(0, start);
 			String forwards[] = forward.split(System.getProperty("line.separator"));
 			int startLine = forwards.length-1;
 			rv[0] = startLine;
 			String contexts[] = context.split(";");
 			String lastContext = contexts[(contexts.length-1)];
-			int last = text.replace(", ", ",").replace(" = ", "=").indexOf(lastContext);
+			int last = text.replace(", ", ",").replace(" = ", "=").indexOf(lastContext.replace(", ", ",").replace(" = ", "="));
 			forward = text.substring(0, last);
 			forwards = forward.split(System.getProperty("line.separator"));
 			int lastLine = forwards.length;

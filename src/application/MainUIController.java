@@ -175,7 +175,7 @@ public class MainUIController implements Initializable {
 			bg = new Background(bi);
 			break;
     	}
-    	desktopPaneController.fcc.setBackground(bg);
+    	desktopPaneController.pane.setBackground(bg);
 //		System.out.println(sourceId);
 	}
 	public void prepare(){

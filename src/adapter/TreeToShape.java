@@ -92,6 +92,11 @@ public class TreeToShape {
 					rv.setLines(lines);
 					rootNode.addNode(rootNode.getNodes().size()-1,rv);
 					rv.addNode(new CCodeManager(body.get(0), rv));
+				} else if(type == Constants.ELSEIF){
+					rv = new CIfManager(CConstants.ELSEIF, "", rootNode);
+					rv.setLines(lines);
+					rootNode.addNode(rootNode.getNodes().size()-1,rv);
+					rv.addNode(new CCodeManager(body.get(0), rv));
 				} else if(type == Constants.WHILE){
 					rv = new CIteratorManager(CConstants.WHILE, body.get(1), rootNode);
 					rv.setLines(lines);
