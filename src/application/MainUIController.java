@@ -77,8 +77,12 @@ public class MainUIController implements Initializable {
 		fileChooser.setTitle("Select C file");
 		fileChooser.setInitialDirectory(new File("."));
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("C Sources (*.c)", "*.c"));
+		
+		File selectedFile = fileChooser.showOpenDialog(null);
+		
+		if (selectedFile == null) return;
+		
 		try {
-			File selectedFile = fileChooser.showOpenDialog(null);
 			String filePath = selectedFile.getAbsolutePath();
 			
 			if (filePath.endsWith(".c")) {
@@ -118,8 +122,6 @@ public class MainUIController implements Initializable {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (NullPointerException e) {
-			
 		} finally {
 			doParse();
 //			desktopPaneController.fcc.showAll();
