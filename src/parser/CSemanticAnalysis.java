@@ -485,8 +485,12 @@ public class CSemanticAnalysis {
 		String open = "{";
 		if(parseTree.getChildCount()>1){
 			for(int i = 1; i< parseTree.getChildCount(); i++){
+//				if(parseTree.getChild(0).getText().matches("^if")){
+//					flag = 4;
+//				}
 				if(parseTree.getChild(i).getText().contains(open)){
 					flag = i;
+					break;
 				}
 			}
 //			System.out.println(flag);

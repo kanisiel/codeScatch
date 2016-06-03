@@ -93,7 +93,7 @@ public class TreeToShape {
 					rootNode.addNode(rootNode.getNodes().size()-1,rv);
 					rv.addNode(new CCodeManager(body.get(0), rv));
 				} else if(type == Constants.ELSEIF){
-					rv = new CIfManager(CConstants.ELSEIF, "", rootNode);
+					rv = new CIfManager(CConstants.ELSEIF, body.get(1), rootNode);
 					rv.setLines(lines);
 					rootNode.addNode(rootNode.getNodes().size()-1,rv);
 					rv.addNode(new CCodeManager(body.get(0), rv));

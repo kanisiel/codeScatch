@@ -6,17 +6,20 @@ import java.util.Vector;
 
 import Settings.Constants;
 import javafx.scene.Group;
+import javafx.scene.layout.StackPane;
 import shapes.CShapeManager;
 
 public class FlowChartManager {
 	private Vector<CShapeManager> nodes;
 	private Vector<Group> allnodes;
 	private Map<String, Group> connects;
+	private Vector<StackPane> connection;
 	
 	public FlowChartManager(){
 		this.nodes = new Vector<>();
 		this.allnodes = new Vector<>();
 		this.setConnects(new LinkedHashMap<>());
+		this.setConnection(new Vector<>());
 	}
 	public void initManager(CShapeManager start, CShapeManager end){
 		this.nodes.clear();
@@ -87,5 +90,11 @@ public class FlowChartManager {
 	}
 	public void setConnects(Map<String, Group> connects) {
 		this.connects = connects;
+	}
+	public Vector<StackPane> getConnection() {
+		return connection;
+	}
+	public void setConnection(Vector<StackPane> connection) {
+		this.connection = connection;
 	}
 }

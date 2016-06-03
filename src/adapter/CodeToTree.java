@@ -147,11 +147,12 @@ public class CodeToTree {
 	    		if(parent.getChildList().get(i).getELSEIF().size()>0){
 	    			for(TreeData node : parent.getChildList().get(i).getELSEIF()){
 	    				Vector<String> stelseif = new Vector<>();
-	    				String bodyEI = node.getParseTree().getParent().getText();
+	    				System.out.println(node.getParseTree().getText());
+	    				String bodyEI = semanticAnalysis.getBody(node.getParseTree());//node.getParseTree().getParent().getText();
 	    				stelseif.add(bodyEI);
 	    	    		String conditionEI = node.getIfCondition();
 	    	    		stelseif.add(conditionEI);
-	    	    		shape = tts.declareToShape(stelseif, Constants.ELSEIF, findLines(buffer, "else if{"+bodyEI, CConstants.ELSEIF, findDupOther(parent, parent.getChildList().get(i), i)));
+	    	    		shape = tts.declareToShape(stelseif, Constants.ELSEIF, findLines(buffer, "else if ( "+conditionEI+" ) {"+bodyEI, CConstants.ELSEIF, findDupOther(parent, parent.getChildList().get(i), i)));
 	    			}
 	    		}
 	    		if(elses!=null){
@@ -187,6 +188,7 @@ public class CodeToTree {
 	}
 	public int[] findLines(String text, String context, String type, int dup){
 		int rv[] = new int[2];
+		checkLine(context);
 		if(type.equals(CConstants.CODE)){
 			int firstSC = context.indexOf(";");
 			String target = context.substring(0, firstSC);
@@ -202,7 +204,22 @@ public class CodeToTree {
 			forwards = forward.split(System.getProperty("line.separator"));
 			int lastLine = forwards.length;
 			rv[1] = lastLine;
-		}else {
+		} else if (type.equals(CConstants.ELSEIF)){
+			System.out.println(context);
+			String buffer = context;
+			int pointer = buffer.replace(" ", "").indexOf("elseif");
+			String contexts[] = context.split(" ");
+			Boolean flag = false;
+			for(String t : texts){
+				for(String s : contexts){
+					if(t.contains(s)){
+						flag = true;
+					} else {
+						break;
+					}
+				}
+			}
+		} else {
 			if(context.startsWith("if(")){
 				int cbracet = context.indexOf("}")+1;
 				context = context.replace("else{", "");
@@ -320,5 +337,32 @@ public class CodeToTree {
 		else{
 			;
 		}
+	}
+	public void checkLine(String target){
+		String buffer[] = texts;
+		String tb = target.replace(" ", "");
+		Boolean flag = false;
+		int start = 0;
+		for(int index = 0; index < buffer.length; index++){
+			String s = buffer[index];
+			s = s.replace(" ", "");
+			String subtg;
+			if(s.length()>tb.length()){
+				subtg = tb;
+			} else {
+				subtg = tb.substring(0, s.length());
+			}
+			for(int i = 1; i < s.length(); i++){
+				if(s.substring(0, i).contains(subtg)){
+					flag = true;
+					break;
+				}
+			}
+			if(flag){
+				start = index;
+				break;
+			}
+		}
+		System.out.println(start);
 	}
 }

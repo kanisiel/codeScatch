@@ -82,6 +82,33 @@ public abstract class CShapeNode implements Serializable {
 		}
 		return null;
 	}
+	public Boolean findElse(){
+		Boolean rv = false, flag = false;
+		for(CShapeNode node : this.bodies){
+			if(node.getType().equals(CConstants.IF)){
+				flag = true;
+			}else if(flag&&(!node.getType().equals(CConstants.ELSEIF)&&!node.getType().equals(CConstants.ELSE))){
+				flag = false;
+			}else if(flag&&node.getType().equals(CConstants.ELSE)){
+				rv = true;
+			}
+		}
+		return rv;
+	}
+	public CShapeNode getElse(){
+		CShapeNode rv = null;
+		Boolean flag = false;
+		for(CShapeNode node : this.bodies){
+			if(node.getType().equals(CConstants.IF)){
+				flag = true;
+			}else if(flag&&(!node.getType().equals(CConstants.ELSEIF)&&!node.getType().equals(CConstants.ELSE))){
+				flag = false;
+			}else if(flag&&node.getType().equals(CConstants.ELSE)){
+				rv = node;
+			}
+		}
+		return rv;
+	}
 	public Vector<CShapeNode> getNodes(){
 		return bodies;
 	}
