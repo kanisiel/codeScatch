@@ -248,7 +248,7 @@ public class FlowChartCanvas extends BorderPane {
 		    public void handle(MouseEvent event) {
 		       rect.setStroke(Color.RED);
 		       int[] lines = node.lines;
-		       for(int i = lines[0]; i < lines[1]; i++){
+		       for(int i = lines[0]; i <= lines[1]; i++){
 		    	   try {
 		    		   Object tag = parent.textArea.addLineHighlight(i+trimmed, java.awt.Color.ORANGE);
 		    		   tags.add(tag);
@@ -636,7 +636,7 @@ public class FlowChartCanvas extends BorderPane {
 								nextBlockFirst = nextBlock.getNodes().firstElement();
 							}
 							StackPane nextBShape = find(nextBlockFirst);
-							drawOrthogoral(node, sp, nextBShape, CConstants.ELSE);
+							drawOrthogoral(node, sp, nextBShape, CConstants.ELSEIF);
 						}
 					}else {
 						drawStraight(node, sp, next);

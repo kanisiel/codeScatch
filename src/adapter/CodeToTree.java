@@ -196,7 +196,8 @@ public class CodeToTree {
 	}
 	public int[] findLines(String text, String context, String type, int dup){
 		int rv[] = new int[2];
-		checkLine(context);
+		
+//		System.out.println(duplicate(context));
 		if(type.equals(CConstants.CODE)){
 			int firstSC = context.indexOf(";");
 			String target = context.substring(0, firstSC);
@@ -282,8 +283,8 @@ public class CodeToTree {
 //			System.out.println(rv[0]);
 //			System.out.println(rv[1]);
 		}
-		
-		return rv;
+		return checkLine(context);
+//		return rv;
 	}
 	private Boolean checkSame(Vector<String> vs, int start){
 		Boolean rv = false;
@@ -304,6 +305,29 @@ public class CodeToTree {
 			rv = true;
 		}
 		
+		return rv;
+	}
+	private int duplicate(String target){
+		String buffer[] = texts;
+		String tb = target.replace(" ", "");
+		Boolean flag = false;
+		int rv = 0;
+
+		for(int index = 0; index < buffer.length; index++){
+			String s = buffer[index];
+			s = s.replace(" ", "");
+			if(tb.contains(s)){
+				if(!flag){
+					flag = true;
+					rv++;
+				}
+			} else{
+				if(flag){
+					flag = false;
+					break;
+				}
+			}
+		}
 		return rv;
 	}
 	private int findDupCode(Vector<String> st, String targetbody, int max){
@@ -346,31 +370,37 @@ public class CodeToTree {
 			;
 		}
 	}
-	public void checkLine(String target){
+	public int[] checkLine(String target){
+		int rv[] = new int[2];
 		String buffer[] = texts;
 		String tb = target.replace(" ", "");
 		Boolean flag = false;
 		int start = 0;
+		int end = 0;
+
 		for(int index = 0; index < buffer.length; index++){
 			String s = buffer[index];
 			s = s.replace(" ", "");
-			String subtg;
-			if(s.length()>tb.length()){
-				subtg = tb;
-			} else {
-				subtg = tb.substring(0, s.length());
-			}
-			for(int i = 1; i < s.length(); i++){
-				if(s.substring(0, i).contains(subtg)){
+			if(tb.contains(s)){
+				if(!flag){
 					flag = true;
+					start = index;
+				}
+			} else{
+//				System.out.println("target: "+tb);
+//				System.out.println("base: "+s);
+				if(flag){
+					end = index-1;
 					break;
 				}
 			}
-			if(flag){
-				start = index;
-				break;
-			}
 		}
-		System.out.println(start);
+		rv[0] = start;
+		rv[1] = end;
+		System.out.println(target);
+		for(int i = start; i < end+1; i++){
+			System.out.println(texts[i]);
+		}
+		return rv;
 	}
 }
