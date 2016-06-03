@@ -87,6 +87,18 @@ public class CConnectManager extends CShapeManager {
 		lower = e;
 		points.add(e);
 	}
+	public void setVVertexDo(Point2D s, Point2D e, double hgap){
+		points.add(s);
+		lower = s;
+		Point2D vertex1 = new Point2D(s.getX(), s.getY()+vgap);
+		points.add(vertex1);
+		Point2D vertex2 = new Point2D(vertex1.getX()-hgap, vertex1.getY());
+		points.add(vertex2);
+		Point2D vertex3 = new Point2D(vertex2.getX(), e.getY());
+		points.add(vertex3);
+		lower = e;
+		points.add(e);
+	}
 	@Override
 	public void draw(GraphicsContext gc) {
 		// TODO Auto-generated method stub

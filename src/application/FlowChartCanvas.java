@@ -213,6 +213,10 @@ public class FlowChartCanvas extends BorderPane {
 			fill = Color.ROYALBLUE;
 			stroke = Color.DARKBLUE;
 			break;
+		case CConstants.DO:
+			fill = Color.DARKKHAKI;
+			stroke = Color.DARKGREEN;
+			break;
 		case CConstants.WHILE:
 			fill = Color.OLIVE;
 			stroke = Color.DARKOLIVEGREEN;
@@ -510,6 +514,28 @@ public class FlowChartCanvas extends BorderPane {
 			sp.layoutYProperty().bind(fromPane.layoutYProperty().add((sp.getPrefHeight()/2)+20.0));
 			this.manager.getConnection().add(sp);
 //			this.getChildren().add(sp);		
+		}if(to.equals((CConstants.DO))){
+			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
+			west = new Point2D(toPane.getLayoutX()-(toPane.getPrefWidth()/2), toPane.getLayoutY());
+			cm.setVVertexDo(south, west, gap);
+			lh.setHead(Constants.EAST, cm.lower, cm.upper);
+			line = cm.getShape();
+			head = lh.getShape();
+			arrow.getChildren().addAll(line, head);
+			this.manager.getConnects().put(node.getType()+node.getDepth()+"Else", arrow);
+			sp = new StackPane(arrow);
+			sp.setPrefHeight(line.getLayoutBounds().getHeight());
+			sp.setPrefWidth(line.getLayoutBounds().getWidth());
+			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(Math.floor(sp.getPrefWidth()/2)-1));
+			sp.layoutYProperty().bind(fromPane.layoutYProperty().add((fromPane.getPrefHeight()/2)+13.0).subtract(sp.getPrefHeight()/2));
+			Text ty = new Text("Yes");
+			ty.setX(south.getX()+10);
+			ty.setY(south.getY()+20);
+			StackPane lsp = new StackPane(ty);
+			lsp.layoutXProperty().bind(sp.layoutXProperty().subtract(sp.getPrefWidth()/2+25.0+ty.getWrappingWidth()));
+			lsp.layoutYProperty().bind(sp.layoutYProperty());
+			this.manager.getConnection().add(sp);
+			this.manager.getConnection().add(lsp);
 		}
 	}
 	public void drawStraight(CShapeNode node, StackPane fromPane, StackPane toPane){
@@ -532,7 +558,7 @@ public class FlowChartCanvas extends BorderPane {
 		double temp = sp.getPrefHeight();
 //		System.out.println(temp);
 		sp.setLayoutY(south.getY()+(sp.getPrefHeight()/2));
-		if(node.getType().equals(CConstants.CONDITION)){
+		if(node.getType().equals(CConstants.CONDITION)&&!node.getParent().getType().equals(CConstants.DO)){
 			Text ty = new Text("Yes");
 			ty.setX(south.getX()+10);
 			ty.setY(south.getY()+20);
@@ -558,13 +584,20 @@ public class FlowChartCanvas extends BorderPane {
 			CShapeNode nextBody;
 			if(ancester.findNext(parent).getType().equals(CConstants.CODE)||ancester.findNext(parent).getType().equals(Constants.EShapeType.STOP.name())){
 				nextBody = ancester.findNext(parent);
-			}else {
+			} else {
 				nextBody = ancester.findNext(parent).getFirstNode();
 			}
-			drawOrthogoral(node, sp, nextShape, Constants.NO);
-			int index = this.getChildren().indexOf(sp);
-			StackPane next = (StackPane) this.getChildren().get(index+1);
-			drawStraight(node, sp, next);
+			if(parent.getType().equals(CConstants.DO)){
+				StackPane body = find(parent.getNodes().firstElement());
+				StackPane nextsp = find(nextBody);
+				drawOrthogoral(node, sp, body, CConstants.DO);
+				drawStraight(node, sp, nextsp);
+			} else { 
+				drawOrthogoral(node, sp, nextShape, Constants.NO);
+				int index = this.getChildren().indexOf(sp);
+				StackPane next = (StackPane) this.getChildren().get(index+1);
+				drawStraight(node, sp, next);
+			}
 		}else if(node.getType().equals(CConstants.CODE)){
 			CShapeNode prev = parent.findCondition();
 			StackPane sp = find(node);

@@ -103,6 +103,13 @@ public class TreeToShape {
 					rootNode.addNode(rootNode.getNodes().size()-1,rv);
 					rv.addNode(new CCodeManager(body.get(0), rv));
 //					
+				} else if(type == Constants.DO){
+					rv = new CIteratorManager(CConstants.DO, body.get(1), rootNode);
+					rv.setLines(lines);
+					rootNode.addNode(rootNode.getNodes().size()-1,rv);
+					rv.getNodes().add(0,new CCodeManager(body.get(0),rv));
+//					rv.addNode(new CCodeManager(body.get(0), rv));
+//					
 				} else if(type == Constants.FOR){
 					String condition[] = body.get(1).split(";");
 					rv = new CIteratorManager(CConstants.FOR, condition[0], condition[1], condition[2], rootNode);

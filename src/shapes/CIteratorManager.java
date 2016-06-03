@@ -33,6 +33,7 @@ public class CIteratorManager extends CShapeNode {
 		this.firstNode = this.bodies.firstElement();
 	}
 	
+	
 	public Vector<CShapeNode> getBodies(){
 		return bodies;
 	}	

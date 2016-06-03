@@ -167,6 +167,14 @@ public class CodeToTree {
 	    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
 	    		sts.add(condition);
 	    		shape = tts.declareToShape(sts, Constants.WHILE, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.WHILE, findDupOther(parent, parent.getChildList().get(i), i)));
+	    	} else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.DO)){
+	    		System.out.println("do");
+//	    		shape = null;
+	    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
+	    		sts.add(body);
+	    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
+	    		sts.add(condition);
+	    		shape = tts.declareToShape(sts, Constants.DO, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.DO, findDupOther(parent, parent.getChildList().get(i), i)));
 	    	} else if (semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.FOR)){
 	    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
 	    		sts.add(body);
