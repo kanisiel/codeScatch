@@ -1,4 +1,5 @@
 package parser;
+import java.util.Scanner;
 import java.util.Vector;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -13,8 +14,10 @@ public class CSemanticAnalysis {
 	private Vector<ParseTree> parseTrees;
 	private TreeNode<TreeData> parent;
 	private ParseTree searchSelectionStatement = null;
+	private ParseTree iterationStatement = null;
 	private TreeNode<TreeData> ifRoot = null;
 	private String ifCondition;
+	private String iterationCondition;
 	private String line;
 	public Vector<String> st;
 
@@ -40,7 +43,6 @@ public class CSemanticAnalysis {
 			mergeCode(this.parent);
 		}
 		return parent;
-		
 	}
 	
 	public void analyzeFunc(ParseTree parseTree) {
@@ -72,15 +74,23 @@ public class CSemanticAnalysis {
 	
 	public void analyzeIterationStatement(ParseTree parseTree, TreeNode<TreeData> parent){
 		//parseTree nodename is blockItem in here
+		
+		//search iterationStatement
+		searchiterationStatement(parseTree);
+		// get iteration condition
+		getIterationCondition(this.iterationStatement);
+		//set iteration Condition
+		parent.getData().setIterationCondition(this.iterationCondition);
 
-		for(int i = 0; i < parseTree.getChild(0).getChild(0).getChildCount(); ++i){
-			if( Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i), parser)
+		for(int i = 0; i < this.iterationStatement.getChildCount(); ++i){			
+			if( Trees.getNodeText(this.iterationStatement.getChild(i), parser)
 					.equals(CConstants.STATEMENT)){
-			
-				if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser)
+				// iteration compoundstatement
+				if(Trees.getNodeText(this.iterationStatement.getChild(i).getChild(0), parser)
 						.equals(CConstants.COMPOUNDSTATEMENT)){
+					
 					this.parseTrees.clear();
-					analyzeCompoundStatement(parseTree.getChild(0).getChild(0).getChild(i).getChild(0));
+					analyzeCompoundStatement(this.iterationStatement.getChild(i).getChild(0));
 					makeTree(this.parseTrees, parent);
 					
 					for(int k = 0; k < isNeedMerge(parent); k++){
@@ -88,24 +98,25 @@ public class CSemanticAnalysis {
 					}
 
 				}
+				// iteration singlestatement
 				else{
 					
 					//System.out.println(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser));
-					if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), parser)
+					if(Trees.getNodeText(this.iterationStatement.getChild(i).getChild(0), parser)
 							.equals(CConstants.ITERATIONSTATEMENT)){
-						parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), CConstants.ITERATIONSTATEMENT, 
-								parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0).getText()));
+						parent.addChild(new TreeData(this.iterationStatement.getChild(i).getChild(0), CConstants.ITERATIONSTATEMENT, 
+								this.iterationStatement.getChild(i).getChild(0).getChild(0).getText()));
 						//System.out.println(this.parent.getChildList().get(1).getChildList().get(0).getData().getNodeType());
 						
 					}
-					else if(Trees.getNodeText(parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0), parser)
+					else if(Trees.getNodeText(this.iterationStatement.getChild(i).getChild(0).getChild(0), parser)
 							.equals(CConstants.SELECTIONSTATEMENT)){
-						parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), CConstants.SELECTIONSTATEMENT, 
-								parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0).getText()));
+						parent.addChild(new TreeData(this.iterationStatement.getChild(i).getChild(0), CConstants.SELECTIONSTATEMENT, 
+								this.iterationStatement.getChild(i).getChild(0).getChild(0).getText()));
 					}
 					else{
 						parent.addChild(new TreeData(parseTree.getChild(0).getChild(0).getChild(i).getChild(0), CConstants.CODE, 
-								parseTree.getChild(0).getChild(0).getChild(i).getChild(0).getChild(0).getText()));
+								this.iterationStatement.getChild(i).getChild(0).getChild(0).getText()));
 					}
 				}		
 			}
@@ -220,7 +231,6 @@ public class CSemanticAnalysis {
 						// add else if of node
 						makeTree(this.searchSelectionStatement.getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);
 						
-//						System.out.println(parent.getData().getKind());
 									
 						// add elseifVector
 						if(parent.getData().getKind().equals(CConstants.ELSEIF)){
@@ -244,7 +254,6 @@ public class CSemanticAnalysis {
 							// add else if of node
 							makeTree(this.searchSelectionStatement.getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);
 							
-							System.out.println(parent.getData().getKind());
 							
 							// add elseifVector
 							if(parent.getData().getKind().equals(CConstants.ELSEIF)){
@@ -260,8 +269,7 @@ public class CSemanticAnalysis {
 							parent.addChild(new TreeData(this.searchSelectionStatement.getChild(4).getChild(0), CConstants.SELECTIONSTATEMENT, 
 									this.searchSelectionStatement.getChild(4).getChild(0).getChild(0).getText()));
 							// add else if of node
-							makeTree(this.searchSelectionStatement.getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);
-							System.out.println(parent.getData().getKind());
+							makeTree(this.searchSelectionStatement.getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);	
 							
 							// add elseifVector
 							if(parent.getData().getKind().equals(CConstants.ELSEIF)){
@@ -280,7 +288,6 @@ public class CSemanticAnalysis {
 							// add else if of node
 							makeTree(this.searchSelectionStatement.getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);
 							
-							System.out.println(parent.getData().getKind());
 							// add elseifVector
 							if(parent.getData().getKind().equals(CConstants.ELSEIF)){
 								upTree(parent);
@@ -308,7 +315,7 @@ public class CSemanticAnalysis {
 						for(int k = 0; k < isNeedMerge(parent); k++){
 							mergeCode(parent);
 						}
-						System.out.println(parent.getData().getKind());
+
 						//set if ifCodition in if
 						if(parent.getData().getKind().equals(CConstants.IF)){
 							parent.getData().setIfCondition(searchSelectionStatement.getChild(2).getText());
@@ -325,7 +332,7 @@ public class CSemanticAnalysis {
 						upTree(parent);
 						ifRoot.setELSE(new TreeData(this.searchSelectionStatement.getChild(6).getChild(0),
 								CConstants.SELECTIONSTATEMENT, CConstants.ELSE));
-						
+						//System.out.println(ifRoot.getData().getNodeType());
 					}
 					
 					// if - compoundStatement, else statement
@@ -338,13 +345,16 @@ public class CSemanticAnalysis {
 						for(int k = 0; k < isNeedMerge(parent); k++){
 							mergeCode(parent);
 						}
-						System.out.println(parent.getData().getKind());
+
 						// add elseVector
 						if(parent.getData().getKind().equals(CConstants.ELSEIF)){
 							upTree(parent);
 							// else if condition set in else if vector
 							parent.getChildList().get(0).getData().setIfCondition(searchSelectionStatement.getChild(2).getText());
 							ifRoot.getELSEIF().add(parent.getChildList().get(0).getData());
+							// set else
+							ifRoot.setELSE(new TreeData(this.searchSelectionStatement.getChild(6).getChild(0),
+									CConstants.SELECTIONSTATEMENT, CConstants.ELSE));
 						}
 						// set else
 						upTree(parent);
@@ -715,9 +725,24 @@ public class CSemanticAnalysis {
 		}
 	}
 	
+	public void searchiterationStatement(ParseTree parseTree){
+		if(parseTree.getChildCount() > 0){
+			for(int i = 0; i < parseTree.getChildCount(); ++i){
+				if(Trees.getNodeText(parseTree, parser).equals(CConstants.ITERATIONSTATEMENT)){
+					this.iterationStatement = parseTree;
+					return;
+				}
+				searchiterationStatement(parseTree.getChild(i));
+			}
+		}
+		else{
+			;
+		}
+	}
+	
 	public void upTree(TreeNode<TreeData> parent) {
-		if(parent.getParent().getData().getKind().equals(CConstants.IF)){
-			this.ifRoot = parent.getParent();
+		if(parent.getData().getKind().equals(CConstants.IF)){
+			this.ifRoot = parent;
 			return ;
 		}
 		else{
@@ -737,6 +762,24 @@ public class CSemanticAnalysis {
 		}
 		else{
 			;
+		}
+	}
+	
+	public void getIterationCondition(ParseTree parseTree){
+		if(parseTree.getChild(0).getText().equals(CConstants.FOR)){
+			String buffer = "";
+			for(int i = 2;  !parseTree.getChild(i).getText().equals(")"); ++i){
+				buffer += parseTree.getChild(i).getText();
+			}
+			this.iterationCondition = buffer;
+		}
+		else{
+			for(int i = 0; i < parseTree.getChildCount(); ++i){
+				if(Trees.getNodeText(parseTree.getChild(i), parser).equals(CConstants.EXPRESSION)){
+					this.iterationCondition = parseTree.getChild(i).getText();
+					return ;
+				}
+			}
 		}
 	}
 }

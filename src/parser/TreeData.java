@@ -13,9 +13,10 @@ public class TreeData {
 	private String nodeType;
     private String kind; 
     private String ifCondition;
-    
+    private String iterationCondition;
 	
-
+	public String getIterationCondition() {return iterationCondition;}
+	public void setIterationCondition(String iterationCondition) {this.iterationCondition = iterationCondition;}
 	public String getIfCondition() {return ifCondition;}
 	public void setIfCondition(String ifCondition) {this.ifCondition = ifCondition;}
 	private CShapeNode shapeNode;
