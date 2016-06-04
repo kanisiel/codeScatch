@@ -149,6 +149,8 @@ public class CodeToTree {
 	    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
 	    		sts.add(condition);
 	    		shape = tts.declareToShape(sts, Constants.IF, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.IF, findDupOther(parent, parent.getChildList().get(i), i)));
+//	    		if()
+	    		System.out.println(parent.getChildList().get(i).getChildList().size());
 	    		TreeData elses = parent.getChildList().get(i).getELSE();
 	    		if(parent.getChildList().get(i).getELSEIF().size()>0){
 	    			for(TreeData node : parent.getChildList().get(i).getELSEIF()){
@@ -383,18 +385,10 @@ public class CodeToTree {
 		Boolean flag = false;
 		int start = 0;
 		int end = 0;
-		if(type.equals(CConstants.ELSEIF)){
-			System.out.println(tb);
-			System.out.println();
-		}
 		for(int index = codeBlocks.lastElement(); index < buffer.length; index++){
 			String s = buffer[index];
 			s = s.replace(" ", "").trim();
 			if(!s.equals("}")){
-				if(type.equals(CConstants.ELSEIF)){
-					System.out.println(s);
-					System.out.println(flag);
-				}
 				if(tb.contains(s)&&!s.equals("")){
 					if(!flag){
 						flag = true;
