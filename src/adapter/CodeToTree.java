@@ -150,7 +150,6 @@ public class CodeToTree {
 	    		sts.add(condition);
 	    		shape = tts.declareToShape(sts, Constants.IF, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.IF, findDupOther(parent, parent.getChildList().get(i), i)));
 //	    		if()
-	    		System.out.println(parent.getChildList().get(i).getChildList().size());
 	    		TreeData elses = parent.getChildList().get(i).getELSE();
 	    		if(parent.getChildList().get(i).getELSEIF().size()>0){
 	    			for(TreeData node : parent.getChildList().get(i).getELSEIF()){

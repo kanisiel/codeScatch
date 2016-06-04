@@ -220,7 +220,7 @@ public class CSemanticAnalysis {
 						// add else if of node
 						makeTree(this.searchSelectionStatement.getChild(6).getChild(0), parent,CConstants.SELECTIONSTATEMENT, CConstants.ELSEIF);
 						
-						System.out.println(parent.getData().getKind());
+//						System.out.println(parent.getData().getKind());
 									
 						// add elseifVector
 						if(parent.getData().getKind().equals(CConstants.ELSEIF)){
