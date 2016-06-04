@@ -94,7 +94,8 @@ public class CodeToTree {
 //	    }
 //	    System.out.println("------------------------------------------------------");
 	    this.root = parent;
-	    //visitChildren(parent);
+	    visitChildren(parent);
+	    
 	    
 //	    System.out.println(parent.getChildList().get(1).getData().getIfCondition());
 //	    for(int i = 0; i < parent.getChildList().get(1).getELSEIF().size(); ++i){
@@ -369,6 +370,7 @@ public class CodeToTree {
 				System.out.println("parent: "+parent.getData().getNodeType());
 				System.out.println(parent.getChildList().get(i).getData().getNodeType());
 				System.out.println(parent.getChildList().get(i).getData().getKind());
+				System.out.println(parent.getChildList().get(i).getData().getParseTree().getText());
 				System.out.println();
 				visitChildren(parent.getChildList().get(i));
 			}
