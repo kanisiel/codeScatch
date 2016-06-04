@@ -25,11 +25,16 @@ public class CodeToTree {
 	private CSemanticAnalysis semanticAnalysis;
 	private String wholeCode;
 	private String texts[];
+	private String code;
+	private Vector<Integer> codeBlocks;
+	
 	public CodeToTree(TreeToShape tts) {
 		super();
 		// TODO Auto-generated constructor stub
 		this.tts = tts;
 		this.timer = new Timer();
+		this.codeBlocks = new Vector<>();
+		this.codeBlocks.add(0);
 		
 	}
 	public void doParse(String buffer){
@@ -38,6 +43,7 @@ public class CodeToTree {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
+				code = buffer;
 				parse(buffer);
 			}
 		};
@@ -147,8 +153,11 @@ public class CodeToTree {
 	    		if(parent.getChildList().get(i).getELSEIF().size()>0){
 	    			for(TreeData node : parent.getChildList().get(i).getELSEIF()){
 	    				Vector<String> stelseif = new Vector<>();
-	    				System.out.println(node.getParseTree().getText());
-	    				String bodyEI = semanticAnalysis.getBody(node.getParseTree());//node.getParseTree().getParent().getText();
+	    				String str = "";
+	    				for(ParseTree t : node.getCodeVector()){
+	    					str += t.getText();
+	    				}
+	    				String bodyEI = str;//node.getParseTree().getParent().getText();
 	    				stelseif.add(bodyEI);
 	    	    		String conditionEI = node.getIfCondition();
 	    	    		stelseif.add(conditionEI);
@@ -168,8 +177,6 @@ public class CodeToTree {
 	    		sts.add(condition);
 	    		shape = tts.declareToShape(sts, Constants.WHILE, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.WHILE, findDupOther(parent, parent.getChildList().get(i), i)));
 	    	} else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.DO)){
-	    		System.out.println("do");
-//	    		shape = null;
 	    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
 	    		sts.add(body);
 	    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
@@ -214,7 +221,6 @@ public class CodeToTree {
 			int lastLine = forwards.length;
 			rv[1] = lastLine;
 		} else if (type.equals(CConstants.ELSEIF)){
-			System.out.println(context);
 			String buffer = context;
 			int pointer = buffer.replace(" ", "").indexOf("elseif");
 			String contexts[] = context.split(" ");
@@ -283,7 +289,7 @@ public class CodeToTree {
 //			System.out.println(rv[0]);
 //			System.out.println(rv[1]);
 		}
-		return checkLine(context);
+		return checkLine(context, type);
 //		return rv;
 	}
 	private Boolean checkSame(Vector<String> vs, int start){
@@ -370,37 +376,65 @@ public class CodeToTree {
 			;
 		}
 	}
-	public int[] checkLine(String target){
+	public int[] checkLine(String target, String type){
 		int rv[] = new int[2];
-		String buffer[] = texts;
+		String buffer[] = code.split(System.getProperty("line.separator"));
 		String tb = target.replace(" ", "");
 		Boolean flag = false;
 		int start = 0;
 		int end = 0;
-
-		for(int index = 0; index < buffer.length; index++){
+		if(type.equals(CConstants.ELSEIF)){
+			System.out.println(tb);
+			System.out.println();
+		}
+		for(int index = codeBlocks.lastElement(); index < buffer.length; index++){
 			String s = buffer[index];
-			s = s.replace(" ", "");
-			if(tb.contains(s)){
-				if(!flag){
-					flag = true;
-					start = index;
+			s = s.replace(" ", "").trim();
+			if(!s.equals("}")){
+				if(type.equals(CConstants.ELSEIF)){
+					System.out.println(s);
+					System.out.println(flag);
 				}
-			} else{
-//				System.out.println("target: "+tb);
-//				System.out.println("base: "+s);
+				if(tb.contains(s)&&!s.equals("")){
+					if(!flag){
+						flag = true;
+						start = index;
+					}
+				} else{
+	//				System.out.println("target: "+tb);
+	//				System.out.println("base: "+s);
+					if(flag){
+						end = index-1;
+						break;
+					}
+				}
+			} else {
+				if(flag){
+					end = index;
+					break;
+				}
+			}
+			if(index==buffer.length-1){
 				if(flag){
 					end = index-1;
 					break;
 				}
 			}
 		}
+		if(end==buffer.length-1){
+			end--;
+		}
 		rv[0] = start;
 		rv[1] = end;
-		System.out.println(target);
-		for(int i = start; i < end+1; i++){
-			System.out.println(texts[i]);
-		}
+		codeBlocks.add(end);
+//		System.out.println(target);
+//		System.out.println(code);
+//		System.out.println();
+//		String ss[] = code.split(System.getProperty("line.separator"));
+//		for(int i = 0; i < ss.length; i++){
+//			System.out.println(ss[i]);
+//		}
+//		System.out.println();
 		return rv;
 	}
 }

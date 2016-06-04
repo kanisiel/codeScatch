@@ -105,25 +105,30 @@ public class MainUIController implements Initializable {
 				for(String str : buffers){
 					if(str.trim().equals("")){
 						trimmed++;
+						trimCode.add(str);
 					} else if (str.startsWith("#")){
 						trimmed++;
-					} else {
 						trimCode.add(str);
+					} else {
+//						trimCode.add(str);
+						break;
 					}
 				}
 //				System.out.println(trimCode.firstElement());
 				trim = String.join(System.getProperty("line.separator"), trimCode);
 //				System.out.println(trim);
-				buffer = trim;
-				trim = code;
-				code = buffer;
-				desktopPaneController.textArea.setText(trim);
+				buffer = buffer.replace(trim, "");
+				
+//				String swap = code;
+//				code = buffer;
+//				buffer = swap;
+				desktopPaneController.textArea.setText(code);
+				doParse(buffer);
 				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			doParse();
 //			desktopPaneController.fcc.showAll();
 		}
 	}
@@ -210,7 +215,7 @@ public class MainUIController implements Initializable {
 		desktopPaneController.textArea.setText(code);
 		
 	}
-	public void doParse(){
+	public void doParse(String code){
 		desktopPaneController.ctt.doParse(code);
 	}
 	@FXML

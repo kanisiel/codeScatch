@@ -268,6 +268,22 @@ public class FlowChartCanvas extends BorderPane {
 		       }
 		       tags.clear();
 		    }
+		});		
+		bound.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent event) {
+		        if(event.isPrimaryButtonDown()){
+		        	int[] lines = node.lines;
+		        	System.out.println(trimmed);
+		        	System.out.println(lines[0]+"~"+lines[1]);
+		        	System.out.println((lines[0]+trimmed)+"~"+(lines[1]+trimmed));
+		        	System.out.println();
+//		        	System.out.println("Height : "+sp.getPrefHeight());
+//		        	System.out.println("Sum : "+(sp.getLayoutY()+sp.getPrefHeight()));
+//		        	Text t = (Text)sp.getChildren().get(1);
+//		    		System.out.println(t.getWidth());
+		        }
+		    }
 		});
 		bound.getChildren().addAll(rect,label);
 		StackPane sp = new StackPane(bound);
@@ -319,9 +335,13 @@ public class FlowChartCanvas extends BorderPane {
 		    @Override
 		    public void handle(MouseEvent event) {
 		        if(event.isPrimaryButtonDown()){
-		        	
-		        	System.out.println("Axis X : "+sp.getLayoutX());
-		        	System.out.println("Center Axis X : "+centerLineX);
+		        	int[] lines = node.lines;
+		        	System.out.println(trimmed);
+		        	System.out.println(lines[0]+"~"+lines[1]);
+		        	System.out.println((lines[0]+trimmed)+"~"+(lines[1]+trimmed));
+		        	System.out.println();
+//		        	System.out.println("Axis X : "+sp.getLayoutX());
+//		        	System.out.println("Center Axis X : "+centerLineX);
 //		        	System.out.println("Height : "+sp.getPrefHeight());
 //		        	System.out.println("Sum : "+(sp.getLayoutY()+sp.getPrefHeight()));
 //		        	Text t = (Text)sp.getChildren().get(1);
@@ -336,7 +356,7 @@ public class FlowChartCanvas extends BorderPane {
 			       Shape s = (Shape) sp.getChildren().get(0);
 			       s.setStroke(Color.RED);
 			       int[] lines = node.lines;
-			       for(int i = lines[0]; i < lines[1]; i++){
+			       for(int i = lines[0]; i <= lines[1]; i++){
 			    	   try {
 			    		   Object tag = parent.textArea.addLineHighlight(i+trimmed, java.awt.Color.ORANGE);
 			    		   tags.add(tag);
