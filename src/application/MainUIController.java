@@ -44,6 +44,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import jfxtras.scene.control.window.Window;
+import models.FontChooserDialog;
 /**
  *
  * @author
@@ -224,12 +225,8 @@ public class MainUIController implements Initializable {
 	}
 	
 	@FXML
-	public void zoomIn() {
-		System.out.println("Zoom In");
-	}
-	
-	@FXML
-	public void zoomOut() {
-		System.out.println("Zoom Out");
+	public void openPreference() {
+		FontChooserDialog dialog = new FontChooserDialog(desktopPaneController.textArea);
+		dialog.requestFocus();
 	}
 }
