@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="codeScatch.jar" size="7959017" download="eager" />
+    <jar href="codeScatch.jar" size="7959114" download="eager" />
     <jar href="libs/antlr-4.5.3-complete.jar" size="1485121" download="eager" />
     <jar href="libs/jfxtras-common-8.0-r5-SNAPSHOT.jar" size="53685" download="eager" />
     <jar href="libs/jfxtras-controls-8.0-r5-SNAPSHOT.jar" size="266324" download="eager" />

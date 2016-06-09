@@ -189,18 +189,12 @@ public class TreeToShape {
 				checkSid(node);
 			}
 		}
-//		for(Double d : sidVector){
-//			System.out.println(d);
-//		}
 	}
 	private void check(CShapeNode node, Vector<Double> sidVector){
 		if(node.getShape()==null){
 		;
 		} else {
 			double sid = node.shape.checkSid(sidVector);
-//			if(sidVector.contains(sid)){
-//				sid = node.shape.setNewSid();
-//			}
 			sidVector.add(sid);
 		}
 	}
