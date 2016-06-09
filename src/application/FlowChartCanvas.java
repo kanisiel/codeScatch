@@ -223,7 +223,7 @@ public class FlowChartCanvas extends BorderPane {
 	public void drawBound(CShapeNode node){
 //		System.out.println(node.getType());
 		if(node.getClass().equals(CIteratorManager.class)||node.getClass().equals(CIfManager.class)){
-			System.out.println(node.getType());
+//			System.out.println(node.getType());
 			double width = 0;
 			double height = 0;
 			int childNum = node.getchildNum();
