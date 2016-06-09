@@ -167,9 +167,9 @@ public class CodeToTree {
 	    		shape = tts.declareToShape(node.getData().getIterationCondition(), Constants.DO, parentNode, findLines(buffer, node.getData().getParseTree().getText(), CConstants.DO, findDupOther(parent, node, i)));
 	    	} else if (node.getData().getKind().equals(CConstants.FOR)){
 	    		shape = tts.declareToShape(node.getData().getIterationCondition(), Constants.FOR, parentNode, findLines(buffer, node.getData().getParseTree().getText(), CConstants.FOR, findDupOther(parent, node, i)));
-	    	} else if(!node.getELSE().equals(null)){
+	    	} /*else if(!node.getELSE().equals(null)){
 	    		shape = tts.declareToShape("", Constants.ELSE, parentNode, checkLine(node.getData().getParseTree().getText(), CConstants.ELSE));
-	    	} else {
+	    	} */else {
 	    		shape = null;
 	    	}
     		node.getData().setShapeNode(shape);

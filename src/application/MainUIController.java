@@ -80,7 +80,7 @@ public class MainUIController implements Initializable {
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("C Sources (*.c)", "*.c"));
 		
 		File selectedFile = fileChooser.showOpenDialog(null);
-		
+				
 		if (selectedFile == null) return;
 		
 		try {
