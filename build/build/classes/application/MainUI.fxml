@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import application.*?>
+
+<VBox fx:id="content" prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1">
+	<children> 
+		<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+		    <top>
+		        <MenuBar BorderPane.alignment="CENTER">
+		            <menus>
+		                <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
+		                    <items>
+		                        <MenuItem mnemonicParsing="false" text="Open" accelerator="Shortcut+O" onAction="#open" />
+		                   		<MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S" onAction="#save" />
+		                        <MenuItem mnemonicParsing="false" text="Save As" accelerator="Shortcut+A" onAction="#saveAs" />
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                       <!--  <MenuItem mnemonicParsing="false" text="Close" onAction="#close"/> -->
+		                        <MenuItem mnemonicParsing="false" text="Exit" accelerator="Alt+F4" onAction="#exit" />
+		                    </items>
+		                </Menu>
+		                <!-- <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+		                    <items>
+		                        <MenuItem mnemonicParsing="false" text="Undo" />
+		                        <MenuItem mnemonicParsing="false" text="Redo" />
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <MenuItem mnemonicParsing="false" text="Copy" />
+		                        <MenuItem mnemonicParsing="false" text="Cut" />
+		                        <MenuItem mnemonicParsing="false" text="Paste" />
+		                        <MenuItem mnemonicParsing="false" text="Delete" />
+		                    </items>
+		                </Menu> -->
+		                <Menu fx:id="windowMenu" mnemonicParsing="false" text="Window">
+		                    <items>
+		                        <MenuItem mnemonicParsing="false" text="Code Viewer" />
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <MenuItem mnemonicParsing="false" text="Flow Chart" />
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <MenuItem mnemonicParsing="false" id="Graph Paper" text="- Graph Paper" onAction="#background"/>
+		                        <MenuItem mnemonicParsing="false" id="Blank Paper" text="- Blank Paper" onAction="#background"/>
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <MenuItem mnemonicParsing="false" text="Preference" onAction="#openPreference"/>
+		                    </items>
+		                </Menu>
+		                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+		                    <items>
+		                        <MenuItem mnemonicParsing="false" text="About" />
+		                    </items>
+		                </Menu>
+		            </menus>
+		        </MenuBar>
+		    </top>
+			<center>
+				<VBox fx:id="desktopPane" prefHeight="570.0" prefWidth="824.0" xmlns:fx="http://javafx.com/fxml/1">
+					<children>
+						
+					</children>
+				</VBox>
+		    </center>
+		    <left>
+		        <VBox fx:id="toolBar" xmlns:fx="http://javafx.com/fxml/1">
+		        	<children>
+		        	
+		        	</children>
+		        </VBox>
+		    </left>
+		        
+		</BorderPane>
+	</children>
+</VBox>

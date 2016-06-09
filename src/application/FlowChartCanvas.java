@@ -382,7 +382,7 @@ public class FlowChartCanvas extends BorderPane {
 	public void draw(CShapeNode node){
 		CShapeManager shape = node.getShape();
 		this.manager.addNode(shape);
-		setCoord(shape);
+//		setCoord(shape);
 		StackPane sp = node.getSp();
 		if(checkBlock(node)){
 			sp.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {

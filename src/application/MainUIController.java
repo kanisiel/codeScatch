@@ -198,7 +198,8 @@ public class MainUIController implements Initializable {
 	}
 	public void prepare(){
 		desktopPane.getChildren().clear();
-		desktopPaneController = new DesktopPaneController(desktopPane);
+		desktopPaneController = null;
+		desktopPaneController= new DesktopPaneController(desktopPane);
 		
 	}
 	public void doParse(String code){
