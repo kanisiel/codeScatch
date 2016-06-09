@@ -70,6 +70,7 @@ public class MainUIController implements Initializable {
 	public void open() {
 		if(desktopPaneController.tts.getRootNode().getNodes().size()>2){
 			prepare();
+			
 		}
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select C file");
