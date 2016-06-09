@@ -47,6 +47,14 @@ public class CodeScatchFX extends Application {
 			}
 		});
 	    primaryStage.show();
+	    primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
 	}
 
     /**

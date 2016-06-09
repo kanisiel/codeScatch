@@ -33,7 +33,7 @@ public class FontChooserDialog extends Dialog<Pair<String, String>> {
 		
 		this.fontList = FXCollections.observableArrayList();
 		this.sizeList = FXCollections.observableArrayList();
-		this.buttonType = new ButtonType("í™•", ButtonData.OK_DONE);
+		this.buttonType = new ButtonType("È®ÀÎ", ButtonData.OK_DONE);
 		this.getDialogPane().getButtonTypes().addAll(buttonType, new ButtonType("Set Default", ButtonData.OTHER), ButtonType.CANCEL);
 		this.grid = new GridPane();
 		this.textArea = textArea;
@@ -90,7 +90,6 @@ public class FontChooserDialog extends Dialog<Pair<String, String>> {
 			@Override
 			public void run() {
 				textArea.setFont(new Font(selectedFontName, Font.PLAIN, size));
-				textArea.revalidate();
 			}
 		});
 	}

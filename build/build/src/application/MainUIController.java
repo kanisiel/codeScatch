@@ -11,25 +11,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
-import adapter.CodeToTree;
-import adapter.TreeToShape;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
@@ -38,12 +32,11 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import jfxtras.scene.control.window.Window;
+import models.FontChooserDialog;
 /**
  *
  * @author
@@ -58,11 +51,13 @@ public class MainUIController implements Initializable {
 	@FXML private Menu fileMenu;
 	private String code = " ";
 	private int trimmed = 0;
+	private VBox desktopPane;
 	
     public MainUIController() {}
     
     
     public void init(VBox desktopPane){//, VBox toolBar){
+    	this.desktopPane = desktopPane;
     	desktopPaneController = new DesktopPaneController(desktopPane);   	
 //    	toolBarController = new ToolBarController(toolBar, desktopPaneController.getFlowChartCanvas());
     	
@@ -73,14 +68,20 @@ public class MainUIController implements Initializable {
 		
 	@FXML
 	public void open() {
+		if(desktopPaneController.tts.getRootNode().getNodes().size()>2){
+			prepare();
+			
+		}
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select C file");
 		fileChooser.setInitialDirectory(new File("."));
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("C Sources (*.c)", "*.c"));
 		
 		File selectedFile = fileChooser.showOpenDialog(null);
-		
+				
 		if (selectedFile == null) return;
+		
+		
 		
 		try {
 			String filePath = selectedFile.getAbsolutePath();
@@ -196,24 +197,8 @@ public class MainUIController implements Initializable {
 //		System.out.println(sourceId);
 	}
 	public void prepare(){
-		Pane canvas = (Pane) desktopPaneController.getDesktopPane().getChildren().get(0);
-		Map<String, Window> windows = new LinkedHashMap<>();
-		for(Node n : canvas.getChildren()){
-			Window w = (Window) n;
-			windows.put(w.getTitle(), w);
-		}
-		Window flowchart = windows.get("Flow Chart");
-		ScrollPane sp = desktopPaneController.sp;
-//		FlowChartCanvas fcc = 
-		desktopPaneController.fcc = new FlowChartCanvas(desktopPaneController);
-		sp.setPrefSize(flowchart.getPrefWidth(), flowchart.getPrefHeight());
-//		fcc.setPrefSize(flowchart.getPrefWidth(), flowchart.getPrefHeight());
-//		fcc.height = Constants.canvasHeight;
-		desktopPaneController.setFcc(desktopPaneController.fcc);
-		desktopPaneController.setTts(new TreeToShape(desktopPaneController.fcc));
-		desktopPaneController.setCtt(new CodeToTree(desktopPaneController.getTts()));
-		code = "";
-		desktopPaneController.textArea.setText(code);
+		desktopPane.getChildren().clear();
+		desktopPaneController = new DesktopPaneController(desktopPane);
 		
 	}
 	public void doParse(String code){
@@ -226,12 +211,8 @@ public class MainUIController implements Initializable {
 	}
 	
 	@FXML
-	public void zoomIn() {
-		System.out.println("Zoom In");
-	}
-	
-	@FXML
-	public void zoomOut() {
-		System.out.println("Zoom Out");
+	public void openPreference() {
+		FontChooserDialog dialog = new FontChooserDialog(desktopPaneController.textArea);
+		dialog.requestFocus();
 	}
 }

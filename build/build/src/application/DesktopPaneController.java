@@ -54,12 +54,13 @@ public class DesktopPaneController extends VBox {
 	private VBox desktopPane;
 	public Map<String, Window> windows;
 	public Map<String, Double> paneBound;
+	private Pane canvas;
 	
     
     public DesktopPaneController(VBox desktopPane){
     	this.windows = new LinkedHashMap<>();
     	this.setDesktopPane(desktopPane);
-    	Pane canvas = new Pane();
+    	canvas = new Pane();
     	desktopPane.getChildren().add(canvas);
 //    	Window w = new Window("test");
 //    	canvas.getChildren().add(w);
@@ -79,6 +80,15 @@ public class DesktopPaneController extends VBox {
 	        canvas.getChildren().add(w);
 		} 
 	}
+    public void revalidate(String title){
+    	canvas.getChildren().remove(0);
+    	windows.remove(title);
+    	Window w = createWindow(title);
+    	windows.replace(title, w);
+    	canvas.getChildren().add(0, w);
+    	this.tts = new TreeToShape(fcc);
+    	this.ctt = new CodeToTree(tts);
+    }
     private Window createWindow(String title){
     	//InternalFrame frame = item.getInternalFrame();
 		Window w = new Window(title);

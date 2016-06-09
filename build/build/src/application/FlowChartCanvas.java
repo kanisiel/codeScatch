@@ -151,6 +151,12 @@ public class FlowChartCanvas extends BorderPane {
 			}else {
 				draw(node);
 			}
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -161,6 +167,12 @@ public class FlowChartCanvas extends BorderPane {
 		for(CShapeNode node : root.getNodes()){
 			drawBounds(node);
 			drawBound(node);
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	public double largestWidth(CShapeNode parent){
@@ -605,6 +617,12 @@ public class FlowChartCanvas extends BorderPane {
 		for(CShapeNode node : nodes){
 				drawConnect(node);
 				drawConnects(node);
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 	}
 	
