@@ -7,8 +7,11 @@ package application;
 
 import Settings.Constants;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -35,6 +38,14 @@ public class CodeScatchFX extends Application {
 	public void start(Stage primaryStage) throws Exception {
 	    init(primaryStage);
 	    primaryStage.show();
+	    primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
 	}
 
     /**
