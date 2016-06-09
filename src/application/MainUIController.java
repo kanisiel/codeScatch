@@ -68,7 +68,9 @@ public class MainUIController implements Initializable {
 		
 	@FXML
 	public void open() {
-
+		if(desktopPaneController.tts.getRootNode().getNodes().size()>2){
+			prepare();
+		}
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select C file");
 		fileChooser.setInitialDirectory(new File("."));
@@ -78,9 +80,7 @@ public class MainUIController implements Initializable {
 				
 		if (selectedFile == null) return;
 		
-		if(desktopPaneController.tts.getRootNode().getNodes().size()>2){
-			prepare();
-		}
+		
 		
 		try {
 			String filePath = selectedFile.getAbsolutePath();
