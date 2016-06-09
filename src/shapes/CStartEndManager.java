@@ -1,6 +1,7 @@
 package shapes;
 
 import Settings.Constants;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -43,6 +44,12 @@ public class CStartEndManager extends CShapeManager {
 			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
 			this.setTp(new Point2D((this.getP().getX()+(this.getD().getWidth()+5)), (this.getP().getY())+(5.0)));
 		}
+		shape = new Circle(this.p.getX(), this.p.getY(), 15);
+		if(flag == Constants.EShapeType.START.ordinal()){
+			shape.setFill(Color.GREEN);
+		} else {
+			shape.setFill(Color.RED);
+		}
 		setAnchor();
 	}
 	public CStartEndManager(int flag, Point2D p){
@@ -68,6 +75,12 @@ public class CStartEndManager extends CShapeManager {
 			this.setTd(new Dimension2D(t.getLayoutBounds().getWidth(), t.getLayoutBounds().getHeight()));
 			this.setTp(new Point2D((this.getP().getX()+(this.getD().getWidth()+5)), (this.getP().getY())+(5.0)));
 		}
+		shape = new Circle(this.p.getX(), this.p.getY(), 15);
+		if(flag == Constants.EShapeType.START.ordinal()){
+			shape.setFill(Color.GREEN);
+		} else {
+			shape.setFill(Color.RED);
+		}
 		setAnchor();
 	}
 
@@ -86,12 +99,7 @@ public class CStartEndManager extends CShapeManager {
 
 	@Override
 	public Shape getShape() {
-		shape = new Circle(p.getX(), p.getY(), 15);
-		if(flag == Constants.EShapeType.START.ordinal()){
-			shape.setFill(Color.GREEN);
-		} else {
-			shape.setFill(Color.RED);
-		}
+		
 		return shape;
 	}
 	
@@ -108,7 +116,11 @@ public class CStartEndManager extends CShapeManager {
 		text.setFill(Color.BLACK);
 		return text;
 	}
-
+	@Override
+	public BoundingBox getBounds(){
+	
+		return new BoundingBox(0, 0, 30, 30); 
+	}
 	@Override
 	public void setCoords(Point2D p, Dimension2D d, Dimension2D w) {
 		// TODO Auto-generated method stub

@@ -1,7 +1,9 @@
 package shapes;
 
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Polygon;
@@ -16,6 +18,7 @@ public class CDiamondManager extends CShapeManager {
 		super();
 		this.body = body;
 		label = new Label(body);
+		text = new Text(body);
 	}
 
 
@@ -37,18 +40,23 @@ public class CDiamondManager extends CShapeManager {
 	@Override
 	public Shape getShape() {
 		// TODO Auto-generated method stub
-		Polygon poly = new Polygon();
+		this.w = new Point2D(0, (getBounds().getHeight()/2));
+		this.e = new Point2D(getBounds().getWidth(), (getBounds().getHeight()/2));
+		this.n = new Point2D((getBounds().getWidth()/2), 0);
+		this.s = new Point2D((getBounds().getWidth()/2), getBounds().getHeight());
+		
+		poly = new Polygon();
 		poly.setFill(fill);
 		poly.setStroke(stroke);
 		poly.setStrokeWidth(2);
-		poly.getPoints().addAll(e.getX(),e.getY(),n.getX(),n.getY(), w.getX(), w.getY(), s.getX(), s.getY());
+		poly.getPoints().addAll(w.getX(),w.getY(),n.getX(),n.getY(), e.getX(), e.getY(), s.getX(), s.getY());
 		return poly;
 	}
 	@Override
 	public Text getText() {
-		text = new Text(body);
-		text.setX(tp.getX());
-		text.setY(tp.getY());
+		
+//		text.setX(tp.getX());
+//		text.setY(tp.getY());
 		return text;
 	}
 
@@ -63,8 +71,8 @@ public class CDiamondManager extends CShapeManager {
 		this.setP(new Point2D((w.getWidth()/2)-(this.d.getWidth()/2), p.getY()+d.getHeight()+40));
 		this.setTp(new Point2D(this.getP().getX()+(14*1.4), this.getP().getY()+(24*1.4)));
 		
-		this.e = new Point2D(this.getP().getX(),this.getP().getY()+(this.getD().getHeight()/2));
-		this.w = new Point2D(this.getP().getX()+this.getD().getWidth(), this.getP().getY()+(this.getD().getHeight()/2));
+		this.w = new Point2D(this.getP().getX(),this.getP().getY()+(this.getD().getHeight()/2));
+		this.e = new Point2D(this.getP().getX()+this.getD().getWidth(), this.getP().getY()+(this.getD().getHeight()/2));
 		this.n = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY());
 		this.s = new Point2D(this.getP().getX()+(this.getD().getWidth()/2), this.getP().getY()+this.getD().getHeight());
 
@@ -74,7 +82,20 @@ public class CDiamondManager extends CShapeManager {
 		rightAnchor = this.w;
 	}
 
-
+	@Override
+	public BoundingBox getBounds(){
+		Canvas buffer = new Canvas();
+		GraphicsContext gc = buffer.getGraphicsContext2D();
+ 		@SuppressWarnings("restriction")
+		float fontHeight = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().getFontMetrics(gc.getFont()).getLineHeight();
+ 		@SuppressWarnings("restriction")
+		float fontWidth = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().computeStringWidth(body, gc.getFont());
+		String[] lines = body.split(System.getProperty("line.separator"));
+		double width = (fontWidth)*2+20;
+		double height = (fontHeight*lines.length)+40;
+//		System.out.println(text+" : "+fontWidth);
+		return new BoundingBox(0, 0, width, height); 
+	}
 
 	@Override
 	public Shape Shape() {

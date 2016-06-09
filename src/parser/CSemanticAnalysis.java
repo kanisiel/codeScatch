@@ -1,5 +1,4 @@
 package parser;
-import java.util.Scanner;
 import java.util.Vector;
 
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -481,7 +480,51 @@ public class CSemanticAnalysis {
 			}
 		}
 	}
-	
+	public void visitChilds(TreeNode<TreeData> parents) {
+		if(parents.getChildList().size() > 0){
+			for(int i = 0; i < parents.getChildList().size(); ++i){
+				String rv = "";
+				TreeNode<TreeData> node = parents.getChildList().get(i);
+//				System.out.println("parent: "+parents.getData().getNodeType());
+//				System.out.println(node.getData().getNodeType());
+//				System.out.println(node.getData().getKind());
+				if(node.getData().getNodeType().equals("code")){
+					for(int j = 0; j < node.getData().getCodeVector().size(); ++j){
+						rv += visitChildrens(node.getData().getCodeVector().get(j));					
+					}
+					if(rv.equals("")||rv.equals(" ")){
+						rv = node.getData().getParseTree().getText();
+					}
+					node.getData().setBody(rv);
+				}
+				else{
+					node.getData().setBody(node.getData().getParseTree().getText());
+				}
+//				if(node.getData().getNodeType().equals(anObject))
+//				System.out.println(node.getData().getIterationCondition());//getParseTree().getText());
+//				System.out.println();
+				visitChilds(node);
+			}
+		} else {
+			;
+		}
+	}
+	public String visitChildrens(ParseTree parseTree) {
+		String rv = "";
+		if(parseTree.getChildCount() > 0){
+			for(int i = 0; i < parseTree.getChildCount(); ++i){
+				rv += visitChildrens(parseTree.getChild(i));
+			}
+		}
+		else{
+			if(Trees.getNodeText(parseTree.getParent(), parser).equals("typeSpecifier")){
+				rv += parseTree.getText() + " ";
+			} else {
+				rv += parseTree.getText();
+			}
+		}
+		return rv;
+	}
 	public String getCondition(ParseTree parseTree){//TreeNode<TreeData> parents){
 //		ParseTree parseTree = parents.getData().getParseTree();
 		String buffer = "";

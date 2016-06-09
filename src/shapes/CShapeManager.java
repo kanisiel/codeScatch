@@ -3,8 +3,12 @@ package shapes;
 import java.io.Serializable;
 import java.util.Random;
 
+import com.sun.javafx.tk.Toolkit;
+
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -29,9 +33,13 @@ public abstract class CShapeManager implements Serializable {
 	public CShapeManager(){
 		this.stroke = Color.BLACK;
 		this.fill = Color.WHITE;
+		setNewSid();
+	}
+	public Double setNewSid(){
 		Random r = new Random();
 		r.setSeed(System.currentTimeMillis());
 		sid = Math.abs(r.nextGaussian());
+		return sid;
 	}
 	public void setLines(int lines){ this.lines = lines; }
 	public String getBody(){return body;}
@@ -106,5 +114,16 @@ public abstract class CShapeManager implements Serializable {
 	public void setRightAnchor(Point2D rightAnchor) {
 		this.rightAnchor = rightAnchor;
 	}
-	
+	public BoundingBox getBounds(){
+		Canvas buffer = new Canvas();
+		GraphicsContext gc = buffer.getGraphicsContext2D();
+		@SuppressWarnings("restriction")
+		float fontWidth = Toolkit.getToolkit().getFontLoader().computeStringWidth(body, gc.getFont());
+		@SuppressWarnings("restriction")
+		float fontHeight = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().getFontMetrics(gc.getFont()).getLineHeight();
+		String[] lines = body.split(System.getProperty("line.separator"));
+		float width = fontWidth+30;
+		float height = (fontHeight*lines.length)+30;
+		return new BoundingBox(0, 0, width, height); 
+	}
 }

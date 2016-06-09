@@ -94,7 +94,8 @@ public class CodeToTree {
 //	    }
 //	    System.out.println("------------------------------------------------------");
 	    this.root = parent;
-	    visitChildren(parent);
+	    semanticAnalysis.visitChilds(parent);
+//	    visitChildren(parent);
 	    
 	    
 //	    System.out.println(parent.getChildList().get(1).getData().getIfCondition());
@@ -134,165 +135,79 @@ public class CodeToTree {
 				wholeCode += node.getData().getParseTree().getText();
 			}
 		}
-	    Vector<String> st = semanticAnalysis.getST();
-	    CShapeNode shape;
-	    Vector<Integer> linePointer = new Vector<>();
-	    for(int i = 0; i < parent.getChildList().size(); ++i){
-    		Vector<String> sts = new Vector<>();
-    		ParseTree tree = parent.getChildList().get(i).getData().getParseTree();
-	    	if(parent.getChildList().get(i).getData().getNodeType().equals(CConstants.CODE)){
-	    		sts.add(st.get(i));
-	    		shape = tts.declareToShape(sts,Constants.CODE, findLines(buffer, st.get(i), CConstants.CODE, findDupCode(st, st.get(i), i)));
-	    		
-	    	} else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.IF)){
-	    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(body);
-	    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(condition);
-	    		shape = tts.declareToShape(sts, Constants.IF, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.IF, findDupOther(parent, parent.getChildList().get(i), i)));
-//	    		if()
-	    		TreeData elses = parent.getChildList().get(i).getELSE();
-	    		if(parent.getChildList().get(i).getELSEIF().size()>0){
-	    			for(TreeData node : parent.getChildList().get(i).getELSEIF()){
-	    				Vector<String> stelseif = new Vector<>();
-	    				String str = "";
-	    				for(ParseTree t : node.getCodeVector()){
-	    					str += t.getText();
-	    				}
-	    				String bodyEI = str;//node.getParseTree().getParent().getText();
-	    				stelseif.add(bodyEI);
-	    	    		String conditionEI = node.getIfCondition();
-	    	    		stelseif.add(conditionEI);
-	    	    		shape = tts.declareToShape(stelseif, Constants.ELSEIF, findLines(buffer, "else if ( "+conditionEI+" ) {"+bodyEI, CConstants.ELSEIF, findDupOther(parent, parent.getChildList().get(i), i)));
-	    			}
-	    		}
-	    		if(elses!=null){
-	    			Vector<String> stelse = new Vector<>();
-	    			String elsebody = semanticAnalysis.getElseBody(elses.getParseTree());
-	    			stelse.add(elsebody);
-	    			shape = tts.declareToShape(stelse, Constants.ELSE, findLines(buffer, "else{"+elsebody, CConstants.ELSE, findDupOther(parent, parent.getChildList().get(i), i)));
-	    		}
-	    	} else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.WHILE)){
-	    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(body);
-	    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(condition);
-	    		shape = tts.declareToShape(sts, Constants.WHILE, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.WHILE, findDupOther(parent, parent.getChildList().get(i), i)));
-	    	} else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.DO)){
-	    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(body);
-	    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(condition);
-	    		shape = tts.declareToShape(sts, Constants.DO, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.DO, findDupOther(parent, parent.getChildList().get(i), i)));
-	    	} else if (semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.FOR)){
-	    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(body);
-	    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(condition);
-	    		shape = tts.declareToShape(sts, Constants.FOR, findLines(buffer, parent.getChildList().get(i).getData().getParseTree().getText(), CConstants.FOR, findDupOther(parent, parent.getChildList().get(i), i)));
-	    	} /*else if(semanticAnalysis.analyzeParseTreeKind(tree).equals(CConstants.ELSE)){
-	    		String body = semanticAnalysis.getBody(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(body);
-	    		String condition = semanticAnalysis.getCondition(parent.getChildList().get(i).getData().getParseTree());
-	    		sts.add(condition);
-	    		shape = tts.declareToShape(sts, Constants.ELSE);
-	    	} */else {
-	    		shape = null;
-	    	}
-    		parent.getChildList().get(i).getData().setShapeNode(shape);
-		}
+		declare(parent, buffer);
 		tts.drawRoot();
 	}
-	public int[] findLines(String text, String context, String type, int dup){
-		int rv[] = new int[2];
+	private void declare(TreeNode<TreeData> parent, String buffer){
 		
-//		System.out.println(duplicate(context));
-		if(type.equals(CConstants.CODE)){
-			int firstSC = context.indexOf(";");
-			String target = context.substring(0, firstSC);
-			int start = text.replace(", ", ",").replace(" = ", "=").indexOf(target.replace(", ", ",").replace(" = ", "="));
-			String forward = text.substring(0, start);
-			String forwards[] = forward.split(System.getProperty("line.separator"));
-			int startLine = forwards.length-1;
-			rv[0] = startLine;
-			String contexts[] = context.split(";");
-			String lastContext = contexts[(contexts.length-1)];
-			int last = text.replace(", ", ",").replace(" = ", "=").indexOf(lastContext.replace(", ", ",").replace(" = ", "="));
-			forward = text.substring(0, last);
-			forwards = forward.split(System.getProperty("line.separator"));
-			int lastLine = forwards.length;
-			rv[1] = lastLine;
-		} else if (type.equals(CConstants.ELSEIF)){
-			String buffer = context;
-			int pointer = buffer.replace(" ", "").indexOf("elseif");
-			String contexts[] = context.split(" ");
-			Boolean flag = false;
-			for(String t : texts){
-				for(String s : contexts){
-					if(t.contains(s)){
-						flag = true;
-					} else {
-						break;
-					}
-				}
-			}
-		} else {
-			if(context.startsWith("if(")){
-				int cbracet = context.indexOf("}")+1;
-				context = context.replace("else{", "");
-				context = context.substring(0, cbracet);
-			}else if(context.startsWith("else{")){
-				context += "}";
-			}
-			Vector<String> vs = new Vector<>();
-			int bracet = context.indexOf("{");
-			String value = context.replace("{", "{"+System.getProperty("line.separator"));
-			String values[] = value.split(System.getProperty("line.separator"));
-			vs.add(values[0]);
-			for(int i = 1; i < values.length; i++){
-				values[i] = values[i].replaceAll(";", ";"+System.getProperty("line.separator"));
-				String values2[] = values[i].split(System.getProperty("line.separator"));
-				for(int j = 0; j < values2.length; j++){
-					vs.add(values2[j]);
-				}
-			}
-//			for(String s : vs){
-//				System.out.println(s);
-//			}
-
-			int flag = 0;
-			int startLine = 0;
-			for(int i = 1; i < texts.length-1; i++){
-				if(texts[i].startsWith("}")){
-					String target = texts[i].replace("}", "");
-					if(target.trim().equals(vs.get(0))){
-						if(checkSame(vs, i)){
-							flag++;
-						}
-					}
-					if(flag == dup){
-						startLine = i;
-						break;
-					}
-				}else {
-					if(texts[i].trim().equals(vs.get(0))){
-						if(checkSame(vs, i)){
-							flag++;
-						}
-					}
-					if(flag == dup){
-						startLine = i;
-						break;
-					}
-				}
-			}
-			rv[0] = startLine;
-			rv[1] = startLine + vs.size();
-//			System.out.println(rv[0]);
-//			System.out.println(rv[1]);
+		Vector<String> st = semanticAnalysis.getST();
+	    CShapeNode shape, parentNode = null;
+	    Vector<Integer> linePointer = new Vector<>();
+	    for(int i = 0; i < parent.getChildList().size(); ++i){
+	    	TreeNode<TreeData> node = parent.getChildList().get(i);
+    		ParseTree tree = node.getData().getParseTree();
+    		if(parent.getData().getNodeType().equals("root")){
+    			parentNode = tts.getRootNode();
+	    	} else {
+	    		parentNode = node.getParent().getData().getShapeNode();
+	    	}
+//    		System.out.println(node.getData().getNodeType());
+//    		System.out.println(node.getParent().getData().getNodeType());
+//    		System.out.println(node.getParent().getData().getShapeNode());
+//    		System.out.println();
+	    	if(node.getData().getNodeType().equals(CConstants.CODE)){
+	    		shape = tts.declareToShape(node.getData().getBody(),Constants.CODE, parentNode, findLines(buffer, st.get(i), CConstants.CODE, findDupCode(st, st.get(i), i)));
+	    	} else if(node.getData().getKind().equals(CConstants.IF)){
+	    		shape = tts.declareToShape(node.getData().getIfCondition(), Constants.IF, parentNode, findLines(buffer, node.getData().getParseTree().getText(), CConstants.IF, findDupOther(parent, node, i)));
+	    	} else if(node.getData().getKind().equals(CConstants.ELSEIF)){
+	    		shape = tts.declareToShape(node.getData().getIfCondition(), Constants.ELSEIF, parentNode, findLines(buffer, node.getData().getParseTree().getText(), CConstants.ELSEIF, findDupOther(parent, node, i)));
+	    	} else if(node.getData().getKind().equals(CConstants.WHILE)){
+	    		shape = tts.declareToShape(node.getData().getIterationCondition(), Constants.WHILE, parentNode, findLines(buffer, node.getData().getParseTree().getText(), CConstants.WHILE, findDupOther(parent, node, i)));
+	    	} else if(node.getData().getKind().equals(CConstants.DO)){
+	    		shape = tts.declareToShape(node.getData().getIterationCondition(), Constants.DO, parentNode, findLines(buffer, node.getData().getParseTree().getText(), CConstants.DO, findDupOther(parent, node, i)));
+	    	} else if (node.getData().getKind().equals(CConstants.FOR)){
+	    		shape = tts.declareToShape(node.getData().getIterationCondition(), Constants.FOR, parentNode, findLines(buffer, node.getData().getParseTree().getText(), CConstants.FOR, findDupOther(parent, node, i)));
+	    	} else if(!node.getELSE().equals(null)){
+	    		shape = tts.declareToShape("", Constants.ELSE, parentNode, checkLine(node.getData().getParseTree().getText(), CConstants.ELSE));
+	    	} else {
+	    		shape = null;
+	    	}
+    		node.getData().setShapeNode(shape);
+//    		if(shape.shape==null){
+//    			;
+//    		}else {
+//	    		System.out.println(shape.shape.sid);
+//	    		System.out.println();
+//    		}
+	    	if(node.getChildList().size()>0){
+    			declare(node, buffer);
+    		}
+	    	
 		}
+	}
+	public void visitChildren(TreeNode<TreeData> parent) {
+		if(parent.getChildList().size() > 0){
+			for(int i = 0; i < parent.getChildList().size(); ++i){
+				System.out.println("parent: "+parent.getData().getNodeType());
+				System.out.println(i+"/"+parent.getChildList().size());
+				System.out.println(parent.getChildList().get(i).getData().getNodeType());
+				System.out.println(parent.getChildList().get(i).getData().getKind());
+				if(parent.getChildList().get(i).getData().getKind().contains("if")){
+					System.out.println(parent.getChildList().get(i).getData().getIfCondition());
+				}
+				System.out.println(parent.getChildList().get(i).getData().getBody());//getParseTree().getText());
+				System.out.println();
+				visitChildren(parent.getChildList().get(i));
+			}
+		}
+		else{
+			;
+		}
+	}
+	
+	public int[] findLines(String text, String context, String type, int dup){
+		
 		return checkLine(context, type);
-//		return rv;
 	}
 	private Boolean checkSame(Vector<String> vs, int start){
 		Boolean rv = false;
@@ -364,21 +279,6 @@ public class CodeToTree {
 		return rv;
 	}
 	
-	public void visitChildren(TreeNode<TreeData> parent) {
-		if(parent.getChildList().size() > 0){
-			for(int i = 0; i < parent.getChildList().size(); ++i){
-				System.out.println("parent: "+parent.getData().getNodeType());
-				System.out.println(parent.getChildList().get(i).getData().getNodeType());
-				System.out.println(parent.getChildList().get(i).getData().getKind());
-				System.out.println(parent.getChildList().get(i).getData().getParseTree().getText());
-				System.out.println();
-				visitChildren(parent.getChildList().get(i));
-			}
-		}
-		else{
-			;
-		}
-	}
 	public int[] checkLine(String target, String type){
 		int rv[] = new int[2];
 		String buffer[] = code.split(System.getProperty("line.separator"));

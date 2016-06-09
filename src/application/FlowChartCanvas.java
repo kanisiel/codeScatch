@@ -9,6 +9,7 @@ import javax.swing.text.BadLocationException;
 import Settings.CConstants;
 import Settings.Constants;
 import Settings.Windows.InternalWindows;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
@@ -20,17 +21,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import jfxtras.scene.control.window.Window;
 import shapes.CArrowHead;
 import shapes.CConnectManager;
+import shapes.CIfManager;
 import shapes.CIteratorManager;
 import shapes.CRootManager;
 import shapes.CShapeManager;
 import shapes.CShapeNode;
-import shapes.CStartEndManager;
 
 public class FlowChartCanvas extends BorderPane {
 	private Canvas canvas;
@@ -137,27 +139,11 @@ public class FlowChartCanvas extends BorderPane {
 		drawConnects(root);
 		addToThis();
 	}
-	public void showAll(){
-//		for(Node n :this.getChildren()){
-//			System.out.println(n);
-//		}
-		show(root);
-	}
-	public void show(CShapeNode node){
-		for(CShapeNode n : root.getNodes()){
-			if(n.getNodes().size()==0){
-				System.out.print(n.getParent().getType()+":"+n.getType());
-				System.out.println();
-			} else {
-				show(n);
-			}
-		}
-	}
 	public void drawNodes(CShapeNode root){
 		Vector<CShapeNode> nodes = root.getNodes();
 		this.boundaryWidth.put(root.getType()+root.getDepth(), 0.0);
 		for(CShapeNode node : nodes){
-			if(node.getchildNum()>0||node.getType().contains("if")||node.getType().contains("else")){
+			if(node.getchildNum()>0){
 				this.boundaryWidth.put(node.getType()+node.getDepth(), 0.0);
 				this.layoutY.put(node.getType()+node.getDepth(), 0.0);
 				this.lastLowerAnchor.put(node.getType()+node.getDepth(), 0.0);
@@ -168,187 +154,252 @@ public class FlowChartCanvas extends BorderPane {
 		}
 	}
 
-	public void drawConnects(CShapeNode root){
-		Vector<CShapeNode> nodes = root.getNodes();
-		for(CShapeNode node : nodes){
-			if(node.getchildNum()>0){
-				drawConnects(node);
-			}else {
-				drawConnect(node);
-			}
-		}
-	}
 	
 	public void drawBounds(CShapeNode root){
 //		Vector<CShapeNode> nodes = ;
+		System.out.println(root.getClass()+" > "+root.getType()+"("+root.getchildNum()+")");
 		for(CShapeNode node : root.getNodes()){
-			if(node.getClass().equals(CIteratorManager.class)||node.getType().equals(CConstants.IF)||node.getType().equals(CConstants.ELSE)||node.getType().equals(CConstants.ELSEIF)){
-				drawBound(node);
+			drawBounds(node);
+			drawBound(node);
+		}
+	}
+	public double largestWidth(CShapeNode parent){
+		double rv = 0;
+		for(CShapeNode node : parent.getNodes()){
+//			System.out.println(node.getParent().getType() +" : " + node.getType() + "("+parent.getNodes().indexOf(node)+"/"+(parent.getchildNum()-1)+")");
+			if(node.getClass().equals(CIteratorManager.class)||node.getClass().equals(CIfManager.class)){
+				if(node.getType().equals(CConstants.ELSEIF)){
+					if(parent.getType().equals(CConstants.IF)||parent.getType().equals(CConstants.ELSEIF)){
+						largestWidth(node);
+					}
+				}else {
+					if(rv<=node.getBoundWidth()){
+						rv = node.getBoundWidth()+30;
+					}
+				}
+			} else {
+				StackPane sp = find(node);
+				if(rv < sp.getPrefWidth()){
+					rv = sp.getPrefWidth();
+				
+				}
 			}
 		}
+		return rv;
+	}
+	public CShapeNode findlast(CShapeNode node){
+		
+		CShapeNode n = node.getNodes().get(node.getchildNum()-1);
+		if(n.getType().equals(CConstants.ELSEIF)){
+			if(node.getType().equals(CConstants.IF)||node.getType().equals(CConstants.ELSEIF)){
+				return node.getNodes().get(node.getchildNum()-2);
+			}
+		}
+		if(n.getchildNum()>0){
+			return findlast(n);
+		} else {
+			return n;
+		}
+		
 	}
 	public void drawBound(CShapeNode node){
-		double width = 0;
-		double height = 0;
-		CShapeNode first = node.getNodes().firstElement();
-		CShapeNode last = node.getNodes().lastElement();
-		StackPane fsp = find(first);
-		StackPane lsp = find(last);
-		Color fill;
-		Color stroke;
-		double upperAnchor = fsp.getLayoutY()-(fsp.getPrefHeight()/2), lowerAnchor = (lsp.getLayoutY()+(lsp.getPrefHeight()/2));
-		for(CShapeNode n : node.getNodes()){
-			StackPane sp = find(n);
-			if(width < sp.getPrefWidth()){
-				width = sp.getPrefWidth();
-			}
+//		System.out.println(node.getType());
+		if(node.getClass().equals(CIteratorManager.class)||node.getClass().equals(CIfManager.class)){
+			double width = 0;
+			double height = 0;
+			int childNum = node.getchildNum();
+			CShapeNode first = node.getNodes().get(0);
+			CShapeNode last = findlast(node);
+//			System.out.println("first: "+first.shape.sid);
+//			System.out.println("last: "+last.shape.sid);
+//			System.out.println(childNum);
+//			System.out.println();
+			StackPane fsp = find(first);
+			StackPane lsp = find(last);
+			Color fill;
+			Color stroke;
+			double upperAnchor = fsp.getLayoutY()-(fsp.getPrefHeight()/2), lowerAnchor = (lsp.getLayoutY()+(lsp.getPrefHeight()/2));
+			width = largestWidth(node);
+			height = (lsp.getLayoutY()+(lsp.getPrefHeight()/2)) - (fsp.getLayoutY()-(fsp.getPrefHeight()/2));
+			Rectangle rect = new Rectangle();
+			rect.setWidth(width+50);
+			rect.setHeight(height+20);
+			rect.setOpacity(0.4);
+			rect.setFill(getFill(node.getType()));
+			rect.setStroke(getStroke(node.getType()));
+			rect.setStrokeWidth(2);
+			rect.setLayoutX(centerLineX-(rect.getWidth()/2));
+			rect.setLayoutY(upperAnchor-10);
+			Label label = new Label(node.getType());
+			label.setLayoutX(centerLineX-(rect.getWidth()/2)+5);
+			label.setLayoutY(upperAnchor-25);
+			node.setBoundWidth(rect.getWidth());
+//			if(rect.getWidth()/2 > this.boundaryWidth.get(node.getType()+node.getDepth())){
+//				this.boundaryWidth.replace(node.getType()+node.getDepth(), sp.getPrefWidth()/2);
+//			}
+			Group bound = new Group();
+			bound.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			    @Override
+			    public void handle(MouseEvent event) {
+			       rect.setStroke(Color.RED);
+			       int[] lines = node.lines;
+			       for(int i = lines[0]; i <= lines[1]; i++){
+			    	   try {
+			    		   Object tag = parent.textArea.addLineHighlight(i+trimmed, java.awt.Color.ORANGE);
+			    		   tags.add(tag);
+			    	   } catch (BadLocationException e) {
+			    		   // TODO Auto-generated catch block
+			    		   e.printStackTrace();
+			    	   }
+			       }
+//			       Node n = lsp.getChildren().get(0);
+////			       System.out.println(n.getClass().toString());
+////			       System.out.println(Polygon.class.toString());
+//			       Class<? extends Node> c = n.getClass();
+//			       if(c.equals(Rectangle.class)){
+//			    	   Rectangle r = (Rectangle) n;
+//			    	   r.setStroke(Color.RED);
+//			       } else if(c.equals(Polygon.class)){
+//			    	   Polygon p = (Polygon)n;
+//			    	   p.setStroke(Color.RED);
+//			       }
+			    }
+			});
+			bound.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			    @Override
+			    public void handle(MouseEvent event) {
+			       rect.setStroke(getStroke(node.getType()));
+			       for(Object tag : tags){
+			    	   parent.textArea.removeLineHighlight(tag);
+			       }
+			       tags.clear();
+//			       Node n = lsp.getChildren().get(0);
+////			       System.out.println(n.getClass().toString());
+////			       System.out.println(Polygon.class.toString());
+//			       Class<? extends Node> c = n.getClass();
+//			       if(c.equals(Rectangle.class)){
+//			    	   Rectangle r = (Rectangle) n;
+//			    	   r.setStroke(getStroke(node.getType()));
+//			       } else if(c.equals(Polygon.class)){
+//			    	   Polygon p = (Polygon)n;
+//			    	   p.setStroke(getStroke(node.getType()));
+//			       }
+			    }
+			});		
+			bound.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			    @Override
+			    public void handle(MouseEvent event) {
+			        if(event.isPrimaryButtonDown()){
+			        	System.out.println(last.shape.sid);
+//			        	int[] lines = node.lines;
+//			        	System.out.println(trimmed);
+//			        	System.out.println(lines[0]+"~"+lines[1]);
+//			        	System.out.println((lines[0]+trimmed)+"~"+(lines[1]+trimmed));
+//			        	System.out.println();
+	//		        	System.out.println("Height : "+sp.getPrefHeight());
+	//		        	System.out.println("Sum : "+(sp.getLayoutY()+sp.getPrefHeight()));
+	//		        	Text t = (Text)sp.getChildren().get(1);
+	//		    		System.out.println(t.getWidth());
+			        }
+			    }
+			});
+			bound.getChildren().addAll(rect,label);
+			StackPane sp = new StackPane(bound);
+			sp.setUserData(0);
+			sp.layoutXProperty().bind(this.prefWidthProperty().divide(2));
+			sp.setLayoutY(upperAnchor+(height/2)-10);
+			this.getChildren().add(1, sp);
+			
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
-		height = (lsp.getLayoutY()+(lsp.getPrefHeight()/2)) - (fsp.getLayoutY()-(fsp.getPrefHeight()/2));
-		Rectangle rect = new Rectangle();
-		rect.setWidth(width+50);
-		rect.setHeight(height+20);
-		rect.setOpacity(0.4);
-		switch(node.getType()){
+	}
+	private Paint getFill(String type){
+		Paint rv;
+		switch(type){
 		case CConstants.FOR:
-			fill = Color.ROYALBLUE;
-			stroke = Color.DARKBLUE;
+			rv = Color.ROYALBLUE;
 			break;
 		case CConstants.DO:
-			fill = Color.DARKKHAKI;
-			stroke = Color.DARKGREEN;
+			rv = Color.DARKKHAKI;
 			break;
 		case CConstants.WHILE:
-			fill = Color.OLIVE;
-			stroke = Color.DARKOLIVEGREEN;
+			rv = Color.OLIVE;
 			break;
 		case CConstants.IF:
-			fill = Color.ORCHID;
-			stroke = Color.DARKORCHID;
+			rv = Color.ORCHID;
 			break;
 		case CConstants.ELSEIF:
-			fill = Color.CADETBLUE;
-			stroke = Color.DARKCYAN;
+			rv = Color.CADETBLUE;
 			break;
 		default:
-			fill = Color.MOCCASIN;
-			stroke = Color.ORANGE;
+			rv = Color.MOCCASIN;
 			break;
 		}
-		rect.setFill(fill);
-		rect.setStroke(stroke);
-		rect.setStrokeWidth(2);
-		rect.setLayoutX(centerLineX-(rect.getWidth()/2));
-		rect.setLayoutY(upperAnchor-10);
-		Label label = new Label(node.getType());
-		label.setLayoutX(centerLineX-(rect.getWidth()/2)+5);
-		label.setLayoutY(upperAnchor-25);
-		Group bound = new Group();
-		bound.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		       rect.setStroke(Color.RED);
-		       int[] lines = node.lines;
-		       for(int i = lines[0]; i <= lines[1]; i++){
-		    	   try {
-		    		   Object tag = parent.textArea.addLineHighlight(i+trimmed, java.awt.Color.ORANGE);
-		    		   tags.add(tag);
-		    	   } catch (BadLocationException e) {
-		    		   // TODO Auto-generated catch block
-		    		   e.printStackTrace();
-		    	   }
-		       }
-		    }
-		});
-		bound.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		       rect.setStroke(stroke);
-		       for(Object tag : tags){
-		    	   parent.textArea.removeLineHighlight(tag);
-		       }
-		       tags.clear();
-		    }
-		});		
-		bound.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		        if(event.isPrimaryButtonDown()){
-		        	int[] lines = node.lines;
-		        	System.out.println(trimmed);
-		        	System.out.println(lines[0]+"~"+lines[1]);
-		        	System.out.println((lines[0]+trimmed)+"~"+(lines[1]+trimmed));
-		        	System.out.println();
-//		        	System.out.println("Height : "+sp.getPrefHeight());
-//		        	System.out.println("Sum : "+(sp.getLayoutY()+sp.getPrefHeight()));
-//		        	Text t = (Text)sp.getChildren().get(1);
-//		    		System.out.println(t.getWidth());
-		        }
-		    }
-		});
-		bound.getChildren().addAll(rect,label);
-		StackPane sp = new StackPane(bound);
-		sp.setUserData(0);
-		sp.layoutXProperty().bind(this.prefWidthProperty().divide(2));
-		sp.setLayoutY(upperAnchor+(height/2)-10);
-		this.getChildren().add(1, sp);
+		return rv;
 	}
-	public Boolean checkBlock(CShapeNode node){
-		if(isRoot(node.getParent())){
-			if(node.getType().equals(CConstants.CODE)){
-				return true;
-			} else return false;
-		}else {
-			return checkBlock(node.getParent());
+	private Paint getStroke(String type){
+		Paint rv;
+		switch(type){
+		case CConstants.FOR:
+			rv = Color.DARKBLUE;
+			break;
+		case CConstants.DO:
+			rv = Color.DARKGREEN;
+			break;
+		case CConstants.WHILE:
+			rv = Color.DARKOLIVEGREEN;
+			break;
+		case CConstants.IF:
+			rv = Color.DARKORCHID;
+			break;
+		case CConstants.ELSEIF:
+			rv = Color.DARKCYAN;
+			break;
+		default:
+			rv = Color.ORANGE;
+			break;
 		}
+		return rv;
 	}
+	
 	public void draw(CShapeNode node){
 		CShapeManager shape = node.getShape();
 		this.manager.addNode(shape);
 		setCoord(shape);
-		if(node.getType().equals(Constants.EShapeType.STOP.name())){
-			if(node.getParent().getchildNum()>2){
-				startPoint = this.manager.findPrev(node.shape).getLowerAnchor();
-				Point2D p = new Point2D(centerLineX, this.getPrefHeight()-30);
-				CStartEndManager end = (CStartEndManager) this.manager.getNodes().lastElement();
-				end.setP(p);
-				end.setTp(new Point2D(p.getX()+(end.getD().getWidth()+5), (p.getY())+(5.0)));
-				end.setUpperAnchor(new Point2D(p.getX(), p.getY()-15));
-				this.height = p.getY()+40;
-				CStartEndManager start = (CStartEndManager) this.manager.getNodes().firstElement();
-				startPoint = node.shape.getUpperAnchor();
-				Point2D p2 = new Point2D(centerLineX, 30);
-				start.setP(p2);
-				start.setTp(new Point2D(p2.getX()+(start.getD().getWidth()+5), (p2.getY())+(5.0)));
-				start.setLowerAnchor(new Point2D(p2.getX(), p2.getY()+15));
-				StackPane sp = findFirst();
-				sp.getChildren().set(0,start.getShape()); 
-			}
-		}
-		Shape s = shape.getShape();
-		s.setUserData(shape.getUpperAnchor().getY());
-		s.setId("");
-		Text text = shape.getText();
-		StackPane sp = new StackPane();
-		sp.setPrefSize(shape.getD().getWidth(),	 shape.getD().getHeight());
-		sp.getChildren().addAll(s, text);
-		sp.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-		    @Override
-		    public void handle(MouseEvent event) {
-		        if(event.isPrimaryButtonDown()){
-		        	int[] lines = node.lines;
-		        	System.out.println(trimmed);
-		        	System.out.println(lines[0]+"~"+lines[1]);
-		        	System.out.println((lines[0]+trimmed)+"~"+(lines[1]+trimmed));
-		        	System.out.println();
-//		        	System.out.println("Axis X : "+sp.getLayoutX());
-//		        	System.out.println("Center Axis X : "+centerLineX);
-//		        	System.out.println("Height : "+sp.getPrefHeight());
-//		        	System.out.println("Sum : "+(sp.getLayoutY()+sp.getPrefHeight()));
-//		        	Text t = (Text)sp.getChildren().get(1);
-//		    		System.out.println(t.getWidth());
-		        }
-		    }
-		});
+//		if(node.getType().equals(Constants.EShapeType.STOP.name())){
+//			if(node.getParent().getchildNum()>2){
+//				startPoint = this.manager.findPrev(node.shape).getLowerAnchor();
+//				Point2D p = new Point2D(centerLineX, this.getPrefHeight()-30);
+//				CStartEndManager end = (CStartEndManager) this.manager.getNodes().lastElement();
+//				end.setP(p);
+//				end.setTp(new Point2D(p.getX()+(end.getD().getWidth()+5), (p.getY())+(5.0)));
+//				end.setUpperAnchor(new Point2D(p.getX(), p.getY()-15));
+//				this.height = p.getY()+40;
+//				CStartEndManager start = (CStartEndManager) this.manager.getNodes().firstElement();
+//				startPoint = node.shape.getUpperAnchor();
+//				Point2D p2 = new Point2D(centerLineX, 30);
+//				start.setP(p2);
+//				start.setTp(new Point2D(p2.getX()+(start.getD().getWidth()+5), (p2.getY())+(5.0)));
+//				start.setLowerAnchor(new Point2D(p2.getX(), p2.getY()+15));
+//				StackPane sp = findFirst();
+//				sp.getChildren().set(0,start.getShape()); 
+//			}
+//		}
+//		Shape s = shape.getShape();
+//		s.setUserData(shape.getUpperAnchor().getY());
+//		s.setId("");
+//		Label label = new Label(shape.getBody());
+//		System.out.println(label.getFont());
+//		Text text = shape.getText();
+		StackPane sp = node.getSp();
+//		sp.setPrefSize(shape.getD().getWidth(),	 shape.getD().getHeight());
+//		sp.getChildren().addAll(s, text);
+//		sp.setUserData(shape.sid);
 		if(checkBlock(node)){
 			sp.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			    @Override
@@ -423,7 +474,6 @@ public class FlowChartCanvas extends BorderPane {
 //				sp.getChildren().set(0, shape.getShape());
 			}
 		}
-		sp.setUserData(shape.sid);
 //			System.out.println(sp.getUserData());
 		if(node.getParent().findNode(node)==0){
 			this.layoutY.replace(node.getParent().getType()+node.getParent().getDepth(), sp.getLayoutY()-15);
@@ -432,7 +482,8 @@ public class FlowChartCanvas extends BorderPane {
 			this.lastLowerAnchor.replace(node.getParent().getType()+node.getParent().getDepth(), sp.getLayoutY()+sp.getPrefHeight()+15);
 		}
 		double bw = this.boundaryWidth.get(node.getParent().getType()+node.getParent().getDepth());
-		if(node.getParent().findNode(node)==0){
+		
+		if(node.getParent().findNode(node)>=0){
 			this.boundaryWidth.put(node.getParent().getType()+node.getParent().getDepth(), sp.getPrefWidth()/2);
 		}else {
 			if(sp.getPrefWidth()/2 > bw){
@@ -445,120 +496,63 @@ public class FlowChartCanvas extends BorderPane {
 		
 	}
 	public void drawOrthogoral(CShapeNode node, StackPane fromPane, StackPane toPane, String to){
-		StackPane sp;
-		Point2D north, east, south, west, southD;
-		CShapeNode parent = node.getParent();
+		StackPane sp = new StackPane();
 		Group arrow = new Group();
 		CConnectManager cm = new CConnectManager();
 		CArrowHead lh = new CArrowHead();
-		CShapeNode ancester = parent.getParent();
-		CShapeNode nextBody;
-		Shape line;
-		Shape head;
-		StackPane prev = null;
-		for(int i = this.getChildren().indexOf(fromPane)-1; i > 0; i--){
-			if(this.getChildren().get(i).getClass().equals(StackPane.class)){
-				prev = (StackPane) this.getChildren().get(i);
-			}
-		}
-		if(ancester.findNext(parent).getType().equals(CConstants.CODE)||ancester.findNext(parent).getType().equals(Constants.EShapeType.STOP.name())){
-			nextBody = ancester.findNext(parent);
-		}else {
-			nextBody = ancester.findNext(parent).getFirstNode();
-		}
-		double gap = boundaryWidth.get(parent.getType()+parent.getDepth())/2+30;
+		Text text = new Text("");
+		double gap = boundaryWidth.get(node.getType()+node.getDepth())/2+30;
+//		double gap = node.getBoundWidth()/2+10;
+		double height = 0;
+		SimpleDoubleProperty sdpw = new SimpleDoubleProperty(0.0);
 		if(to.equals(Constants.NO)){
-			east = new Point2D(fromPane.getLayoutX()+(fromPane.getPrefWidth()/2), fromPane.getLayoutY());
-			north = new Point2D(toPane.getLayoutX(), toPane.getLayoutY()-(toPane.getPrefHeight()/2));
-			cm.setHVertex(east, north, gap);//node.shape.getRightAnchor(), nextBody.shape.getUpperAnchor(), gap);
-			lh.setHead(Constants.SOUTH, cm.lower, cm.upper);
-			line = cm.getShape();
-			head = lh.getShape();
-			Text tn = new Text(Constants.NO);
-			tn.setX(east.getX()+10);
-			tn.setY(east.getY()-10);
-			arrow.getChildren().addAll(line, head, tn);
-			this.manager.getConnects().put(node.getType()+node.getDepth()+"N", arrow);
-			sp = new StackPane(arrow);
-			sp.setPrefHeight(line.getLayoutBounds().getHeight());
-			sp.setPrefWidth(line.getLayoutBounds().getWidth());
-			sp.layoutXProperty().bind(fromPane.layoutXProperty().add(Math.floor(sp.getPrefWidth()/2)-6));
-			sp.layoutYProperty().bind(fromPane.layoutYProperty().add((sp.getPrefHeight()/2)-14.0));
-			this.manager.getConnection().add(sp);
-//			this.getChildren().add(sp);
-		}if(to.equals(CConstants.ITERATIONSTATEMENT)){
-			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
-			west = new Point2D(toPane.getLayoutX()-(toPane.getPrefWidth()/2), toPane.getLayoutY());
-			cm.setVVertex(south, west, gap);
-			lh.setHead(Constants.EAST, cm.lower, cm.upper);
-			line = cm.getShape();
-			head = lh.getShape();
-			arrow.getChildren().addAll(line, head);
-			this.manager.getConnects().put(node.getType()+node.getDepth()+"While", arrow);
-			sp = new StackPane(arrow);
-			sp.setPrefHeight(line.getLayoutBounds().getHeight());
-			sp.setPrefWidth(line.getLayoutBounds().getWidth());
-			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(sp.getPrefWidth()/2));
-			sp.layoutYProperty().bind(fromPane.layoutYProperty().subtract((sp.getPrefHeight()/2)-35.0));
-			this.manager.getConnection().add(sp);
-//			this.getChildren().add(sp);		
-		}if(to.equals(CConstants.ELSE)){
-			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
-			southD = new Point2D(toPane.getLayoutX(), toPane.getLayoutY()-(toPane.getPrefHeight()/2));
-			cm.setVVertexL(south, southD, gap);
-			lh.setHead(Constants.SOUTH, cm.lower, cm.upper);
-			line = cm.getShape();
-			head = lh.getShape();
-			arrow.getChildren().addAll(line, head);
-			this.manager.getConnects().put(node.getType()+node.getDepth()+"Else", arrow);
-			sp = new StackPane(arrow);
-			sp.setPrefHeight(line.getLayoutBounds().getHeight());
-			sp.setPrefWidth(line.getLayoutBounds().getWidth());
-			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(Math.floor(sp.getPrefWidth()/2)-5));
-			sp.layoutYProperty().bind(fromPane.layoutYProperty().add((sp.getPrefHeight()/2)+20.0));
-			this.manager.getConnection().add(sp);
-//			this.getChildren().add(sp);		
-		}if(to.equals(CConstants.ELSEIF)){
-			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
-			southD = new Point2D(toPane.getLayoutX(), toPane.getLayoutY()-(toPane.getPrefHeight()/2));
-			cm.setVVertexL(south, southD, gap);
-			lh.setHead(Constants.SOUTH, cm.lower, cm.upper);
-			line = cm.getShape();
-			head = lh.getShape();
-			arrow.getChildren().addAll(line, head);
-			this.manager.getConnects().put(node.getType()+node.getDepth()+"Else", arrow);
-			sp = new StackPane(arrow);
-			sp.setPrefHeight(line.getLayoutBounds().getHeight());
-			sp.setPrefWidth(line.getLayoutBounds().getWidth());
-			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(Math.floor(sp.getPrefWidth()/2)-5));
-			sp.layoutYProperty().bind(fromPane.layoutYProperty().add((sp.getPrefHeight()/2)+20.0));
-			this.manager.getConnection().add(sp);
-//			this.getChildren().add(sp);		
-		}if(to.equals((CConstants.DO))){
-			south = new Point2D(fromPane.getLayoutX(), fromPane.getLayoutY()+(fromPane.getPrefHeight()/2));
-			west = new Point2D(toPane.getLayoutX()-(toPane.getPrefWidth()/2), toPane.getLayoutY());
-			cm.setVVertexDo(south, west, gap);
-			lh.setHead(Constants.EAST, cm.lower, cm.upper);
-			line = cm.getShape();
-			head = lh.getShape();
-			arrow.getChildren().addAll(line, head);
-			this.manager.getConnects().put(node.getType()+node.getDepth()+"Else", arrow);
-			sp = new StackPane(arrow);
-			sp.setPrefHeight(line.getLayoutBounds().getHeight());
-			sp.setPrefWidth(line.getLayoutBounds().getWidth());
-			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(Math.floor(sp.getPrefWidth()/2)-1));
-			sp.layoutYProperty().bind(fromPane.layoutYProperty().add((fromPane.getPrefHeight()/2)+13.0).subtract(sp.getPrefHeight()/2));
-			Text ty = new Text("Yes");
-			ty.setX(south.getX()+10);
-			ty.setY(south.getY()+20);
-			StackPane lsp = new StackPane(ty);
-			lsp.layoutXProperty().bind(sp.layoutXProperty().subtract(sp.getPrefWidth()/2+25.0+ty.getWrappingWidth()));
-			lsp.layoutYProperty().bind(sp.layoutYProperty());
-			this.manager.getConnection().add(sp);
-			this.manager.getConnection().add(lsp);
+			cm.setNoConn(fromPane, toPane, gap);
+			lh.setHead(Constants.SOUTH, new Point2D(toPane.getLayoutX(), toPane.getLayoutY()-(toPane.getPrefHeight()/2)));
+			text = new Text(Constants.NO);
+			text.setX(fromPane.getLayoutX()+(fromPane.getPrefWidth()/2)+10);
+			text.setY(fromPane.getLayoutY()-10);
+			height = toPane.getLayoutY()-fromPane.getLayoutY();
+			sdpw.add(fromPane.layoutXProperty()).add(sp.getPrefWidth()/2);
+		} else if(to.equals(CConstants.ELSE)){
+			cm.setElse(fromPane, toPane, gap);
+			lh.setHead(Constants.SOUTH, new Point2D(toPane.getLayoutX(), toPane.getLayoutY()-(toPane.getPrefHeight()/2)));
+			height = toPane.getLayoutY()-fromPane.getLayoutY();
+		} else if(to.equals(CConstants.ITERATIONSTATEMENT)){
+			cm.setIter(fromPane, toPane, gap);
+			lh.setHead(Constants.EAST, new Point2D(toPane.getLayoutX()-(toPane.getPrefWidth()/2), toPane.getLayoutY()));
+			height = fromPane.getLayoutY()-toPane.getLayoutY();
+		} else if(to.equals(CConstants.DO)){
+			cm.setDo(fromPane, toPane, gap);
+			lh.setHead(Constants.EAST, new Point2D(toPane.getLayoutX()-(toPane.getPrefWidth()/2), toPane.getLayoutY()));
+			height = fromPane.getLayoutY()-toPane.getLayoutY();
 		}
+		Shape line = cm.getShape();
+		Shape head = lh.getShape();
+		arrow.getChildren().addAll(line, head);
+		this.manager.getConnects().put(node.getType()+node.getDepth(), arrow);
+		sp.getChildren().addAll(arrow);
+		sp.setPrefWidth(gap);
+		sp.setPrefHeight(height);
+		if(to.equals(Constants.NO)){
+			sp.layoutXProperty().bind(fromPane.layoutXProperty().add(gap-5));
+			sp.layoutYProperty().bind(fromPane.layoutYProperty().add((sp.getPrefHeight()/2)));
+		} else if(to.equals(CConstants.ELSE)){
+			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(sp.getPrefWidth()/2));
+			sp.layoutYProperty().bind(fromPane.layoutYProperty().add(sp.getPrefHeight()/2));
+		} else if(to.equals(CConstants.ITERATIONSTATEMENT)){
+			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(gap));
+			sp.layoutYProperty().bind(fromPane.layoutYProperty().subtract(sp.getPrefHeight()/2-15));
+		} else if(to.equals(CConstants.DO)){
+			sp.layoutXProperty().bind(fromPane.layoutXProperty().subtract(sp.getPrefWidth()/2));
+			sp.layoutYProperty().bind(fromPane.layoutYProperty().subtract(sp.getPrefHeight()/2));
+		}
+		StackPane tsp = new StackPane(text);
+		tsp.layoutXProperty().bind(sp.layoutXProperty().add(gap+30));
+		tsp.layoutYProperty().bind(sp.layoutYProperty());
+		this.manager.getConnection().add(sp);
+		this.manager.getConnection().add(tsp);
 	}
-	public void drawStraight(CShapeNode node, StackPane fromPane, StackPane toPane){
+	public void drawStraight(String type, CShapeNode node, StackPane fromPane, StackPane toPane){
 		double label = 0;
 		Group arrow = new Group();
 		CConnectManager cm = new CConnectManager();
@@ -578,8 +572,8 @@ public class FlowChartCanvas extends BorderPane {
 		double temp = sp.getPrefHeight();
 //		System.out.println(temp);
 		sp.setLayoutY(south.getY()+(sp.getPrefHeight()/2));
-		if(node.getType().equals(CConstants.CONDITION)&&!node.getParent().getType().equals(CConstants.DO)){
-			Text ty = new Text("Yes");
+		if(type.equals(CConstants.YES)){
+			Text ty = new Text(type.toUpperCase());
 			ty.setX(south.getX()+10);
 			ty.setY(south.getY()+20);
 			StackPane lsp = new StackPane(ty);
@@ -587,96 +581,152 @@ public class FlowChartCanvas extends BorderPane {
 			lsp.layoutYProperty().bind(sp.layoutYProperty());
 			this.manager.getConnection().add(sp);
 			this.manager.getConnection().add(lsp);
-//			this.getChildren().addAll(sp,lsp);
-		}else {
+		} else if(type.equals(Constants.NO)){
+			Text ty = new Text(type.toUpperCase());
+			ty.setX(south.getX()+10);
+			ty.setY(south.getY()+20);
+			StackPane lsp = new StackPane(ty);
+			lsp.layoutXProperty().bind(sp.layoutXProperty().add(25.0));
+			lsp.layoutYProperty().bind(sp.layoutYProperty());
 			this.manager.getConnection().add(sp);
-//			this.getChildren().add(sp);
+			this.manager.getConnection().add(lsp);
+		} else if(type.equals(CConstants.PLAIN)){
+			this.manager.getConnection().add(sp);
 		}
 		
 	}
-	public void drawConnect(CShapeNode node){
-		//StackPane spConnect = new StackPane();
+	public CShapeNode getNext(CShapeNode node){
+		
 		CShapeNode parent = node.getParent();
-		if(node.getType().equals(CConstants.CONDITION)){
-			StackPane nextShape = findNext(node);
-			StackPane sp = find(node);
-			CShapeNode ancester = parent.getParent();
-			CShapeNode nextBody;
-			if(ancester.findNext(parent).getType().equals(CConstants.CODE)||ancester.findNext(parent).getType().equals(Constants.EShapeType.STOP.name())){
-				nextBody = ancester.findNext(parent);
+		if(parent.findNode(node)==parent.getchildNum()-1){
+			return getNext(parent);
+		} else {
+			if(parent.findNext(node).getchildNum()>0){
+				return getFirst(parent.findNext(node));
 			} else {
-				nextBody = ancester.findNext(parent).getFirstNode();
+				return parent.findNext(node);
 			}
-			if(parent.getType().equals(CConstants.DO)){
-				StackPane body = find(parent.getNodes().firstElement());
-				StackPane nextsp = find(nextBody);
-				drawOrthogoral(node, sp, body, CConstants.DO);
-				drawStraight(node, sp, nextsp);
-			} else { 
-				drawOrthogoral(node, sp, nextShape, Constants.NO);
-				int index = this.getChildren().indexOf(sp);
-				StackPane next = (StackPane) this.getChildren().get(index+1);
-				drawStraight(node, sp, next);
+		}
+	}
+	public CShapeNode getByType(String type, CShapeNode node){
+		for(CShapeNode n : node.getNodes()){
+			if(n.getType().equals(type)){
+				return n;
 			}
-		}else if(node.getType().equals(CConstants.CODE)){
-			CShapeNode prev = parent.findCondition();
-			StackPane sp = find(node);
-			int index = this.getChildren().indexOf(sp);
-			StackPane next = (StackPane) this.getChildren().get(index+1);
-			if(prev!=null){
-				StackPane prevShape = find(prev);
-				if(parent.findNode(node) == (parent.getNodes().size()-1)&&(!(parent.getType().equals(CConstants.IF))&&!(parent.getType().equals(CConstants.ELSEIF)))){
-					drawOrthogoral(node, sp, prevShape, CConstants.ITERATIONSTATEMENT);
-				} else {
-					if(parent.getType().equals(CConstants.IF)||parent.getType().equals(CConstants.ELSEIF)){
-						CShapeNode ancester = parent.getParent();
-						if(ancester.findNext(parent).getType().equals(CConstants.ELSE)){
-							CShapeNode elsenode = parent.getParent().findNext(parent);
-							CShapeNode nextBlock = ancester.findNext(elsenode);
-							CShapeNode nextBlockFirst;
-							if(nextBlock.getType().equals(CConstants.CODE)){
-								nextBlockFirst = nextBlock;
-							} else {
-								nextBlockFirst = nextBlock.getNodes().firstElement();
-							}
-							StackPane nextBShape = find(nextBlockFirst);
-							drawOrthogoral(node, sp, nextBShape, CConstants.ELSE);
-						} else if(ancester.findNext(parent).getType().equals(CConstants.ELSEIF)){
-							CShapeNode elsenode;
-							if(ancester.findElse()){
-								elsenode = ancester.getElse();
-							} else {
-								elsenode = ancester.findNext(parent);
-							}
-							CShapeNode nextBlock = ancester.findNext(elsenode);
-							CShapeNode nextBlockFirst;
-							if(nextBlock.getType().equals(CConstants.CODE)){
-								nextBlockFirst = nextBlock;
-							} else {
-								nextBlockFirst = nextBlock.getNodes().firstElement();
-							}
-							StackPane nextBShape = find(nextBlockFirst);
-							drawOrthogoral(node, sp, nextBShape, CConstants.ELSEIF);
-						}
-					}else {
-						drawStraight(node, sp, next);
+		}
+		return null;
+	}
+	public CShapeNode getFirst(CShapeNode node){
+		if(node.getchildNum()>0){
+			return getFirst(node.getNodes().get(0));
+		} else {
+			return node;
+		}
+	}
+	public CShapeNode findIF(CShapeNode node){
+		if(node.getParent().getType().equals(CConstants.IF)){
+			return node.getParent();
+		} else {
+			return findIF(node.getParent());
+		}
+	}
+
+	public void drawConnects(CShapeNode root){
+		Vector<CShapeNode> nodes = root.getNodes();
+		for(CShapeNode node : nodes){
+				drawConnect(node);
+				drawConnects(node);
+		}
+	}
+	
+	public void drawConnect(CShapeNode node){
+		StackPane fromPane, toPane;
+		if(node.getType().equals(CConstants.BODY)){
+			CShapeNode next = getNext(node);
+//			System.out.println(next.getType()+" ["+next.shape.getBody()+"] {"+node.getParent().findNode(node)+"}");
+			if(next.getClass().equals(CIteratorManager.class)||next.getClass().equals(CIfManager.class)){
+				toPane = getFirst(next).getSp();
+			} else {
+				toPane = next.getSp();
+			}
+			drawStraight(CConstants.PLAIN, node, node.getSp(), toPane);
+		} else {
+			if(node.getType().equals(Constants.EShapeType.START.name())){
+				drawStraight(CConstants.PLAIN, node, node.getSp(), getNext(node).getSp());
+			}else {
+				
+				if(node.getType().equals(CConstants.FOR)){
+	//				for(CShapeNode n : node.getNodes()){
+	//					System.out.println(n.getType()+" ["+n.shape.getBody()+"] {"+n.getParent().findNode(n)+"}");
+	//				}
+					CShapeNode condition = node.getNodes().get(1);
+					drawStraight(CConstants.PLAIN, node, node.getNodes().get(0).getSp(), condition.getSp());
+					drawStraight(CConstants.YES, node, condition.getSp(), getNext(condition).getSp());
+					drawOrthogoral(node, getByType(CConstants.AMOUNT, node).getSp(), condition.getSp(), CConstants.ITERATIONSTATEMENT);
+					CShapeNode next = getNext(node);
+					System.out.println(next.getType()+" ["+next.shape.getBody()+"] {"+node.getParent().findNode(node)+"}");
+					if(next.getClass().equals(CIteratorManager.class)||next.getClass().equals(CIfManager.class)){
+						toPane = getFirst(next).getSp();
+					} else {
+						toPane = next.getSp();
+					}
+					drawOrthogoral(node, condition.getSp(), toPane, Constants.NO);
+					for(int i = 2; i < node.getchildNum()-2; i++){
+						drawConnect(node.getNodes().get(i));
+					}
+				} else if(node.getType().equals(CConstants.WHILE)){
+					CShapeNode condition = node.getNodes().get(0);
+					drawStraight(CConstants.YES, node, condition.getSp(), getNext(condition).getSp());
+					CShapeNode next = getNext(node);
+					if(next.getClass().equals(CIteratorManager.class)||next.getClass().equals(CIfManager.class)){
+						toPane = getFirst(next).getSp();
+					} else {
+						toPane = next.getSp();
+					}
+					drawOrthogoral(node, condition.getSp(), toPane, Constants.NO);
+					for(int i = 1; i < node.getchildNum()-1; i++){
+						drawConnect(node.getNodes().get(i));
+					}
+				} else if(node.getType().equals(CConstants.DO)){
+					CShapeNode condition = node.getNodes().get(node.getchildNum()-1);
+					drawStraight(Constants.NO, node, condition.getSp(), getNext(condition).getSp());
+					toPane = node.getNodes().get(0).getSp();
+					drawOrthogoral(node, condition.getSp(), toPane, CConstants.DO);
+					for(int i = 0; i < node.getchildNum()-2; i++){
+						drawConnect(node.getNodes().get(i));
+					}
+				} else if(node.getType().equals(CConstants.IF)){
+					CShapeNode condition = node.getNodes().get(0);
+					drawStraight(CConstants.YES, node, condition.getSp(), getNext(condition).getSp());
+					CShapeNode next = getNext(node);
+					if(next.getClass().equals(CIteratorManager.class)||next.getClass().equals(CIfManager.class)){
+						toPane = getFirst(next).getSp();
+					} else {
+						toPane = next.getSp();
+					}
+					drawOrthogoral(node, condition.getSp(), toPane, Constants.NO);
+					for(int i = 1; i < node.getchildNum()-1; i++){
+						drawConnect(node.getNodes().get(i));
+					}
+				} else if(node.getType().equals(CConstants.ELSEIF)){
+					CShapeNode condition = node.getNodes().get(0);
+					drawStraight(CConstants.YES, node, condition.getSp(), getNext(condition).getSp());
+					CShapeNode ifNode = findIF(node);
+					CShapeNode next = getNext(ifNode);
+					if(next.getClass().equals(CIteratorManager.class)||next.getClass().equals(CIfManager.class)){
+						toPane = getFirst(next).getSp();
+					} else {
+						toPane = next.getSp();
+					}
+					drawOrthogoral(node, condition.getSp(), toPane, Constants.NO);
+					for(int i = 1; i < node.getchildNum()-1; i++){
+						drawConnect(node.getNodes().get(i));
 					}
 				}
-			} else {
-				drawStraight(node, sp, next);
 			}
 		}
-		if(root.findNode(node)==0){
-//			CShapeNode end = root.getNodes().lastElement();
-			StackPane currShape = find(node);
-			StackPane nextShape = findNext(node);
-			
-			drawStraight(node, currShape, nextShape);
-		}
-		Group g = this.manager.getConnects().get(Constants.EShapeType.STOP.name()+"1");
-		if(g!=null){
-			this.getChildren().remove(g);	
-		}
+	
+		
 	}
 	public StackPane findFirst(){
 		for(Node n : this.getChildren()){
@@ -735,6 +785,15 @@ public class FlowChartCanvas extends BorderPane {
 	private void addToThis(){
 		for(StackPane sp : this.manager.getConnection()){
 			this.getChildren().add(1, sp);
+		}
+	}
+	public Boolean checkBlock(CShapeNode node){
+		if(isRoot(node.getParent())){
+			if(node.getType().equals(CConstants.BODY)){
+				return true;
+			} else return false;
+		}else {
+			return checkBlock(node.getParent());
 		}
 	}
 	public Boolean isRoot(CShapeNode node){

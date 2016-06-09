@@ -15,8 +15,10 @@ public class CIfManager extends CShapeNode {
 		this.condition = condition;
 		if(type.equals(CConstants.IF)){
 			this.bodies.add(new CConditionManager(condition, this));
+			this.childNum++;
 		}else if(type.equals(CConstants.ELSEIF)){
 			this.bodies.add(new CConditionManager(condition, this));
+			this.childNum++;
 		}
 		// TODO Auto-generated constructor stub
 	}

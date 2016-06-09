@@ -11,8 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
 
+@SuppressWarnings("restriction")
 public class CRectangleManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
 	private static final double oneLineH = 15.310546875;
@@ -51,7 +51,7 @@ public class CRectangleManager extends CShapeManager {
 	}
 	@Override
 	public Shape getShape(){
-		r = new Rectangle(p.getX(), p.getY(), d.getWidth(), d.getHeight());
+		r = new Rectangle(0, 0, getBounds().getWidth(), getBounds().getHeight());
 		r.setStroke(stroke);
 		r.setStrokeWidth(2);
 		r.setFill(fill);
@@ -60,9 +60,9 @@ public class CRectangleManager extends CShapeManager {
 	}
 	@Override
 	public Text getText() {
-		text.setX(tp.getX());
-		text.setY(tp.getY());
-		text.setBoundsType(TextBoundsType.LOGICAL);
+//		text.setX(tp.getX());
+//		text.setY(tp.getY());
+//		text.setBoundsType(TextBoundsType.LOGICAL);
 		return text;
 	}
 //	public CRectangleManager(EShapeType shapeType) {
@@ -86,7 +86,9 @@ public class CRectangleManager extends CShapeManager {
 		text = new Text(body);
 		Canvas buffer = new Canvas();
 		GraphicsContext gc = buffer.getGraphicsContext2D();
+		@SuppressWarnings("restriction")
 		float width = Toolkit.getToolkit().getFontLoader().computeStringWidth(body, gc.getFont());
+		@SuppressWarnings("restriction")
 		float height = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().getFontMetrics(gc.getFont()).getLineHeight();
 		String[] line = body.split(System.getProperty("line.separator"));
 		this.setTd(new Dimension2D(text.getLayoutBounds().getWidth(), text.getLayoutBounds().getHeight()));
@@ -105,5 +107,7 @@ public class CRectangleManager extends CShapeManager {
 		// TODO Auto-generated method stub
 		return r;
 	}
+	
+	
 
 }

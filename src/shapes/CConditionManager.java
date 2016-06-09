@@ -12,11 +12,12 @@ public class CConditionManager extends CShapeNode {
 		this.parent = parent;
 		type = CConstants.CONDITION;
 		this.firstNode = this;
+		shape = new CDiamondManager(this.condition);
 	}
 	
 	@Override
 	public CShapeManager getShape(){
-		shape = new CDiamondManager(condition);
+		
 		return shape;
 	}
 }

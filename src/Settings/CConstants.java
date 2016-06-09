@@ -10,6 +10,6 @@ public class CConstants {
 			SELECTIONSTATEMENT = "selectionStatement", IF = "if", SWITCH = "switch", ELSEIF = "else if", ELSE = "else",
 			JUMPSTATEMENT = "jumpStatement", RETURN = "return", BREAK = "break",
 			FUNCTIONDEFINITION = "functionDefinition", ROOT = "root" , CONDITION = "condition" , END = "end", 
-			EXPRESSION = "expression"
+			EXPRESSION = "expression", INIT = "init", AMOUNT = "amount", BODY = "body", PLAIN = "plain", YES = "yes";
 			;
 }

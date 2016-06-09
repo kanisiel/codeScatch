@@ -5,6 +5,7 @@ import java.util.Vector;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -37,68 +38,65 @@ public class CConnectManager extends CShapeManager {
 		lower = e;
 		points.add(e);
 	}
-	public void setHVertex(Point2D s, Point2D e, double hgap){
+	public void setNoConn(StackPane start, StackPane end, double hgap){
 		points.clear();
-		points.add(s);
-		Point2D vertex1 = new Point2D(s.getX()+hgap, s.getY());
+		Point2D startp = new Point2D(start.getLayoutX(), start.getLayoutY());
+		Point2D endp = new Point2D(end.getLayoutX(), end.getLayoutY());
+		points.add(startp);
+		Point2D vertex1 = new Point2D(startp.getX()+start.getPrefWidth()/2+hgap, startp.getY());
 		points.add(vertex1);
-		Point2D vertex2 = new Point2D(vertex1.getX(), e.getY()-vgap);
+		Point2D vertex2 = new Point2D(vertex1.getX(), endp.getY()-(end.getPrefHeight()/2)-vgap);
 		points.add(vertex2);
-		Point2D vertex3 = new Point2D(e.getX(), e.getY()-vgap);
+		Point2D vertex3 = new Point2D(endp.getX(), endp.getY()-(end.getPrefHeight()/2)-vgap);
 		upper = vertex3;
 		points.add(vertex3);
-		lower = e;
-		points.add(e);
+		lower = endp;
+		points.add(endp);
 	}
-	public void setVVertex(Point2D s, Point2D e, double hgap){
+	public void setElse(StackPane start, StackPane end, double hgap){
 		points.clear();
-		points.add(e);
-		lower = e;
-		Point2D vertex1 = new Point2D(e.getX()-hgap, e.getY());
+		Point2D startp = new Point2D(start.getLayoutX(), start.getLayoutY());
+		Point2D endp = new Point2D(end.getLayoutX(), end.getLayoutY());
+		points.add(startp);
+		Point2D vertex1 = new Point2D(startp.getX()-start.getPrefWidth()/2-hgap, startp.getY());
 		points.add(vertex1);
-		upper = vertex1;
-		Point2D vertex2 = new Point2D(vertex1.getX(), s.getY()+vgap);
+		Point2D vertex2 = new Point2D(vertex1.getX(), endp.getY()-(end.getPrefHeight()/2)-vgap);
 		points.add(vertex2);
-		Point2D vertex3 = new Point2D(s.getX(), s.getY()+vgap);
+		Point2D vertex3 = new Point2D(endp.getX(), endp.getY()-(end.getPrefHeight()/2)-vgap);
+		upper = vertex3;
 		points.add(vertex3);
-		points.add(s);
-//		points.add(s);
-//		Point2D vertex1 = new Point2D(s.getX(), s.getY()+vgap);
-//		points.add(vertex1);
-//		Point2D vertex2 = new Point2D(vertex1.getX()-hgap, vertex1.getY());
-//		points.add(vertex2);
-//		Point2D vertex3 = new Point2D(e.getX()-hgap, e.getY());
-//		upper = vertex3;
-//		points.add(vertex3);
-//		lower = e;
-//		points.add(e);
+		lower = endp;
+		points.add(endp);
 	}
-	public void setVVertexL(Point2D s, Point2D e, double hgap){
-		points.add(s);
-		Point2D vertex1 = new Point2D(s.getX(), s.getY()+vgap);
+	public void setIter(StackPane start, StackPane end, double hgap){
+		points.clear();
+		Point2D startp = new Point2D(start.getLayoutX(), start.getLayoutY());
+		Point2D endp = new Point2D(end.getLayoutX(), end.getLayoutY());
+		points.add(startp);
+		Point2D vertex1 = new Point2D(startp.getX(), startp.getY()+(start.getPrefHeight()/2)+vgap);
 		points.add(vertex1);
-		Point2D vertex2 = new Point2D(vertex1.getX()-hgap, vertex1.getY());
+		Point2D vertex2 = new Point2D(vertex1.getX()-(start.getPrefWidth()/2)-hgap, vertex1.getY());
 		points.add(vertex2);
-		Point2D vertex3 = new Point2D(vertex2.getX(), e.getY()-(vgap*2));
+		Point2D vertex3 = new Point2D(vertex2 .getX(), endp.getY());
+		upper = vertex3;
 		points.add(vertex3);
-		Point2D vertex4 = new Point2D(e.getX(), e.getY()-(vgap*2));
-		upper = vertex4;
-		points.add(vertex4);
-		lower = e;
-		points.add(e);
+		lower = endp;
+		points.add(endp);
 	}
-	public void setVVertexDo(Point2D s, Point2D e, double hgap){
-		points.add(s);
-		lower = s;
-		Point2D vertex1 = new Point2D(s.getX(), s.getY()+vgap);
+	public void setDo(StackPane start, StackPane end, double hgap){
+		points.clear();
+		Point2D startp = new Point2D(start.getLayoutX(), start.getLayoutY());
+		Point2D endp = new Point2D(end.getLayoutX(), end.getLayoutY());
+		points.add(startp);
+		Point2D vertex1 = new Point2D(startp.getX()-hgap, startp.getY());
 		points.add(vertex1);
-		Point2D vertex2 = new Point2D(vertex1.getX()-hgap, vertex1.getY());
+		Point2D vertex2 = new Point2D(vertex1.getX(), endp.getY());
 		points.add(vertex2);
-		Point2D vertex3 = new Point2D(vertex2.getX(), e.getY());
-		points.add(vertex3);
-		lower = e;
-		points.add(e);
+		
+		lower = endp;
+		points.add(endp);
 	}
+	
 	@Override
 	public void draw(GraphicsContext gc) {
 		// TODO Auto-generated method stub

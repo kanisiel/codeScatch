@@ -1,17 +1,18 @@
 package shapes;
 
-import Settings.CConstants;
+import javafx.geometry.BoundingBox;
 
 public class CCodeManager extends CShapeNode {
 	private static final long serialVersionUID = 1L;
 	public String body;
+	public BoundingBox bounds;
 
-	public CCodeManager(String body, CShapeNode parent) {
+	public CCodeManager(String type, String body, CShapeNode parent) {
 		super();
 		this.parent = parent;
 		this.firstNode = this;
 		// TODO Auto-generated constructor stub
-		type = CConstants.CODE;
+		this.type = type;
 		String[] tokens = body.split(";");
 		this.body = "";
 		String lineSeparator = System.getProperty("line.separator");
@@ -22,12 +23,14 @@ public class CCodeManager extends CShapeNode {
 			}
 		}
 //		this.bodies.add(this);
+		shape = new CRectangleManager(this.body);
+		this.bounds = shape.getBounds();
 	}
 
 	@Override
 	public CShapeManager getShape() {
 		// TODO Auto-generated method stub
-		shape = new CRectangleManager(body);
+		
 		return shape;
 	}
 	

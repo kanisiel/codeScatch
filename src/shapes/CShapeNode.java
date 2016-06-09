@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Vector;
 
 import Settings.CConstants;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Shape;
 
 public abstract class CShapeNode implements Serializable {
@@ -18,6 +19,8 @@ public abstract class CShapeNode implements Serializable {
 	protected CShapeNode firstNode;
 	protected Vector<Shape> connections;
 	public int[] lines;
+	protected StackPane sp;
+	protected double boundWidth = 0;
 	
 	public String getType(){
 		return type;
@@ -40,7 +43,25 @@ public abstract class CShapeNode implements Serializable {
 		this.connections.add(index, conn);
 	}
 	public void addNode(CShapeNode node){
-		this.bodies.add(node);
+		if(this.getClass().equals(CRootManager.class)){
+			if(this.bodies.size()>1){
+				CShapeNode end = this.bodies.lastElement();
+				this.bodies.remove(end);
+				this.bodies.add(node);
+				this.bodies.add(end);
+			} else {
+				this.bodies.add(node);
+			}
+		} else {
+			if(this.getClass().equals(CIteratorManager.class)&&this.getType().equals(CConstants.FOR)){
+				CShapeNode end = this.bodies.lastElement();
+				this.bodies.remove(end);
+				this.bodies.add(node);
+				this.bodies.add(end);
+			}else {
+				this.bodies.add(node);
+			}
+		}
 		childNum++;
 		node.depth = this.depth+1;
 	}
@@ -48,6 +69,10 @@ public abstract class CShapeNode implements Serializable {
 		this.bodies.add(index, node);
 		childNum++;
 		node.depth = this.depth+1;
+	}
+	public void remove(CShapeNode node){
+		this.bodies.remove(node);
+		this.childNum--;
 	}
 	public void addLast(CShapeNode node){
 		int index = this.bodies.indexOf(this.bodies.lastElement());
@@ -142,5 +167,17 @@ public abstract class CShapeNode implements Serializable {
 	}
 	public void setLines(int[] lines) {
 		this.lines = lines;
+	}
+	public StackPane getSp() {
+		return sp;
+	}
+	public void setSp(StackPane sp) {
+		this.sp = sp;
+	}
+	public double getBoundWidth() {
+		return boundWidth;
+	}
+	public void setBoundWidth(double boundWidth) {
+		this.boundWidth = boundWidth;
 	}
 }

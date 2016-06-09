@@ -14,6 +14,7 @@ public class TreeData {
     private String kind; 
     private String ifCondition;
     private String iterationCondition;
+    private String body;
 	
 	public String getIterationCondition() {return iterationCondition;}
 	public void setIterationCondition(String iterationCondition) {this.iterationCondition = iterationCondition;}
@@ -38,12 +39,19 @@ public class TreeData {
     	this.kind = kind;
     	this.codeVector = new Vector<ParseTree>();
     	this.codeVector.add(this.parseTree);
+    	this.body = "";
     }
 	public CShapeNode getShapeNode() {
 		return shapeNode;
 	}
 	public void setShapeNode(CShapeNode shapeNode) {
 		this.shapeNode = shapeNode;
+	}
+	public String getBody() {
+		return body;
+	}
+	public void setBody(String body) {
+		this.body = body;
 	}
     
 }
