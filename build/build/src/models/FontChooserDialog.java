@@ -33,7 +33,7 @@ public class FontChooserDialog extends Dialog<Pair<String, String>> {
 		
 		this.fontList = FXCollections.observableArrayList();
 		this.sizeList = FXCollections.observableArrayList();
-		this.buttonType = new ButtonType("확", ButtonData.OK_DONE);
+		this.buttonType = new ButtonType("확인", ButtonData.OK_DONE);
 		this.getDialogPane().getButtonTypes().addAll(buttonType, new ButtonType("Set Default", ButtonData.OTHER), ButtonType.CANCEL);
 		this.grid = new GridPane();
 		this.textArea = textArea;

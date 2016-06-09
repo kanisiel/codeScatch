@@ -2,6 +2,7 @@ package shapes;
 
 import java.io.Serializable;
 import java.util.Random;
+import java.util.Vector;
 
 import com.sun.javafx.tk.Toolkit;
 
@@ -36,10 +37,30 @@ public abstract class CShapeManager implements Serializable {
 		setNewSid();
 	}
 	public Double setNewSid(){
+		return newSid();
+	}
+	public Double newSid(){
 		Random r = new Random();
 		r.setSeed(System.currentTimeMillis());
 		sid = Math.abs(r.nextGaussian());
 		return sid;
+	}
+	private Boolean sidUnique(Vector<Double> sidVector){
+		Boolean rv = false;
+		if(sidVector.contains(sid)){
+			;
+		} else {
+			rv = true;
+		}
+		return rv;
+	}
+	public Double checkSid(Vector<Double> sidVector){
+		if(sidUnique(sidVector)){
+			return sid;
+		} else{
+			sid = newSid();
+			return checkSid(sidVector);
+		}
 	}
 	public void setLines(int lines){ this.lines = lines; }
 	public String getBody(){return body;}

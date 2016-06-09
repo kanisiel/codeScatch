@@ -198,9 +198,6 @@ public class TreeToShape {
 		;
 		} else {
 			double sid = node.shape.checkSid(sidVector);
-//			if(sidVector.contains(sid)){
-//				sid = node.shape.setNewSid();
-//			}
 			sidVector.add(sid);
 		}
 	}

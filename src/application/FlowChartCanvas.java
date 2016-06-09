@@ -135,6 +135,12 @@ public class FlowChartCanvas extends BorderPane {
 	}
 	public void drawAllNodes(CRootManager root){
 		drawNodes(root);
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		drawBounds(root);
 		drawConnects(root);
 		addToThis();
