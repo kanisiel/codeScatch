@@ -56,8 +56,8 @@ public class TreeToShape {
 				rootNode.clearNodes();
 				rootNode.addNode(new CStartEndNode(Constants.EShapeType.START.name(), rootNode));
 				rootNode.addNode(new CStartEndNode(Constants.EShapeType.STOP.name(), rootNode));
-				checkSid(rootNode);
-				setStackPane(rootNode);
+//				checkSid(rootNode);
+//				setStackPane(rootNode);
 			}
 		});
 	}
@@ -197,11 +197,12 @@ public class TreeToShape {
 		if(node.getShape()==null){
 		;
 		} else {
-			double sid = node.shape.sid;
-			while(sidVector.contains(sid)){
-				sid = node.shape.setNewSid();
-			}
+			double sid = node.shape.checkSid(sidVector);
+//			if(sidVector.contains(sid)){
+//				sid = node.shape.setNewSid();
+//			}
 			sidVector.add(sid);
 		}
 	}
+	
 }

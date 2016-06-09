@@ -68,70 +68,77 @@ public class MainUIController implements Initializable {
 		
 	@FXML
 	public void open() {
-		if(desktopPaneController.tts.getRootNode().getNodes().size()>2){
-			prepare();
+		Platform.runLater(new Runnable() {
 			
-		}
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Select C file");
-		fileChooser.setInitialDirectory(new File("."));
-		fileChooser.getExtensionFilters().add(new ExtensionFilter("C Sources (*.c)", "*.c"));
-		
-		File selectedFile = fileChooser.showOpenDialog(null);
-				
-		if (selectedFile == null) return;
-		
-		
-		
-		try {
-			String filePath = selectedFile.getAbsolutePath();
-			
-			if (filePath.endsWith(".c")) {
-				StringBuffer fileData = new StringBuffer();
-				BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-				char[] buf = new char[1024];
-		        int numRead = 0;
-		        
-		        while((numRead = reader.read(buf)) != -1)
-		            fileData.append(String.valueOf(buf, 0, numRead));
-		        
-		        reader.close();
-		        
-		        code = fileData.toString();
-		        String buffer, trim;
-		        String buffers[];
-				buffer = code;
-				buffers = buffer.split(System.getProperty("line.separator"));
-				Vector<String> trimCode = new Vector<>(); 
-				for(String str : buffers){
-					if(str.trim().equals("")){
-						trimmed++;
-						trimCode.add(str);
-					} else if (str.startsWith("#")){
-						trimmed++;
-						trimCode.add(str);
-					} else {
-//						trimCode.add(str);
-						break;
-					}
+			@Override
+			public void run() {
+				if(desktopPaneController.tts.getRootNode().getNodes().size()>2){
+					prepare();
+					
 				}
-//				System.out.println(trimCode.firstElement());
-				trim = String.join(System.getProperty("line.separator"), trimCode);
-//				System.out.println(trim);
-				buffer = buffer.replace(trim, "");
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Select C file");
+				fileChooser.setInitialDirectory(new File("."));
+				fileChooser.getExtensionFilters().add(new ExtensionFilter("C Sources (*.c)", "*.c"));
 				
-//				String swap = code;
-//				code = buffer;
-//				buffer = swap;
-				desktopPaneController.textArea.setText(code);
-				doParse(buffer);
+				File selectedFile = fileChooser.showOpenDialog(null);
+						
+				if (selectedFile == null) return;
 				
+				
+				
+				try {
+					String filePath = selectedFile.getAbsolutePath();
+					
+					if (filePath.endsWith(".c")) {
+						StringBuffer fileData = new StringBuffer();
+						BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+						char[] buf = new char[1024];
+				        int numRead = 0;
+				        
+				        while((numRead = reader.read(buf)) != -1)
+				            fileData.append(String.valueOf(buf, 0, numRead));
+				        
+				        reader.close();
+				        
+				        code = fileData.toString();
+				        String buffer, trim;
+				        String buffers[];
+						buffer = code;
+						buffers = buffer.split(System.getProperty("line.separator"));
+						Vector<String> trimCode = new Vector<>(); 
+						for(String str : buffers){
+							if(str.trim().equals("")){
+								trimmed++;
+								trimCode.add(str);
+							} else if (str.startsWith("#")){
+								trimmed++;
+								trimCode.add(str);
+							} else {
+//								trimCode.add(str);
+								break;
+							}
+						}
+//						System.out.println(trimCode.firstElement());
+						trim = String.join(System.getProperty("line.separator"), trimCode);
+//						System.out.println(trim);
+						buffer = buffer.replace(trim, "");
+						
+//						String swap = code;
+//						code = buffer;
+//						buffer = swap;
+						desktopPaneController.textArea.setText(code);
+						doParse(buffer);
+						
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+//					desktopPaneController.fcc.showAll();
+				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-//			desktopPaneController.fcc.showAll();
-		}
+		});
+		
 	}
 	
 	private WritableImage getSnapshot() {
