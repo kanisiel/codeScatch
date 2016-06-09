@@ -36,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import models.FontChooserDialog;
 /**
  *
  * @author
@@ -74,7 +75,7 @@ public class MainUIController implements Initializable {
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("C Sources (*.c)", "*.c"));
 		
 		File selectedFile = fileChooser.showOpenDialog(null);
-		
+				
 		if (selectedFile == null) return;
 		
 		if(desktopPaneController.tts.getRootNode().getNodes().size()>2){
@@ -209,12 +210,8 @@ public class MainUIController implements Initializable {
 	}
 	
 	@FXML
-	public void zoomIn() {
-		System.out.println("Zoom In");
-	}
-	
-	@FXML
-	public void zoomOut() {
-		System.out.println("Zoom Out");
+	public void openPreference() {
+		FontChooserDialog dialog = new FontChooserDialog(desktopPaneController.textArea);
+		dialog.requestFocus();
 	}
 }

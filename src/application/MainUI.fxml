@@ -25,12 +25,6 @@
 		                        <MenuItem mnemonicParsing="false" text="Exit" accelerator="Alt+F4" onAction="#exit" />
 		                    </items>
 		                </Menu>
-		                <Menu fx:id="zoomMenu" mnemonicParsing="false" text="Zoom">
-		                	<items>
-		                		<MenuItem mnemonicParsing="false" text="Zoom In" accelerator="Shortcut+UP" onAction="#zoomIn" />
-		                		<MenuItem mnemonicParsing="false" text="Zoom Out" accelerator="Shortcut+DOWN" onAction="#zoomOut" />
-		                	</items>
-		                </Menu>
 		                <!-- <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
 		                    <items>
 		                        <MenuItem mnemonicParsing="false" text="Undo" />
@@ -51,7 +45,8 @@
 		                        <SeparatorMenuItem mnemonicParsing="false" />
 		                        <MenuItem mnemonicParsing="false" id="Graph Paper" text="- Graph Paper" onAction="#background"/>
 		                        <MenuItem mnemonicParsing="false" id="Blank Paper" text="- Blank Paper" onAction="#background"/>
-		                        <!-- <MenuItem mnemonicParsing="false" text="Preference" /> -->
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <MenuItem mnemonicParsing="false" text="Preference" onAction="#openPreference"/>
 		                    </items>
 		                </Menu>
 		                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
