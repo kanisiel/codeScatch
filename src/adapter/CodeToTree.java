@@ -288,7 +288,7 @@ public class CodeToTree {
 		int end = 0;
 		int startindex = codeBlocks.lastElement();
 		if(startindex<0) startindex=0;
-		for(int index = codeBlocks.lastElement(); index < buffer.length; index++){
+		for(int index = startindex; index < buffer.length; index++){
 			String s = buffer[index];
 			s = s.replace(" ", "").trim();
 			if(!s.equals("}")){
