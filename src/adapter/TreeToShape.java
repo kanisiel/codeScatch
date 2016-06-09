@@ -189,9 +189,6 @@ public class TreeToShape {
 				checkSid(node);
 			}
 		}
-//		for(Double d : sidVector){
-//			System.out.println(d);
-//		}
 	}
 	private void check(CShapeNode node, Vector<Double> sidVector){
 		if(node.getShape()==null){

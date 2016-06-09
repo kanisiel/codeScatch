@@ -223,6 +223,7 @@ public class FlowChartCanvas extends BorderPane {
 	public void drawBound(CShapeNode node){
 //		System.out.println(node.getType());
 		if(node.getClass().equals(CIteratorManager.class)||node.getClass().equals(CIfManager.class)){
+			System.out.println(node.getType());
 			double width = 0;
 			double height = 0;
 			int childNum = node.getchildNum();
@@ -232,8 +233,8 @@ public class FlowChartCanvas extends BorderPane {
 //			System.out.println("last: "+last.shape.sid);
 //			System.out.println(childNum);
 //			System.out.println();
-			StackPane fsp = find(first);
-			StackPane lsp = find(last);
+			StackPane fsp = first.getSp();
+			StackPane lsp = last.getSp();
 			Color fill;
 			Color stroke;
 			double upperAnchor = fsp.getLayoutY()-(fsp.getPrefHeight()/2), lowerAnchor = (lsp.getLayoutY()+(lsp.getPrefHeight()/2));
