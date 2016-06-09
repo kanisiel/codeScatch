@@ -151,16 +151,28 @@ public class FlowChartCanvas extends BorderPane {
 			}else {
 				draw(node);
 			}
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	
 	public void drawBounds(CShapeNode root){
 //		Vector<CShapeNode> nodes = ;
-		System.out.println(root.getClass()+" > "+root.getType()+"("+root.getchildNum()+")");
+//		System.out.println(root.getClass()+" > "+root.getType()+"("+root.getchildNum()+")");
 		for(CShapeNode node : root.getNodes()){
 			drawBounds(node);
 			drawBound(node);
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	public double largestWidth(CShapeNode parent){
@@ -371,35 +383,7 @@ public class FlowChartCanvas extends BorderPane {
 		CShapeManager shape = node.getShape();
 		this.manager.addNode(shape);
 		setCoord(shape);
-//		if(node.getType().equals(Constants.EShapeType.STOP.name())){
-//			if(node.getParent().getchildNum()>2){
-//				startPoint = this.manager.findPrev(node.shape).getLowerAnchor();
-//				Point2D p = new Point2D(centerLineX, this.getPrefHeight()-30);
-//				CStartEndManager end = (CStartEndManager) this.manager.getNodes().lastElement();
-//				end.setP(p);
-//				end.setTp(new Point2D(p.getX()+(end.getD().getWidth()+5), (p.getY())+(5.0)));
-//				end.setUpperAnchor(new Point2D(p.getX(), p.getY()-15));
-//				this.height = p.getY()+40;
-//				CStartEndManager start = (CStartEndManager) this.manager.getNodes().firstElement();
-//				startPoint = node.shape.getUpperAnchor();
-//				Point2D p2 = new Point2D(centerLineX, 30);
-//				start.setP(p2);
-//				start.setTp(new Point2D(p2.getX()+(start.getD().getWidth()+5), (p2.getY())+(5.0)));
-//				start.setLowerAnchor(new Point2D(p2.getX(), p2.getY()+15));
-//				StackPane sp = findFirst();
-//				sp.getChildren().set(0,start.getShape()); 
-//			}
-//		}
-//		Shape s = shape.getShape();
-//		s.setUserData(shape.getUpperAnchor().getY());
-//		s.setId("");
-//		Label label = new Label(shape.getBody());
-//		System.out.println(label.getFont());
-//		Text text = shape.getText();
 		StackPane sp = node.getSp();
-//		sp.setPrefSize(shape.getD().getWidth(),	 shape.getD().getHeight());
-//		sp.getChildren().addAll(s, text);
-//		sp.setUserData(shape.sid);
 		if(checkBlock(node)){
 			sp.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			    @Override
@@ -446,9 +430,6 @@ public class FlowChartCanvas extends BorderPane {
 					this.setPrefHeight(height);
 				}
 			} else {
-//				if(node.getParent().getClass().equals(CIteratorManager.class)){
-//					sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+70);
-//				}
 				if(isRoot(node.getParent())){
 					if(node.getParent().findPrev(node).getClass().equals(CIteratorManager.class)){
 						sp.setLayoutY(prev.getLayoutY()+prev.getPrefHeight()+60);
@@ -636,6 +617,12 @@ public class FlowChartCanvas extends BorderPane {
 		for(CShapeNode node : nodes){
 				drawConnect(node);
 				drawConnects(node);
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 	}
 	
@@ -656,15 +643,12 @@ public class FlowChartCanvas extends BorderPane {
 			}else {
 				
 				if(node.getType().equals(CConstants.FOR)){
-	//				for(CShapeNode n : node.getNodes()){
-	//					System.out.println(n.getType()+" ["+n.shape.getBody()+"] {"+n.getParent().findNode(n)+"}");
-	//				}
 					CShapeNode condition = node.getNodes().get(1);
 					drawStraight(CConstants.PLAIN, node, node.getNodes().get(0).getSp(), condition.getSp());
 					drawStraight(CConstants.YES, node, condition.getSp(), getNext(condition).getSp());
 					drawOrthogoral(node, getByType(CConstants.AMOUNT, node).getSp(), condition.getSp(), CConstants.ITERATIONSTATEMENT);
 					CShapeNode next = getNext(node);
-					System.out.println(next.getType()+" ["+next.shape.getBody()+"] {"+node.getParent().findNode(node)+"}");
+//					System.out.println(next.getType()+" ["+next.shape.getBody()+"] {"+node.getParent().findNode(node)+"}");
 					if(next.getClass().equals(CIteratorManager.class)||next.getClass().equals(CIfManager.class)){
 						toPane = getFirst(next).getSp();
 					} else {

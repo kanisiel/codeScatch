@@ -4,7 +4,7 @@ import Settings.Constants;
 import javafx.scene.paint.Color;
 
 public class CStartEndNode extends CShapeNode {
-	
+	private static final long serialVersionUID = 1L;
 	
 
 	public CStartEndNode(String type, CShapeNode parent) {

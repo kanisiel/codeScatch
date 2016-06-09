@@ -3,6 +3,7 @@ package shapes;
 import Settings.CConstants;
 
 public class CRootManager extends CShapeNode{
+	private static final long serialVersionUID = 1L;
 
 	public CRootManager() {
 		super();

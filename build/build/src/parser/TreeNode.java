@@ -1,22 +1,30 @@
 package parser;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 
 public class TreeNode<TreeData> implements Iterable<TreeNode<TreeData>>{
 	
     private TreeNode<TreeData> parent;
-    private List<TreeNode<TreeData>> children;
+    private Vector<TreeNode<TreeData>> children;
     private TreeData data;
+    private TreeData ELSE = null;
+    private Vector<TreeData> ELSEIF = null;
 
+	public Vector<TreeData> getELSEIF() {return ELSEIF;}
+	public void setELSEIF(Vector<TreeData> eLSEIF) {ELSEIF = eLSEIF;}
+	public TreeData getELSE() {return ELSE;}
+	public void setELSE(TreeData eLSE) {ELSE = eLSE;}
 	public TreeData getData() {return data;}
 	public void setData(TreeData data) {this.data = data;}
-
+	public TreeNode<TreeData> getParent() {return parent;}
+	
 	public TreeNode(TreeData child) {
 		this.data = child;
-        this.children = new LinkedList<TreeNode<TreeData>>(); 
+        this.children = new Vector<TreeNode<TreeData>>();
+        this.ELSEIF = new Vector<TreeData>();
 	}
 
 	public void addChild(TreeData child) {
@@ -34,5 +42,6 @@ public class TreeNode<TreeData> implements Iterable<TreeNode<TreeData>>{
         // TODO Auto-generated method stub
         return null;
     }
+
 }
 

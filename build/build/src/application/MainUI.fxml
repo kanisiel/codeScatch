@@ -15,17 +15,23 @@
 		    <top>
 		        <MenuBar BorderPane.alignment="CENTER">
 		            <menus>
-		                <Menu mnemonicParsing="false" text="File">
+		                <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
 		                    <items>
-		                        <MenuItem mnemonicParsing="false" text="Open" />
-		                        <MenuItem mnemonicParsing="false" text="Save" />
-		                        <MenuItem mnemonicParsing="false" text="Save As" />
+		                        <MenuItem mnemonicParsing="false" text="Open" accelerator="Shortcut+O" onAction="#open" />
+		                   		<MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S" onAction="#save" />
+		                        <MenuItem mnemonicParsing="false" text="Save As" accelerator="Shortcut+A" onAction="#saveAs" />
 		                        <SeparatorMenuItem mnemonicParsing="false" />
-		                        <MenuItem mnemonicParsing="false" text="Close" />
-		                        <MenuItem mnemonicParsing="false" text="Exit" />
+		                       <!--  <MenuItem mnemonicParsing="false" text="Close" onAction="#close"/> -->
+		                        <MenuItem mnemonicParsing="false" text="Exit" accelerator="Alt+F4" onAction="#exit" />
 		                    </items>
 		                </Menu>
-		                <Menu mnemonicParsing="false" text="Edit">
+		                <Menu fx:id="zoomMenu" mnemonicParsing="false" text="Zoom">
+		                	<items>
+		                		<MenuItem mnemonicParsing="false" text="Zoom In" accelerator="Shortcut+UP" onAction="#zoomIn" />
+		                		<MenuItem mnemonicParsing="false" text="Zoom Out" accelerator="Shortcut+DOWN" onAction="#zoomOut" />
+		                	</items>
+		                </Menu>
+		                <!-- <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
 		                    <items>
 		                        <MenuItem mnemonicParsing="false" text="Undo" />
 		                        <MenuItem mnemonicParsing="false" text="Redo" />
@@ -35,17 +41,20 @@
 		                        <MenuItem mnemonicParsing="false" text="Paste" />
 		                        <MenuItem mnemonicParsing="false" text="Delete" />
 		                    </items>
-		                </Menu>
-		                <Menu mnemonicParsing="false" text="Window">
+		                </Menu> -->
+		                <Menu fx:id="windowMenu" mnemonicParsing="false" text="Window">
 		                    <items>
 		                        <MenuItem mnemonicParsing="false" text="Code Viewer" />
-		                        <MenuItem mnemonicParsing="false" text="Flow Chart" />
-		                        <MenuItem mnemonicParsing="false" text="Task List" />
 		                        <SeparatorMenuItem mnemonicParsing="false" />
-		                        <MenuItem mnemonicParsing="false" text="Preference" />
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <MenuItem mnemonicParsing="false" text="Flow Chart" />
+		                        <SeparatorMenuItem mnemonicParsing="false" />
+		                        <MenuItem mnemonicParsing="false" id="Graph Paper" text="- Graph Paper" onAction="#background"/>
+		                        <MenuItem mnemonicParsing="false" id="Blank Paper" text="- Blank Paper" onAction="#background"/>
+		                        <!-- <MenuItem mnemonicParsing="false" text="Preference" /> -->
 		                    </items>
 		                </Menu>
-		                <Menu mnemonicParsing="false" text="Help">
+		                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
 		                    <items>
 		                        <MenuItem mnemonicParsing="false" text="About" />
 		                    </items>

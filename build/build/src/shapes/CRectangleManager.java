@@ -1,21 +1,29 @@
 package shapes;
 
+import com.sun.javafx.tk.Toolkit;
+
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
+@SuppressWarnings("restriction")
 public class CRectangleManager extends CShapeManager {
 	private static final long serialVersionUID = 1L;
+	private static final double oneLineH = 15.310546875;
 	
 	Rectangle r;
 	
 	public CRectangleManager(String body){
 		super();
 		this.body = body;
+		text = new Text(body);
+		label = new Label(body);
 	}
 	
 	@Override
@@ -43,17 +51,18 @@ public class CRectangleManager extends CShapeManager {
 	}
 	@Override
 	public Shape getShape(){
-		r = new Rectangle(p.getX(), p.getY(), d.getWidth(), d.getHeight());
+		r = new Rectangle(0, 0, getBounds().getWidth(), getBounds().getHeight());
 		r.setStroke(stroke);
 		r.setStrokeWidth(2);
-		r.setFill(Color.TRANSPARENT);
+		r.setFill(fill);
+//		text.getBoundsInLocal().getWidth()
 		return r;
 	}
 	@Override
 	public Text getText() {
-		text = new Text(body);
-		text.setX(tp.getX());
-		text.setY(tp.getY());
+//		text.setX(tp.getX());
+//		text.setY(tp.getY());
+//		text.setBoundsType(TextBoundsType.LOGICAL);
 		return text;
 	}
 //	public CRectangleManager(EShapeType shapeType) {
@@ -75,11 +84,17 @@ public class CRectangleManager extends CShapeManager {
 	public void setCoords(Point2D p, Dimension2D d, Dimension2D w) {
 		// TODO Auto-generated method stub
 		text = new Text(body);
-		text.setWrappingWidth(Math.ceil(text.getLayoutBounds().getWidth()));
+		Canvas buffer = new Canvas();
+		GraphicsContext gc = buffer.getGraphicsContext2D();
+		@SuppressWarnings("restriction")
+		float width = Toolkit.getToolkit().getFontLoader().computeStringWidth(body, gc.getFont());
+		@SuppressWarnings("restriction")
+		float height = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().getFontMetrics(gc.getFont()).getLineHeight();
+		String[] line = body.split(System.getProperty("line.separator"));
 		this.setTd(new Dimension2D(text.getLayoutBounds().getWidth(), text.getLayoutBounds().getHeight()));
-		this.setD(new Dimension2D((Math.floor(text.getWrappingWidth())*1.4)+20, td.getHeight()+30));
+		this.setD(new Dimension2D(width+30, (height*line.length)+30));
 		this.setP(new Point2D((w.getWidth()/2)-(this.d.getWidth()/2), p.getY()+d.getHeight()+40));
-		this.setTp(new Point2D(this.getP().getX()+10, this.getP().getY()+27));
+		this.setTp(new Point2D(this.getP().getX()+10, this.getP().getY()+(1.8*oneLineH)));
 		
 		upperAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY());
 		lowerAnchor = new Point2D(this.p.getX()+this.d.getWidth()/2, this.p.getY()+this.d.getHeight());
@@ -92,5 +107,7 @@ public class CRectangleManager extends CShapeManager {
 		// TODO Auto-generated method stub
 		return r;
 	}
+	
+	
 
 }

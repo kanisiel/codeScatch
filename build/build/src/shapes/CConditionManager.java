@@ -3,6 +3,7 @@ package shapes;
 import Settings.CConstants;
 
 public class CConditionManager extends CShapeNode {
+	private static final long serialVersionUID = 1L;
 	
 	public CConditionManager(String condition, CShapeNode parent) {
 		super();
@@ -10,11 +11,13 @@ public class CConditionManager extends CShapeNode {
 		this.condition = condition;
 		this.parent = parent;
 		type = CConstants.CONDITION;
+		this.firstNode = this;
+		shape = new CDiamondManager(this.condition);
 	}
 	
 	@Override
 	public CShapeManager getShape(){
-		shape = new CDiamondManager(condition);
+		
 		return shape;
 	}
 }

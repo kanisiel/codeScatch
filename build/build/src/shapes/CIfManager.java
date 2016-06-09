@@ -5,14 +5,21 @@ import java.util.Vector;
 import Settings.CConstants;
 
 public class CIfManager extends CShapeNode {
+	private static final long serialVersionUID = 1L;
 	
-	public CIfManager(String condition, CShapeNode parent) {
+	public CIfManager(String type, String condition, CShapeNode parent) {
 		super();
 		this.parent = parent;
-		type = CConstants.IF;
+		this.type = type;
 		this.bodies = new Vector<>();
 		this.condition = condition;
-		this.bodies.add(new CConditionManager(condition, this));
+		if(type.equals(CConstants.IF)){
+			this.bodies.add(new CConditionManager(condition, this));
+			this.childNum++;
+		}else if(type.equals(CConstants.ELSEIF)){
+			this.bodies.add(new CConditionManager(condition, this));
+			this.childNum++;
+		}
 		// TODO Auto-generated constructor stub
 	}
 	

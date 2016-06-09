@@ -8,7 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
 
 public class CArrowHead extends CShapeManager {
 
@@ -48,17 +47,41 @@ public class CArrowHead extends CShapeManager {
 		if(arrowTo.equals(Constants.EAST)){
 			lp = new Point2D(endP.getX()-10, endP.getY()-10);
 			rp = new Point2D(endP.getX()-10, endP.getY()+10);
+			p = new Point2D(cp.getX()-10, cp.getY());
 		}else if(arrowTo.equals(Constants.WEST)){
 			lp = new Point2D(endP.getX()+10, endP.getY()+10);
 			rp = new Point2D(endP.getX()+10, endP.getY()-10);
+			p = new Point2D(cp.getX()+10, cp.getY());
 		}else if(arrowTo.equals(Constants.SOUTH)){
 			lp = new Point2D(endP.getX()+10, endP.getY()-10);
 			rp = new Point2D(endP.getX()-10, endP.getY()-10);
+			p = new Point2D(cp.getX(), cp.getY()-9);
 		}else if(arrowTo.equals(Constants.NORTH)){
 			lp = new Point2D(endP.getX()-10, endP.getY()+10);
 			rp = new Point2D(endP.getX()+10, endP.getY()+10);
+			p = new Point2D(cp.getX(), cp.getY()+10);
 		}
-		p = new Point2D(cp.getX(), cp.getY()-10);
+		
+	}
+	public void setHead(String arrowTo, Point2D endP){
+		cp = endP;
+		if(arrowTo.equals(Constants.EAST)){
+			lp = new Point2D(endP.getX()-10, endP.getY()-10);
+			rp = new Point2D(endP.getX()-10, endP.getY()+10);
+			p = new Point2D(cp.getX()-10, cp.getY());
+		}else if(arrowTo.equals(Constants.WEST)){
+			lp = new Point2D(endP.getX()+10, endP.getY()+10);
+			rp = new Point2D(endP.getX()+10, endP.getY()-10);
+			p = new Point2D(cp.getX()+10, cp.getY());
+		}else if(arrowTo.equals(Constants.SOUTH)){
+			lp = new Point2D(endP.getX()+10, endP.getY()-10);
+			rp = new Point2D(endP.getX()-10, endP.getY()-10);
+			p = new Point2D(cp.getX(), cp.getY()-10);
+		}else if(arrowTo.equals(Constants.NORTH)){
+			lp = new Point2D(endP.getX()-10, endP.getY()+10);
+			rp = new Point2D(endP.getX()+10, endP.getY()+10);
+			p = new Point2D(cp.getX(), cp.getY()+10);
+		}
 		
 	}
 
@@ -80,7 +103,7 @@ public class CArrowHead extends CShapeManager {
 		poly = new Polygon(cp.getX(), cp.getY(), lp.getX(), lp.getY(), rp.getX(), rp.getY());
 		poly.setFill(Color.BLACK);
 		poly.setStrokeWidth(2);
-		poly.getTransforms().add(new Rotate(GetAngle(cp,sp),cp.getX(),cp.getY()));
+//		poly.getTransforms().add(new Rotate(GetAngle(cp,sp),cp.getX(),cp.getY()));
 		return poly;
 	}
 

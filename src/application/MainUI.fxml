@@ -21,7 +21,7 @@
 		                   		<MenuItem mnemonicParsing="false" text="Save" accelerator="Shortcut+S" onAction="#save" />
 		                        <MenuItem mnemonicParsing="false" text="Save As" accelerator="Shortcut+A" onAction="#saveAs" />
 		                        <SeparatorMenuItem mnemonicParsing="false" />
-		                        <MenuItem mnemonicParsing="false" text="Close" onAction="#close"/>
+		                       <!--  <MenuItem mnemonicParsing="false" text="Close" onAction="#close"/> -->
 		                        <MenuItem mnemonicParsing="false" text="Exit" accelerator="Alt+F4" onAction="#exit" />
 		                    </items>
 		                </Menu>

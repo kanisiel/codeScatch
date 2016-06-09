@@ -4,12 +4,23 @@ import java.util.Vector;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import shapes.CShapeNode;
+
 
 public class TreeData {
 	private ParseTree parseTree;
 	private Vector<ParseTree> codeVector;
 	private String nodeType;
     private String kind; 
+    private String ifCondition;
+    private String iterationCondition;
+    private String body;
+	
+	public String getIterationCondition() {return iterationCondition;}
+	public void setIterationCondition(String iterationCondition) {this.iterationCondition = iterationCondition;}
+	public String getIfCondition() {return ifCondition;}
+	public void setIfCondition(String ifCondition) {this.ifCondition = ifCondition;}
+	private CShapeNode shapeNode;
     
 	public ParseTree getParseTree() {return parseTree;}
 	public void setParseTree(ParseTree parseTree) {this.parseTree = parseTree;}
@@ -20,12 +31,27 @@ public class TreeData {
 	public String getKind() {return kind;}
 	public void setKind(String kind) {this.kind = kind;}
 
+
+
     public TreeData(ParseTree parseTree, String nodeType, String kind){
     	this.parseTree = parseTree;
     	this.nodeType = nodeType;
     	this.kind = kind;
     	this.codeVector = new Vector<ParseTree>();
     	this.codeVector.add(this.parseTree);
+    	this.body = "";
     }
+	public CShapeNode getShapeNode() {
+		return shapeNode;
+	}
+	public void setShapeNode(CShapeNode shapeNode) {
+		this.shapeNode = shapeNode;
+	}
+	public String getBody() {
+		return body;
+	}
+	public void setBody(String body) {
+		this.body = body;
+	}
     
 }
